@@ -24,7 +24,7 @@ available to cook in their kitchen on a specific date.
 ### Front-End
 
 ```sh
-cd server
+cd client
 npm install
 npm run start
 ```
@@ -32,7 +32,7 @@ npm run start
 ### Server
 
 ```sh
-cd client
+cd server
 npm install
 nodemon ./bin/www
 ```
