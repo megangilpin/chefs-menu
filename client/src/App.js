@@ -1,17 +1,21 @@
 import React from "react";
 import { MuiThemeProvider } from "@material-ui/core";
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter, Route, Redirect } from "react-router-dom";
 
 import { theme } from "./themes/theme";
-import LandingPage from "./pages/Landing";
-
-import "./App.css";
+import Login from "./pages/Login";
+import SignUp from "./pages/SignUp";
 
 function App() {
   return (
     <MuiThemeProvider theme={theme}>
       <BrowserRouter>
-        <Route path="/" component={LandingPage} />
+        <Route path="/">
+          <Redirect to="/signup" />
+        </Route>
+
+        <Route path="/login" component={Login} />
+        <Route path="/signup" component={SignUp} />
       </BrowserRouter>
     </MuiThemeProvider>
   );
