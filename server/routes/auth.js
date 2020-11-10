@@ -13,7 +13,7 @@ router.post("/login", validationMiddleware, async function (req, res, next) {
         // create and return jwt with user obj
         res.json({ user, token });
     } catch (error) {
-        console.error(error)
+        console.error(error);
         next(error);
     }
 });
@@ -41,7 +41,7 @@ router.post("/register", validationMiddleware, async function (req, res, next) {
         const responseObj = await createResponseObj(createdUser._doc);
         res.status(201).json(responseObj);
     } catch (error) {
-        console.error(error)
+        console.error(error);
         next(error);
     }
 });
