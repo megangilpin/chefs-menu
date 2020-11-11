@@ -11,7 +11,7 @@ router.post("/login", validationMiddleware, async function (req, res, next) {
         // verify that there is user for email
         const user = await userController.findOneWithemail(email);
         if (!user) {
-            res.status(400).json({ errors: ["email or password invalid"] });
+            res.status(400).json({ errors: ["Email or password invalid"] });
             return;
         }
         // verify that the passwords match
@@ -21,7 +21,7 @@ router.post("/login", validationMiddleware, async function (req, res, next) {
         });
 
         if (!passwordsMatch) {
-            res.status(400).json({ errors: ["email or password invalid"] });
+            res.status(400).json({ errors: ["Email or password invalid"] });
             return;
         }
         // create and return jwt with user obj

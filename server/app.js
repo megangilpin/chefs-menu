@@ -6,12 +6,13 @@ const { join } = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 
+const { loginRequired } = require("./middleware");
 const authRouter = require("./routes/auth");
 const usersRouter = require("./routes/users");
 
 const { json, urlencoded } = express;
 
-var app = express();
+const app = express();
 
 app.use(logger("dev"));
 app.use(json());
@@ -21,6 +22,7 @@ app.use(express.static(join(__dirname, "public")));
 
 // ROUTES
 app.use("/auth", authRouter);
+app.all("/ping", loginRequired, (req, res) => res.json({ success: true }));
 app.use("/users", usersRouter);
 
 // catch 404 and forward to error handler
