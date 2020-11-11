@@ -19,9 +19,4 @@ yarn-debug.log*
 yarn-error.log*
 
 
-.env
-<<<<<<< HEAD
-server/.env
-client/.env
-=======
->>>>>>> dev
+*.env
