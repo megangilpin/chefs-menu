@@ -5,12 +5,17 @@ const userSchema = require("../models/user");
 
 const User = connection.model("User", userSchema);
 
+const SALT_ROUNDS = Number(process.env.SALT_ROUNDS);
+
 const create = async ({ email, password }) => {
-    const hashedPassword = await bcrypt.hash(password, process.env.SALT_ROUNDS);
+    const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
     const user = await User.create({ email, password: hashedPassword });
     return user;
 };
 
 const findOneWithemail = async (email) => await User.findOne({ email });
 
-module.exports = { create, findOneWithemail };
+const checkPassword = async ({ user, password }) =>
+    await bcrypt.compare(password, user.password);
+
+module.exports = { create, findOneWithemail, checkPassword };

@@ -9,9 +9,25 @@ router.post("/login", validationMiddleware, async function (req, res, next) {
     try {
         const { email, password } = req.body;
         // verify that there is user for email
+        const user = await userController.findOneWithemail(email);
+        if (!user) {
+            res.status(400).json({ errors: ["email or password invalid"] });
+            return;
+        }
         // verify that the passwords match
+        const passwordsMatch = await userController.checkPassword({
+            user,
+            password,
+        });
+
+        if (!passwordsMatch) {
+            res.status(400).json({ errors: ["email or password invalid"] });
+            return;
+        }
         // create and return jwt with user obj
-        res.json({ user, token });
+        const responseObj = await createResponseObj(user._doc);
+        res.cookie("token", responseObj.token, { httpOnly: true });
+        res.json(responseObj);
     } catch (error) {
         console.error(error);
         next(error);
@@ -39,6 +55,7 @@ router.post("/register", validationMiddleware, async function (req, res, next) {
 
         const createdUser = await userController.create({ email, password });
         const responseObj = await createResponseObj(createdUser._doc);
+        res.cookie("token", responseObj.token, { httpOnly: true });
         res.status(201).json(responseObj);
     } catch (error) {
         console.error(error);
