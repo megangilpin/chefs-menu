@@ -69,8 +69,8 @@ function validationMiddleware(req, res, next) {
     const errors = [];
     if (!email) errors.push("Missing email");
     if (!password) errors.push("Missing password");
-    if (email && typeof email !== "string") errors.push("Invalid type");
-    if (password && typeof password !== "string") errors.push("Invalid type");
+    if (email && typeof email !== "string") errors.push("Invalid type for email");
+    if (password && typeof password !== "string") errors.push("Invalid type for password");
     if (errors.length > 0) {
         res.status(400).json({ errors });
         return;
