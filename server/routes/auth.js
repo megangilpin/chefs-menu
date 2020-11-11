@@ -9,7 +9,7 @@ router.post("/login", validationMiddleware, async function (req, res, next) {
     try {
         const { email, password } = req.body;
         // verify that there is user for email
-        const user = await userController.findOneWithemail(email);
+        const user = await userController.findOneWithEmail(email);
         if (!user) {
             res.status(400).json({ errors: ["Email or password invalid"] });
             return;
@@ -39,7 +39,7 @@ router.post("/register", validationMiddleware, async function (req, res, next) {
         const { email, password } = req.body;
 
         // verify that user isn't already in DB
-        const user = await userController.findOneWithemail(email);
+        const user = await userController.findOneWithEmail(email);
         if (user) {
             res.status(400).json({ errors: ["User already exists"] });
             return;
