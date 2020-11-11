@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 const bcrypt = require("bcrypt");
 
 const connection = require("../dbConnection");
@@ -20,14 +19,3 @@ const checkPassword = async ({ user, password }) =>
     await bcrypt.compare(password, user.password);
 
 module.exports = { create, findOneWithemail, checkPassword };
-=======
-// CONTROLLER FOR USER MODEL
-
-const db = require("../models/user");
-
-// Defining methods for the usersController
-module.exports = {
-  // define methods here
-
-};
->>>>>>> dev
