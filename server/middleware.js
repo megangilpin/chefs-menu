@@ -1,7 +1,5 @@
 const jwt = require("jsonwebtoken");
 
-const userController = require("./controllers/usersController");
-
 const loginRequired = async (req, res, next) => {
     try {
         const { token } = req.cookies;
