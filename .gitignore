@@ -20,5 +20,8 @@ yarn-error.log*
 
 
 .env
+<<<<<<< HEAD
 server/.env
 client/.env
+=======
+>>>>>>> dev
