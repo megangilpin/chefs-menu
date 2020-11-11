@@ -69,8 +69,17 @@ function validationMiddleware(req, res, next) {
     const errors = [];
     if (!email) errors.push("Missing email");
     if (!password) errors.push("Missing password");
-    if (email && typeof email !== "string") errors.push("Invalid type for email");
-    if (password && typeof password !== "string") errors.push("Invalid type for password");
+
+    if (email && typeof email !== "string")
+        errors.push("Invalid type for email");
+
+    if (password && typeof password !== "string")
+        errors.push("Invalid type for password");
+
+    // src: https://stackoverflow.com/questions/201323/how-to-validate-an-email-address-using-a-regular-expression
+    if (!/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(email))
+        errors.push("Invalid format for email");
+
     if (errors.length > 0) {
         res.status(400).json({ errors });
         return;
