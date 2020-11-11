@@ -1,14 +1,10 @@
 const mongoose = require('mongoose');
-const { Schema } = mongoose;
+const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
   first_name: { type: String, required: true },
   last_name: String,
   password: { type: Number, required: true },
-  // Do we need reset ability yet?
-  resetToke: Number,
-  resetTokenExpiry: Date,
-  // To do: add validation
   email: { 
     type: String, 
     required: true,
@@ -21,20 +17,16 @@ const userSchema = new Schema({
     postalCode: { type: Number, required: true },
     country: { type: String, required: true },
   },
-  // To do: add validation
   primaryPhone: Number,
   profilePicURL: String,
   bio: String,
-  favoriteCuisine: [{
-    type:String,
-    length: 5,
-  }],
+  favoriteCuisine: [{ type: String }],
   allergies: String,
-  isChef: {type: Boolean, default: false},
+  isChef: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now },
   updatedAt: Date
 })
 
-const User = mongoose.model("Users", userSchema);
+const User = mongoose.model("User", userSchema);
 
 module.exports = User;
