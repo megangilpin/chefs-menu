@@ -3,7 +3,7 @@ const usersDB = require("../models/user");
 const chefsDB = require("../models/chef");
 const mealsDB = require("../models/meal");
 
-// This file empties all the Users, Chefs, and Meals collections and inserts the seeds.
+// This file can empty and seed all the Users, Chefs, and Meals collections.
 
 mongoose.connect("mongodb://localhost/chefsmenu", { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.set('useCreateIndex', true);
@@ -11,8 +11,8 @@ mongoose.set('useCreateIndex', true);
 // Seed for users collection
 const userSeed = 
   {
-    first_name: "Megan",
-    last_name: "Gilpin",
+    firstName: "Megan",
+    lastName: "Gilpin",
     password: 12345,
     email: "megangilpin@gmail.com",
     primaryAddress: {
