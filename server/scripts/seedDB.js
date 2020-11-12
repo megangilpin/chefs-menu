@@ -13,7 +13,7 @@ const userSeed =
   {
     firstName: "Megan",
     lastName: "Gilpin",
-    password: 12345,
+    password: "1234",
     email: "megangilpin@gmail.com",
     primaryAddress: {
       street: "3692 Broadway",
