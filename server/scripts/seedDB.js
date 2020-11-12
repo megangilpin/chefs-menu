@@ -1,15 +1,14 @@
+require("dotenv").config();
 const mongoose = require("mongoose");
-const usersDB = require("../models/user");
+const usersController = require("../controllers/usersController");
 const chefsDB = require("../models/chef");
 const mealsDB = require("../models/meal");
+const connection = require("../dbConnection");
 
 // This file can empty and seed all the Users, Chefs, and Meals collections.
 
-mongoose.connect("mongodb://localhost/chefsmenu", { useNewUrlParser: true, useUnifiedTopology: true });
-mongoose.set('useCreateIndex', true);
-
 // Seed for users collection
-const userSeed = 
+const userSeed = [
   {
     firstName: "Megan",
     lastName: "Gilpin",
@@ -23,7 +22,7 @@ const userSeed =
       country: "United States",
     },
   }
-
+]
 // Seed for chefs collection
 // const chefsSeed = [
 //   {
@@ -49,19 +48,20 @@ const userSeed =
 //     }
 //   }
 
+;(async () => {
+  try {
+    let res = await usersController.deleteAll()
+    console.log('deleteing all users', res)
 
-//  insert into users collection
- usersDB
-  .deleteMany({})
-  .then(() => usersDB.insertMany(userSeed))
-  .then(data => {
-    console.log(data);
-    process.exit(0);
-  })
-  .catch(err => {
-    console.error(err);
-    process.exit(1);
-  });
+    res = await Promise.all(userSeed.map(usersController.create))
+    console.log('creating all users', res)
+    process.exit(0)
+  }
+  catch (error) {
+    console.error(error)
+    rocess.exit(1)
+  }
+})()
 
 //  insert into chefs collection
 //  chefsDB
