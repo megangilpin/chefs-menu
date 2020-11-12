@@ -19,7 +19,7 @@ const userSeed =
       street: "3692 Broadway",
       city: "New York",
       region: "New York",
-      postalCode: 10031,
+      postalCode: "10031",
       country: "United States",
     },
   }

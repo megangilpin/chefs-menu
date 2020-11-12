@@ -14,7 +14,7 @@ const userSchema = new Schema({
     street: String,
     city: String,
     region: String,
-    postalCode: Number,
+    postalCode: String,
     country: String,
   },
   primaryPhone: Number,
