@@ -18,4 +18,6 @@ const findOneWithEmail = async (email) => await User.findOne({ email });
 const checkPassword = async ({ user, password }) =>
     await bcrypt.compare(password, user.password);
 
-module.exports = { User, create, findOneWithEmail, checkPassword };
+const deleteAll = async () => await User.deleteMany({});
+
+module.exports = { create, findOneWithEmail, checkPassword, deleteAll };
