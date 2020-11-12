@@ -1,27 +1,55 @@
 import React from "react";
-import Container from "../components/Container";
-import Item from "../components/Item";
 
 /* ---------- MATERIAL UI ---------- */
-// import { makeStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-import { Typography } from "@material-ui/core";
+import { Grid, Typography, Button } from "@material-ui/core";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 
 /* ---------- REACT ROUTER DOM ---------- */
 import { Link } from "react-router-dom";
 
-export default function SignUp(props) {
-  // const classes = useStyles();
+import bigImage from "../images/login-signup-image.png";
 
+import LoginForm from "../components/LoginForm";
+
+const useStyles = makeStyles({
+  right: {
+    backgroundImage: `url(${bigImage})`,
+    backgroundPosition: "center center",
+    backgroundSize: "cover",
+    height: "100vh",
+  },
+  left: {
+    marginTop: "10vh"
+  }
+});
+
+export default function SignUp(props) {
+  const classes = useStyles();
+  const theme = useTheme();
   return (
-    <Container>
-      <Item xs={4}>SignUp</Item>
-      <Item xs={8}>
-        <Typography variant="body1">Already a member? </Typography>
-        <Button component={Link} to={"/login"}>
-          Sign In
-        </Button>
-      </Item>
-    </Container>
+    <Grid container spacing={4}>
+      <Grid className={classes.left} container item xs={6} justify="center">
+        <Grid container justify="center" item xs={12}>
+          <LoginForm />
+        </Grid>
+      </Grid>
+      <Grid className={classes.right} container item xs={6}>
+        <Grid item xs={6}>
+          <Typography variant="body1">Already a member? </Typography>
+        </Grid>
+
+        <Grid item xs={6}>
+          <Button
+            className={theme.MuiButton}
+            component={Link}
+            to={"/login"}
+            variant="contained"
+            color="primary"
+          >
+            Login
+          </Button>
+        </Grid>
+      </Grid>
+    </Grid>
   );
 }

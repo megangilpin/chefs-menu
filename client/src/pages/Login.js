@@ -1,30 +1,52 @@
 import React from "react";
 
-/* ---------- CUSTOM COMPONENTS---------- */
-import Container from "../components/Container";
-import Item from "../components/Item";
 
 /* ---------- MATERIAL UI ---------- */
-import { Typography } from "@material-ui/core";
-// import { makeStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-
+import { Grid, Typography, Button } from "@material-ui/core";
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 
 /* ---------- REACT ROUTER DOM ---------- */
 import { Link } from "react-router-dom";
 
-export default function Login(props) {
-  // const classes = useStyles();
+import bigImage from "../images/login-signup-image.png";
 
+import LoginForm from "../components/LoginForm";
+
+const useStyles =  makeStyles({
+  right: {
+    backgroundImage: `url(${bigImage})`,
+    backgroundPosition: "center center",
+    backgroundSize: "cover",
+    height: "100vh"
+  }
+})
+
+export default function Login(props) {
+  const classes = useStyles();
+  const theme = useTheme();
   return (
-    <Container>
-      <Item xs={4}>Login</Item>
-      <Item xs={8}>
-        <Typography variant="body1">Don't have an account? </Typography>
-        <Button component={Link} to={"/signup"}>
+    <Grid container spacing={6} justify="center" >
+
+                <LoginForm/>
+
+
+
+      <Grid className={classes.right} container item xs={6}>
+        <Grid item xs={6}>
+        <Typography  variant="body1">
+          Don't have an account?{" "}
+        </Typography>
+
+        </Grid>
+
+        <Grid item xs={6}>
+        <Button className={theme.MuiButton} component={Link} to={"/signup"}
+        variant="contained"
+        color="primary">
           Sign Up
         </Button>
-      </Item>
-    </Container>
+        </Grid>
+      </Grid>
+    </Grid>
   );
 }
