@@ -17,7 +17,8 @@ app.use(cookieParser());
 app.use(express.static(join(__dirname, "public")));
 
 // connect to mongodb Atlas with the help of mongoose
-const MONGODB_URI = process.env.ATLAS_URI;
+// const MONGODB_URI = process.env.ATLAS_URI;
+const MONGODB_URI = "mongodb://localhost:27017/chefsmenu";
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.set('useCreateIndex', true);
 const connection = mongoose.connection;
