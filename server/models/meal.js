@@ -9,10 +9,7 @@ const mealSchema = new Schema({
   servingType: String,
   cuisineType: [{ type: String, required: true }],
   ingredients: { type: String, required: true },
-  requirements: {
-    hasReq: { type: Boolean, default: false },
-    list: { type: String, required: true }
-  },
+  requirements: String,
   createdAt: { type: Date, default: Date.now },
   updatedAt: Date,
   chefId: {type: Schema.Types.ObjectId, ref: 'Chefs'}
