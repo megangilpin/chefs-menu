@@ -30,7 +30,7 @@ router.post("/login", validationMiddleware, async function (req, res, next) {
         res.json(responseObj);
     } catch (error) {
         console.error(error);
-        next(error);
+        res.status(500).json({ errors: ["Unexpected error occured"] });
     }
 });
 
@@ -59,7 +59,7 @@ router.post("/register", validationMiddleware, async function (req, res, next) {
         res.status(201).json(responseObj);
     } catch (error) {
         console.error(error);
-        next(error);
+        res.status(500).json({ errors: ["Unexpected error occured"] });
     }
 });
 
