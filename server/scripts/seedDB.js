@@ -1,12 +1,11 @@
+require("dotenv").config();
 const mongoose = require("mongoose");
-const usersDB = require("../models/user");
+const usersDB = require("../controllers/usersController").User;
 const chefsDB = require("../models/chef");
 const mealsDB = require("../models/meal");
+const connection = require("../dbConnection");
 
 // This file can empty and seed all the Users, Chefs, and Meals collections.
-
-mongoose.connect("mongodb://localhost/chefsmenu", { useNewUrlParser: true, useUnifiedTopology: true });
-mongoose.set('useCreateIndex', true);
 
 // Seed for users collection
 const userSeed = 

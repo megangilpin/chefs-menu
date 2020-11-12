@@ -18,4 +18,4 @@ const findOneWithEmail = async (email) => await User.findOne({ email });
 const checkPassword = async ({ user, password }) =>
     await bcrypt.compare(password, user.password);
 
-module.exports = { create, findOneWithEmail, checkPassword };
+module.exports = { User, create, findOneWithEmail, checkPassword };
