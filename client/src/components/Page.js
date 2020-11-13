@@ -36,10 +36,7 @@ function Page(props) {
 		      <MenuButton />
         </Toolbar>
       </AppBar>
-      <SideBar>
-      </SideBar>
-      <Main>
-      </Main>
+      {props.children}
     </div>
   );
 }
