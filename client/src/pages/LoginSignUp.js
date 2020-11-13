@@ -46,14 +46,16 @@ export default function LoginSignUp(props) {
                     />
                 </Grid>
                 <Grid item container xs={12}>
-                    {location.pathname==="/login" ? <LoginForm /> : <SignUpForm/>}
+                    {location.pathname === "/login" ? <LoginForm /> : <SignUpForm />}
                 </Grid>
             </Grid>
 
             <Grid className={classes.right} container item xs={6} direction="row">
                 <Grid item xs={8}>
                     <Typography className={classes.bannerText} variant="body1">
-                    {location.pathname==="/login" ? "Don't have an account?" :  "Already a member?"}
+                        {location.pathname === "/login"
+                            ? "Don't have an account?"
+                            : "Already a member?"}
                     </Typography>
                 </Grid>
 
@@ -62,9 +64,9 @@ export default function LoginSignUp(props) {
                         color="primary"
                         variant="contained"
                         component={Link}
-                        to={location.pathname==="/signup" ? "/login" : "/signup"}
+                        to={location.pathname === "/signup" ? "/login" : "/signup"}
                     >
-                        Sign Up
+                        {location.pathname === "/signup" ? "Sign In" : "Sign Up"}
                     </Button>
                 </Grid>
             </Grid>

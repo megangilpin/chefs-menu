@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Grid, Button } from "@material-ui/core";
+import { Typography, Grid, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 import { Formik, Form, Field } from "formik";
@@ -48,7 +48,9 @@ export default function SignUp() {
                         justify="flex-start"
                     >
                         <Grid className={classes.formItem} item xs={12}>
-                            <h2>Create an account</h2>
+                            <Typography variant="h5" component="h2">
+                                Create an account
+                            </Typography>
                         </Grid>
 
                         <Grid className={classes.formItem} item xs={12}>

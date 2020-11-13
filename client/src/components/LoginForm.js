@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Formik, Form, Field } from "formik";
-import { Grid, Button } from "@material-ui/core";
+import { Typography, Grid, Button } from "@material-ui/core";
 import { TextField } from "formik-material-ui";
 import { makeStyles } from "@material-ui/core/styles";
 import * as Yup from "yup";
@@ -44,7 +44,9 @@ export default function LoginForm() {
                         justify="flex-start"
                     >
                         <Grid className={classes.formItem} item xs={12}>
-                            <h2>Login</h2>
+                            <Typography variant="h5" component="h2">
+                                Login
+                            </Typography>
                         </Grid>
 
                         <Grid className={classes.formItem} item xs={12}>
