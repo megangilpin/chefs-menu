@@ -3,7 +3,7 @@ import { ThemeProvider } from "@material-ui/core/styles";
 import { BrowserRouter, Route, Redirect } from "react-router-dom";
 
 import { theme } from "./themes/theme";
-import Login from "./pages/Login";
+import Login from "./pages/LoginSignUp";
 import SignUp from "./pages/SignUp";
 
 function App() {
@@ -15,7 +15,7 @@ function App() {
                 </Route>
 
                 <Route path="/login" component={Login} />
-                <Route path="/signup" component={SignUp} />
+                <Route path="/signup" component={Login} />
             </BrowserRouter>
         </ThemeProvider>
     );
