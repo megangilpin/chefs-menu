@@ -40,26 +40,26 @@ nodemon ./bin/www
 ## Screenshots 
 
 ### Sign In
-!["Sign In"](https://github.com/hatchways/team-corn-pops/blob/sagar/signup-and-login/images/sign-in.png?raw=true)
+!["Sign In"](https://github.com/hatchways/team-corn-pops/blob/sagar/signup-and-login/README_IMAGES/sign-in.png?raw=true)
 
 ### Sign Up
-!["Sign Up"](https://github.com/hatchways/team-corn-pops/blob/sagar/signup-and-login/images/sign-up.png?raw=true)
+!["Sign Up"](https://github.com/hatchways/team-corn-pops/blob/sagar/signup-and-login/README_IMAGES/sign-up.png?raw=true)
 
 ### User Profile
-!["User Profile"](https://github.com/hatchways/team-corn-pops/blob/sagar/signup-and-login/images/regular-user-profile.png?raw=true)
+!["User Profile"](https://github.com/hatchways/team-corn-pops/blob/sagar/signup-and-login/README_IMAGES/regular-user-profile.png?raw=true)
 
 ### Chef Profile
-!["Chef Profile"](https://github.com/hatchways/team-corn-pops/blob/sagar/signup-and-login/images/chef-profile.png?raw=true)
+!["Chef Profile"](https://github.com/hatchways/team-corn-pops/blob/sagar/signup-and-login/README_IMAGES/chef-profile.png?raw=true)
 
 ### Messaging 
-!["Messaging"](https://github.com/hatchways/team-corn-pops/blob/sagar/signup-and-login/images/messages.png?raw=true)
+!["Messaging"](https://github.com/hatchways/team-corn-pops/blob/sagar/signup-and-login/README_IMAGES/messages.png?raw=true)
 
 ### Checkout
-!["Checkout"](https://github.com/hatchways/team-corn-pops/blob/sagar/signup-and-login/images/checkout.png?raw=true)
+!["Checkout"](https://github.com/hatchways/team-corn-pops/blob/sagar/signup-and-login/README_IMAGES/checkout.png?raw=true)
 
 ### Browse Chefs
-!["Browse Chefs"](https://github.com/hatchways/team-corn-pops/blob/sagar/signup-and-login/images/browse-chefs.png?raw=true)
+!["Browse Chefs"](https://github.com/hatchways/team-corn-pops/blob/sagar/signup-and-login/README_IMAGES/browse-chefs.png?raw=true)
 
 ### Browse Meals
-!["Browse Meals"](https://github.com/hatchways/team-corn-pops/blob/sagar/signup-and-login/images/browse-meals.png?raw=true)
+!["Browse Meals"](https://github.com/hatchways/team-corn-pops/blob/sagar/signup-and-login/README_IMAGES/browse-meals.png?raw=true)
 
