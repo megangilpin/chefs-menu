@@ -1,8 +1,11 @@
 import * as React from "react";
-import { Formik, Form, Field } from "formik";
+
 import { Grid, Button } from "@material-ui/core";
-import { TextField } from "formik-material-ui";
 import { makeStyles } from "@material-ui/core/styles";
+
+import { Formik, Form, Field } from "formik";
+import { TextField, CheckboxWithLabel } from "formik-material-ui";
+
 import * as Yup from "yup";
 
 const useStyles = makeStyles({
@@ -15,7 +18,7 @@ const useStyles = makeStyles({
     },
 });
 
-export default function LoginForm() {
+export default function SignUp() {
     const classes = useStyles();
 
     const validationSchema = Yup.object().shape({
@@ -27,6 +30,7 @@ export default function LoginForm() {
             initialValues={{
                 email: "",
                 password: "",
+                chef: false,
             }}
             validationSchema={validationSchema}
             onSubmit={(values, { setSubmitting }) => {
@@ -44,7 +48,7 @@ export default function LoginForm() {
                         justify="flex-start"
                     >
                         <Grid className={classes.formItem} item xs={12}>
-                            <h2>Login</h2>
+                            <h2>Create an account</h2>
                         </Grid>
 
                         <Grid className={classes.formItem} item xs={12}>
@@ -63,7 +67,14 @@ export default function LoginForm() {
                                 name="password"
                                 type="password"
                                 label="Password"
-                                
+                            />
+                        </Grid>
+                        <Grid className={classes.formItem} item xs={12}>
+                            <Field
+                                component={CheckboxWithLabel}
+                                type="checkbox"
+                                name="chef"
+                                Label={{ label: "Sign up as chef!" }}
                             />
                         </Grid>
 

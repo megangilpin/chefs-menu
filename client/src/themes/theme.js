@@ -9,19 +9,27 @@ export const theme = createMuiTheme({
     }
   },
   palette: {
-    primary: { main: "#FF743D" },
+    primary: { main: "#FF743D" ,
+    contrastText: '#fff' },
     secondary: { main: "#FF510C" },
+    
   },
 
-  MuiButton: {
-    text: {
-      color: 'white',
-      background: "FF743D"
-      
-    
-    }
+  overrides: {
 
-  }
+    MuiButton: {
+
+      root: {
+        
+        borderRadius: "0px",
+        color: 'white',
+      },
+    },
+  },
+
+
+
+  
 });
 
 

@@ -1,52 +1,73 @@
 import React from "react";
 
-
-/* ---------- MATERIAL UI ---------- */
-import { Grid, Typography, Button } from "@material-ui/core";
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-
-/* ---------- REACT ROUTER DOM ---------- */
 import { Link } from "react-router-dom";
 
-import bigImage from "../images/login-signup-image.png";
+import { Grid, Typography, Button } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+
+import rightBanner from "../images/login-signup-image.png";
+import logo from "../images/logo.png";
 
 import LoginForm from "../components/LoginForm";
 
-const useStyles =  makeStyles({
-  right: {
-    backgroundImage: `url(${bigImage})`,
-    backgroundPosition: "center center",
-    backgroundSize: "cover",
-    height: "100vh"
-  }
-})
+const useStyles = makeStyles({
+    screen: {
+        minHeight: "100vh",
+    },
+    right: {
+        backgroundImage: `url(${rightBanner})`,
+        backgroundPosition: "center center",
+        backgroundSize: "cover",
+        textAlign: "right",
+        padding: "5vh 5vh 10vh 5vw",
+    },
+    left: {
+        textAlign: "left",
+        padding: "5vh 5vh 10vh 5vw",
+        height: "70vh",
+    },
+ 
+    bannerText: {
+        color: "white",
+    },
+});
 
-export default function Login(props) {
-  const classes = useStyles();
-  const theme = useTheme();
-  return (
-    <Grid container spacing={6} justify="center" >
+export default function SignUp(props) {
+    const classes = useStyles();
 
-                <LoginForm/>
+    return (
+        <Grid container className={classes.screen}>
+            <Grid className={classes.left} container item xs={6}>
+                <Grid item xs={12}>
+                    <img
+                        className={classes.logo}
+                        src={logo}
+                        alt="Chef's Menu Logo"
+                    />
+                </Grid>
+                <Grid item container xs={12}>
+                    <LoginForm />
+                </Grid>
+            </Grid>
 
+            <Grid className={classes.right} container item xs={6} direction="row">
+                <Grid item xs={8}>
+                    <Typography className={classes.bannerText} variant="body1">
+                        Don't have an account?{" "}
+                    </Typography>
+                </Grid>
 
-
-      <Grid className={classes.right} container item xs={6}>
-        <Grid item xs={6}>
-        <Typography  variant="body1">
-          Don't have an account?{" "}
-        </Typography>
-
+                <Grid item xs={4}>
+                    <Button
+                        color="primary"
+                        variant="contained"
+                        component={Link}
+                        to={"/signup"}
+                    >
+                        Sign Up
+                    </Button>
+                </Grid>
+            </Grid>
         </Grid>
-
-        <Grid item xs={6}>
-        <Button className={theme.MuiButton} component={Link} to={"/signup"}
-        variant="contained"
-        color="primary">
-          Sign Up
-        </Button>
-        </Grid>
-      </Grid>
-    </Grid>
-  );
+    );
 }
