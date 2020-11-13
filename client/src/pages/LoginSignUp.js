@@ -35,7 +35,7 @@ const useStyles = makeStyles({
 
 
 
-export default function SignUp(props) {
+export default function LoginSignUp(props) {
     const classes = useStyles();
     const location = useLocation();
     return (
