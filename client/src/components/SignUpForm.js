@@ -86,7 +86,7 @@ export default function SignUp() {
                                 disabled={isSubmitting}
                                 onClick={submitForm}
                             >
-                                Sign In
+                                Sign Up
                             </Button>
                         </Grid>
                     </Grid>

@@ -26,7 +26,7 @@ const useStyles = makeStyles({
         padding: "5vh 5vh 10vh 5vw",
         height: "70vh",
     },
- 
+
     bannerText: {
         color: "white",
     },
@@ -34,18 +34,10 @@ const useStyles = makeStyles({
 
 export default function SignUp(props) {
     const classes = useStyles();
-   
+
     return (
-        <Grid container  className={classes.screen}>
-            <Grid
-                className={classes.left}
-                container
-                item
-                
-                xs={6}
-              
-            
-            >
+        <Grid container className={classes.screen}>
+            <Grid className={classes.left} container item xs={6}>
                 <Grid item xs={12}>
                     <img
                         className={classes.logo}
@@ -60,11 +52,18 @@ export default function SignUp(props) {
 
             <Grid className={classes.right} container item xs={6} direction="row">
                 <Grid item xs={8}>
-                    <Typography className={classes.bannerText} variant="body1">Already a member? </Typography>
+                    <Typography className={classes.bannerText} variant="body1">
+                        Already a member?{" "}
+                    </Typography>
                 </Grid>
 
                 <Grid item xs={4}>
-                    <Button color="primary" variant="contained" component={Link} to={"/login"}>
+                    <Button
+                        color="primary"
+                        variant="contained"
+                        component={Link}
+                        to={"/login"}
+                    >
                         Sign In
                     </Button>
                 </Grid>
