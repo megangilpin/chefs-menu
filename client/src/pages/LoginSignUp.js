@@ -27,7 +27,6 @@ const useStyles = makeStyles({
         padding: "5vh 5vh 10vh 5vw",
         height: "70vh",
     },
- 
     bannerText: {
         color: "white",
     },
