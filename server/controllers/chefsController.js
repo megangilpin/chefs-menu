@@ -7,6 +7,5 @@ module.exports = {
   findOneWithId: async (id) => {
     await Chef
       .findOne({id})
-      .catch(err => res.status(422).json(err));
   },
 }
