@@ -13,9 +13,7 @@ import SignUpForm from "../components/SignUpForm";
 
 const useStyles = makeStyles({
     screen: {
-        margin: "0",
         minHeight: "100vh",
-        overflow: "hidden",
     },
     logo: {
         width: "100%",
@@ -25,7 +23,7 @@ const useStyles = makeStyles({
         backgroundImage: `url(${rightBanner})`,
         backgroundPosition: "center center",
         backgroundSize: "cover",
-        textAlign: "center",
+        textAlign: "right",
         padding: "5vh 5vh 10vh 5vw",
     },
     left: {
@@ -65,7 +63,7 @@ export default function LoginSignUp(props) {
                 xs={4}
                 sm={6}
             >
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12}  >
                     <Typography className={classes.bannerText} variant="body1">
                         {location.pathname === "/login"
                             ? "Don't have an account?"
@@ -73,7 +71,7 @@ export default function LoginSignUp(props) {
                     </Typography>
                 </Grid>
 
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12} >
                     <Button
                         color="primary"
                         variant="contained"

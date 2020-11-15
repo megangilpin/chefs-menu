@@ -6,8 +6,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import * as Yup from "yup";
 import AuthService from "../services/AuthService";
 
-// import Snackbar from "@material-ui/core/Snackbar";
-// import MuiAlert from "@material-ui/lab/Alert";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles({
     formItem: {
@@ -21,12 +21,21 @@ const useStyles = makeStyles({
 export default function SignUp() {
     const classes = useStyles();
 
-    // const [message,setMessage] = useState(null);
+    const [open, setOpen] = React.useState(false);
+    const [severity,setSeverity] = React.useState("");
     const validationSchema = Yup.object().shape({
         email: Yup.string().email().required("Required!"),
         password: Yup.string().min(6).required("Required!"),
     });
+
+    const snackBarClose = (event, reason) => {
+        if (reason === "clickaway") {
+            return;
+        }
+        setOpen(false);
+    };
     return (
+        <>
         <Formik
             initialValues={{
                 name: "",
@@ -37,9 +46,17 @@ export default function SignUp() {
             validationSchema={validationSchema}
             onSubmit={(values, { setSubmitting }) => {
                 setSubmitting(false);
-                AuthService.login(values)
+                AuthService.register(values)
                     .then((data) => {
                         if (data.user) {
+                            setSeverity("success")
+                                setOpen(true);
+
+                            } else {
+                                setSeverity("error")
+                                setOpen(true);
+                            
+                            
                         }
                     })
                     .catch((error) => console.log(error));
@@ -110,5 +127,11 @@ export default function SignUp() {
                 </Form>
             )}
         </Formik>
+            <Snackbar open={open} autoHideDuration={6000} onClose={snackBarClose}>
+            <MuiAlert onClose={snackBarClose} severity={severity}>
+                {severity === "success" ? "Successfully logged in!" : "Unable to login!"}
+            </MuiAlert>
+        </Snackbar>
+    </>
     );
 }
