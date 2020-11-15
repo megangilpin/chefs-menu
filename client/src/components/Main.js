@@ -1,12 +1,9 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
-import Toolbar from "@material-ui/core/Toolbar";
+import { Typography,Toolbar } from "@material-ui/core";
+
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        background: theme.background.default
-    },
     content: {
         flexGrow: 1,
         padding: theme.spacing(3),

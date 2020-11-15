@@ -1,8 +1,6 @@
 import React, { useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
+import { AppBar, Typography,Toolbar } from "@material-ui/core";
 import MenuButton from "./MenuButton";
 import { UserContext } from "../components/UserContext";
 import logo from "../images/logo.svg";
@@ -17,16 +15,14 @@ const useStyles = makeStyles((theme) => ({
     },
     appBarTitle: {
         flexGrow: 1,
-        marginLeft: theme.spacing(2)
+        marginLeft: theme.spacing(2),
     },
-    logo: {
-    }
+    logo: {},
 }));
 
 function Page(props) {
     const classes = useStyles();
-    const loadedUser = useContext(UserContext);
-    console.log(loadedUser)
+    const user = useContext(UserContext);
     return (
         <div className={classes.root}>
             <AppBar position="fixed" className={classes.appBar}>

@@ -10,7 +10,7 @@ export const theme = createMuiTheme({
         secondary: { main: "#FF510C" },
     },
     background: {
-        paper: "#F8F8FF",
+        default: "#F8F8FF",
     },
     overrides: {
         MuiButton: {

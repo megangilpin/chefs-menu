@@ -1,30 +1,37 @@
-import React,{ useState, createContext } from "react";
+import React, { useState, createContext, useEffect } from "react";
 
-const loadedUser =   {
-    firstName: "Megan",
-    lastName: "Gilpin",
-    password: "1234",
-    email: "megangilpin@gmail.com",
-    primaryAddress: {
-      street: "3692 Broadway",
-      city: "New York",
-      region: "New York",
-      postalCode: "10031",
-      country: "United States",
-    },
-    auth: false
-  }
-
-const UserContext = createContext(null)
+const UserContext = createContext({ user: {}, auth: false });
 
 const UserProvider = ({ children }) => {
-    const [user, setUser] = useState(loadedUser);
+    const [user, setUser] = useState(null);
+    const [auth, setAuth] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const fetchUser = () => {
+        setIsLoading(true);
+        fetch("/users/user", {
+            method: "get",
+        })
+            .then((res) => {
+                setIsLoading(false);
+                // setUser(res);
+            })
+            .catch((err) => {
+                console.log(err);
+                setIsLoading(false);
+            });
+    };
+
+    useEffect(() => {
+        fetchUser();
+        return () => {};
+    }, [auth]);
 
     return (
-        <UserContext.Provider value={user}>
+        <UserContext.Provider value={{ user, auth: false }}>
             {children}
         </UserContext.Provider>
     );
-}
+};
 
 export { UserContext, UserProvider };

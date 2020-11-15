@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const connection = require("../dbConnection");
 const userSchema = require("../models/user");
 
+
 const User = connection.model("User", userSchema);
 
 const SALT_ROUNDS = Number(process.env.SALT_ROUNDS);
