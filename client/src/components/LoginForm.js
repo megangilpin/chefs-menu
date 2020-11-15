@@ -20,9 +20,10 @@ const useStyles = makeStyles({
 
 export default function LoginForm() {
     const classes = useStyles();
-    
+
     const [open, setOpen] = React.useState(false);
-    const [severity,setSeverity] = React.useState("");
+    const [severity, setSeverity] = React.useState("");
+    const [message, setMessage] = React.useState("");
 
     const validationSchema = Yup.object().shape({
         email: Yup.string().email().required("Required!"),
@@ -48,15 +49,21 @@ export default function LoginForm() {
                     AuthService.login(values)
                         .then((data) => {
                             if (data.user) {
-                                setSeverity("success")
+                                setSeverity("success");
+                                setMessage("Successfully logged in!");
                                 setOpen(true);
-
                             } else {
-                                setSeverity("error")
+                                setSeverity("error");
+                                setMessage(data.errors);
                                 setOpen(true);
                             }
                         })
-                        .catch((error) => console.log(error));
+                        .catch((error) => {
+                            console.log(error);
+                            setSeverity("error");
+                            setMessage("Error while making request");
+                            setOpen(true);
+                        });
                 }}
             >
                 {({ submitForm, isSubmitting }) => (
@@ -110,7 +117,7 @@ export default function LoginForm() {
             </Formik>
             <Snackbar open={open} autoHideDuration={6000} onClose={snackBarClose}>
                 <MuiAlert onClose={snackBarClose} severity={severity}>
-                    {severity === "success" ? "Successfully logged in!" : "Unable to login!"}
+                    {message}
                 </MuiAlert>
             </Snackbar>
         </>
