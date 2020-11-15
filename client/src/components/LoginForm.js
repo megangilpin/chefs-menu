@@ -4,19 +4,24 @@ import { Typography, Grid, Button } from "@material-ui/core";
 import { TextField } from "formik-material-ui";
 import { makeStyles } from "@material-ui/core/styles";
 import * as Yup from "yup";
+import AuthService from "../services/AuthService";
+
+// import Snackbar from "@material-ui/core/Snackbar";
+// import MuiAlert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles({
     formItem: {
-        margin: "2vh 0vw 2vh 0vw",
-        textAlign: "left",
+        margin: "2vh 0 2vh 0",
     },
     formContainer: {
-        marginLeft: "5vw",
+        margin: "10vh 0 0 0",
     },
 });
 
 export default function LoginForm() {
     const classes = useStyles();
+
+    // const [message,setMessage] = useState(null);
 
     const validationSchema = Yup.object().shape({
         email: Yup.string().email().required("Required!"),
@@ -30,10 +35,13 @@ export default function LoginForm() {
             }}
             validationSchema={validationSchema}
             onSubmit={(values, { setSubmitting }) => {
-                setTimeout(() => {
-                    setSubmitting(false);
-                    alert(JSON.stringify(values, null, 2));
-                }, 500);
+                setSubmitting(false);
+                AuthService.login(values)
+                    .then((data) => {
+                        if (data.user) {
+                        }
+                    })
+                    .catch((error) => console.log(error));
             }}
         >
             {({ submitForm, isSubmitting }) => (
@@ -51,6 +59,7 @@ export default function LoginForm() {
 
                         <Grid className={classes.formItem} item xs={12}>
                             <Field
+                                fullWidth
                                 component={TextField}
                                 variant="outlined"
                                 name="email"
@@ -60,6 +69,7 @@ export default function LoginForm() {
                         </Grid>
                         <Grid className={classes.formItem} item xs={12}>
                             <Field
+                                fullWidth
                                 component={TextField}
                                 variant="outlined"
                                 name="password"

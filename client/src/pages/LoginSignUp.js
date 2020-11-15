@@ -13,13 +13,19 @@ import SignUpForm from "../components/SignUpForm";
 
 const useStyles = makeStyles({
     screen: {
+        margin: "0",
         minHeight: "100vh",
+        overflow: "hidden",
+    },
+    logo: {
+        width: "100%",
+        maxWidth: "300px",
     },
     right: {
         backgroundImage: `url(${rightBanner})`,
         backgroundPosition: "center center",
         backgroundSize: "cover",
-        textAlign: "right",
+        textAlign: "center",
         padding: "5vh 5vh 10vh 5vw",
     },
     left: {
@@ -28,6 +34,7 @@ const useStyles = makeStyles({
         height: "70vh",
     },
     bannerText: {
+        paddingBottom: "2vh",
         color: "white",
     },
 });
@@ -37,7 +44,7 @@ export default function LoginSignUp(props) {
     const location = useLocation();
     return (
         <Grid container className={classes.screen}>
-            <Grid className={classes.left} container item xs={6}>
+            <Grid className={classes.left} container item xs={8} sm={6}>
                 <Grid item xs={12}>
                     <img
                         className={classes.logo}
@@ -50,8 +57,15 @@ export default function LoginSignUp(props) {
                 </Grid>
             </Grid>
 
-            <Grid className={classes.right} container item xs={6} direction="row">
-                <Grid item xs={8}>
+            <Grid
+                className={classes.right}
+                container
+                alignContent="flex-start"
+                item
+                xs={4}
+                sm={6}
+            >
+                <Grid item xs={12} sm={6}>
                     <Typography className={classes.bannerText} variant="body1">
                         {location.pathname === "/login"
                             ? "Don't have an account?"
@@ -59,7 +73,7 @@ export default function LoginSignUp(props) {
                     </Typography>
                 </Grid>
 
-                <Grid item xs={4}>
+                <Grid item xs={12} sm={6}>
                     <Button
                         color="primary"
                         variant="contained"
