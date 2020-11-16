@@ -25,7 +25,7 @@ router.post("/login", validationMiddleware, async function (req, res, next) {
             return;
         }
         // create and return jwt with user obj
-        const responseObj = await createResponseObj(user._doc);
+        const responseObj = await createResponseObj(user);
         res.cookie("token", responseObj.token, { httpOnly: true });
         res.json(responseObj);
     } catch (error) {
@@ -54,7 +54,7 @@ router.post("/register", validationMiddleware, async function (req, res, next) {
         }
 
         const createdUser = await userController.create({ email, password });
-        const responseObj = await createResponseObj(createdUser._doc);
+        const responseObj = await createResponseObj(createdUser);
         res.cookie("token", responseObj.token, { httpOnly: true });
         res.status(201).json(responseObj);
     } catch (error) {
@@ -94,7 +94,7 @@ async function createResponseObj(user) {
         { expiresIn: process.env.TOKEN_TTL }
     );
     return {
-        user: { ...user, password: undefined },
+        user: userController.sanatize(user),
         token,
     };
 }
