@@ -15,6 +15,10 @@ const useStyles = makeStyles({
     screen: {
         minHeight: "100vh",
     },
+    logo: {
+        width: "100%",
+        maxWidth: "300px",
+    },
     right: {
         backgroundImage: `url(${rightBanner})`,
         backgroundPosition: "center center",
@@ -28,6 +32,7 @@ const useStyles = makeStyles({
         height: "70vh",
     },
     bannerText: {
+        paddingBottom: "2vh",
         color: "white",
     },
 });
@@ -37,7 +42,7 @@ export default function LoginSignUp(props) {
     const location = useLocation();
     return (
         <Grid container className={classes.screen}>
-            <Grid className={classes.left} container item xs={6}>
+            <Grid className={classes.left} container item xs={8} sm={6}>
                 <Grid item xs={12}>
                     <img
                         className={classes.logo}
@@ -50,8 +55,15 @@ export default function LoginSignUp(props) {
                 </Grid>
             </Grid>
 
-            <Grid className={classes.right} container item xs={6} direction="row">
-                <Grid item xs={8}>
+            <Grid
+                className={classes.right}
+                container
+                alignContent="flex-start"
+                item
+                xs={4}
+                sm={6}
+            >
+                <Grid item xs={12}  >
                     <Typography className={classes.bannerText} variant="body1">
                         {location.pathname === "/login"
                             ? "Don't have an account?"
@@ -59,7 +71,7 @@ export default function LoginSignUp(props) {
                     </Typography>
                 </Grid>
 
-                <Grid item xs={4}>
+                <Grid item xs={12} >
                     <Button
                         color="primary"
                         variant="contained"
