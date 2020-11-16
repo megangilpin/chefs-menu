@@ -1,5 +1,3 @@
-
-
 export default {
     login: (user) => {
         return fetch("/auth/login", {
