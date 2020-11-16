@@ -24,6 +24,7 @@ app.use(express.static(join(__dirname, "public")));
 app.use("/auth", authRouter);
 app.all("/ping", loginRequired, (req, res) => res.json({ success: true }));
 app.use("/users", loginRequired, usersRouter);
+app.use("/meals", loginRequired, mealsRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
