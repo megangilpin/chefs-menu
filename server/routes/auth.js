@@ -76,8 +76,7 @@ function validationMiddleware(req, res, next) {
     if (password && typeof password !== "string")
         errors.push("Invalid type for password");
 
-    // src: https://stackoverflow.com/questions/201323/how-to-validate-an-email-address-using-a-regular-expression
-    if (!/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(email))
+    if (email && !userController.isValidEmailFormat(email))
         errors.push("Invalid format for email");
 
     if (errors.length > 0) {
