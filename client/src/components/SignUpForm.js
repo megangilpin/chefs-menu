@@ -27,7 +27,6 @@ export default function SignUp() {
     const [open, setOpen] = React.useState(false);
     const [severity, setSeverity] = React.useState("");
     const [message, setMessage] = React.useState("");
-
     const validationSchema = Yup.object().shape({
         name: Yup.string().required("Required!"),
         email: Yup.string().email().required("Required!"),
