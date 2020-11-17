@@ -19,16 +19,17 @@ const findOneWithUserId = async (userId) => {
 };
 
 const create = async ({ cuisineSpecialty, availability, userId }) => {
-    const { _doc } = (await Chef.create({
-        cuisineSpecialty,
-        // availability,
-        userId,
-    })) || {};
+    const { _doc } =
+        (await Chef.create({
+            cuisineSpecialty,
+            // availability,
+            userId,
+        })) || {};
     return _doc;
 };
 
 const update = async (id, { cuisineSpecialty, availability, userId }) => {
-    const chef = await Chef.findById(id)
+    const chef = await Chef.findById(id);
     // TODO: get the update array working
     if (cuisineSpecialty) chef.cuisineSpecialty;
     // if (availability) chef.availability;
@@ -39,10 +40,13 @@ const update = async (id, { cuisineSpecialty, availability, userId }) => {
     return _doc;
 };
 
+const deleteAll = async () => Chef.deleteMany({});
+
 module.exports = {
     create,
     update,
     findOneWithId,
     findAllChef,
     findOneWithUserId,
+    deleteAll,
 };

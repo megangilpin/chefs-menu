@@ -77,9 +77,12 @@ const remove = async (id) => {
     return await Meal.findByIdAndDelete(id);
 };
 
+const deleteAll = async () => await Meal.deleteMany({});
+
 module.exports = {
     find,
     create,
     update,
     remove,
+    deleteAll,
 };

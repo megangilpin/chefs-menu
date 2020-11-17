@@ -23,8 +23,9 @@ app.use(cookieParser());
 app.use(express.static(join(__dirname, "public")));
 
 // ROUTES
+app.get("/health", (req, res) => res.json({ success: true }));
 app.use("/auth", authRouter);
-app.all("/ping", loginRequired, (req, res) => res.json({ success: true }));
+app.get("/ping", loginRequired, (req, res) => res.json({ success: true }));
 app.use("/users", loginRequired, usersRouter);
 app.use("/chefs", loginRequired, chefsRouter);
 app.use("/meals", loginRequired, mealsRouter);

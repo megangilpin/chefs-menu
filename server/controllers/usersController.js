@@ -18,7 +18,7 @@ const hashPassword = async (password) =>
 const create = async ({ email, password }) => {
     const hashedPassword = await hashPassword(password);
     const { _doc } = await User.create({ email, password: hashedPassword });
-    return _doc
+    return _doc;
 };
 
 const update = async (id, requestBody) => {
