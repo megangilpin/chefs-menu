@@ -57,7 +57,7 @@ router.put("/", async (req, res) => {
         }
         const errors = [];
         if (!cuisineSpecialty) {
-            errors.push("Missing cuisineSpecialty")
+            errors.push("Missing cuisineSpecialty");
         } else {
             cuisineSpecialty = JSON.parse(cuisineSpecialty);
             if (!isArrayOfStrings(cuisineSpecialty))
@@ -68,7 +68,7 @@ router.put("/", async (req, res) => {
             res.status(400).json({ errors });
             return;
         }
-        const newChef = await chefsController.update(chef._id, {
+        const newChef = await chefsController.update(chef, {
             cuisineSpecialty,
             userId: id,
         });
@@ -93,7 +93,7 @@ router.post("/", async (req, res) => {
         }
         const errors = [];
         if (!cuisineSpecialty) {
-            errors.push("Missing cuisineSpecialty")
+            errors.push("Missing cuisineSpecialty");
         } else {
             cuisineSpecialty = JSON.parse(cuisineSpecialty);
             if (!isArrayOfStrings(cuisineSpecialty))

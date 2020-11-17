@@ -31,12 +31,10 @@ const create = async ({ cuisineSpecialty, availability, userId }) => {
 const update = async (id, { cuisineSpecialty, availability, userId }) => {
     const chef = await Chef.findById(id);
     // TODO: get the update array working
-    if (cuisineSpecialty) chef.cuisineSpecialty;
+    if (cuisineSpecialty) chef.cuisineSpecialty = cuisineSpecialty;
     // if (availability) chef.availability;
     if (userId) chef.userId;
-    // console.log({chef, cuisineSpecialty})
     const { _doc } = await chef.save();
-    // console.log({_doc})
     return _doc;
 };
 
