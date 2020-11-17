@@ -1,6 +1,8 @@
 import React from "react";
 import { ThemeProvider } from "@material-ui/core/styles";
 import { BrowserRouter, Route, Redirect } from "react-router-dom";
+import CssBaseline from '@material-ui/core/CssBaseline';
+
 
 import { theme } from "./themes/theme";
 import LoginSignUp from "./pages/LoginSignUp";
@@ -8,6 +10,7 @@ import LoginSignUp from "./pages/LoginSignUp";
 function App() {
     return (
         <ThemeProvider theme={theme}>
+            <CssBaseline/>
             <BrowserRouter>
                 <Route path="/">
                     <Redirect to="/signup" />

@@ -14,6 +14,8 @@ export const theme = createMuiTheme({
             root: {
                 borderRadius: "0px",
                 color: "white",
+                textAlign: "center",
+               
             },
         },
     },
