@@ -3,7 +3,7 @@ const mealSchema = require("../models/meal");
 
 const Meal = connection.model("Meal", mealSchema);
 
-const find = async (id) => {
+const findOneWithId = async (id) => {
     const { _doc } = await Meal.findById(id);
     return _doc;
 };
@@ -55,18 +55,17 @@ const update = async ({
     chefId,
 }) => {
     const meal = await Meal.findById(id);
-
-    if (title) meal.title;
-    if (picURL) meal.picURL;
-    if (price) meal.price;
-    if (servingSize) meal.servingSize;
-    if (servingType) meal.servingType;
-    if (cuisineType) meal.cuisineType;
-    if (ingredients) meal.ingredients;
-    if (requirements) meal.requirements;
-    if (createdAt) meal.createdAt;
-    if (updatedAt) meal.updatedAt;
-    if (chefId) meal.chefId;
+    if (title) meal.title = title;
+    if (picURL) meal.picURL = picURL;
+    if (price) meal.price = price;
+    if (servingSize) meal.servingSize = servingSize;
+    if (servingType) meal.servingType = servingType;
+    if (cuisineType) meal.cuisineType = cuisineType;
+    if (ingredients) meal.ingredients = ingredients;
+    if (requirements) meal.requirements = requirements;
+    if (createdAt) meal.createdAt = createdAt;
+    if (updatedAt) meal.updatedAt = updatedAt;
+    if (chefId) meal.chefId = chefId;
 
     const { _doc } = await meal.save();
     return _doc;
@@ -80,7 +79,7 @@ const remove = async (id) => {
 const deleteAll = async () => await Meal.deleteMany({});
 
 module.exports = {
-    find,
+    findOneWithId,
     create,
     update,
     remove,

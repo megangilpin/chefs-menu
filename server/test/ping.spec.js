@@ -33,6 +33,21 @@ resetDB()
             let token;
             const cuisineSpecialty = ["fast food", "Italian"];
             const cuisineSpecialty2 = ["Pizza", "Italian"];
+            const meal = {
+                title: "pizza",
+                price: 10.5,
+                servingSize: "large",
+                cuisineType: ["Pizza", "fast food"],
+                ingredients: "bread, onion, cheese",
+            };
+            const meal2 = {
+                title: "pizza",
+                price: 20.5,
+                servingSize: "X-large",
+                cuisineType: ["Pizza", "fast food"],
+                ingredients: "bread, onion, extra-cheese",
+            };
+            let mealId = null;
             it("register", (done) => {
                 chai.request(app)
                     .post("/auth/register")
@@ -163,6 +178,59 @@ resetDB()
                         res.body.should.have
                             .property("cuisineSpecialty")
                             .eql(cuisineSpecialty2);
+                        done();
+                    });
+            });
+            it("create a new meal", (done) => {
+                chai.request(app)
+                    .post("/meals")
+                    .set("Content-Type", "application/x-www-form-urlencoded")
+                    .send({
+                        ...meal,
+                        cuisineType: JSON.stringify(meal.cuisineType),
+                    })
+                    .set("Cookie", `token=${token}`)
+                    .end((err, res) => {
+                        err && console.error(err);
+                        res.should.have.status(200);
+                        res.body.should.have
+                            .property("cuisineType")
+                            .eql(meal.cuisineType);
+                        res.body.should.have.property("title").eql(meal.title);
+                        res.body.should.have.property("price").eql(meal.price);
+                        res.body.should.have
+                            .property("servingSize")
+                            .eql(meal.servingSize);
+                        res.body.should.have
+                            .property("ingredients")
+                            .eql(meal.ingredients);
+                        mealId = res.body._id;
+                        done();
+                    });
+            });
+            it("update meal", (done) => {
+                chai.request(app)
+                    .put(`/meals/${mealId}`)
+                    .set("Content-Type", "application/x-www-form-urlencoded")
+                    .send({
+                        ...meal2,
+                        cuisineType: JSON.stringify(meal2.cuisineType),
+                    })
+                    .set("Cookie", `token=${token}`)
+                    .end((err, res) => {
+                        err && console.error(err);
+                        res.should.have.status(200);
+                        res.body.should.have
+                            .property("cuisineType")
+                            .eql(meal2.cuisineType);
+                        res.body.should.have.property("title").eql(meal2.title);
+                        res.body.should.have.property("price").eql(meal2.price);
+                        res.body.should.have
+                            .property("servingSize")
+                            .eql(meal2.servingSize);
+                        res.body.should.have
+                            .property("ingredients")
+                            .eql(meal2.ingredients);
                         done();
                     });
             });
