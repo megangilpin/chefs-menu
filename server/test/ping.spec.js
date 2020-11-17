@@ -25,7 +25,7 @@ describe("/GET health", () => {
 resetDB()
     .then(console.log)
     .then(
-        describe("Happy path for Register and Login flow", async () => {
+        describe("Happy path for a new user", async () => {
             const user = {
                 email: "random@somemail.com",
                 password: "Absc123456",
