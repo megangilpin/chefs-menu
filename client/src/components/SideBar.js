@@ -1,14 +1,14 @@
-import React, { useContext } from "react";
+import * as React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Drawer, Toolbar, Typography } from "@material-ui/core";
-import { UserContext } from "../components/UserContext";
+import { Drawer, Toolbar } from "@material-ui/core";
+
 
 const drawerWidth = 300;
 
 const useStyles = makeStyles((theme) => ({
     drawer: {
         width: drawerWidth,
-        // flexShrink: 0,
+        flexShrink: 0,
     },
     drawerPaper: {
         width: drawerWidth,
@@ -21,7 +21,6 @@ const useStyles = makeStyles((theme) => ({
 
 function SideBar(props) {
     const classes = useStyles();
-    const loadedUser = useContext(UserContext);
 
     return (
         <Drawer
@@ -34,7 +33,6 @@ function SideBar(props) {
             <Toolbar />
             <div className={classes.drawerContainer}>
                 {props.children}
-                <Typography>Side Bar</Typography>
             </div>
         </Drawer>
     );

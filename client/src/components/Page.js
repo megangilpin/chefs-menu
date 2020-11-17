@@ -1,9 +1,10 @@
-import React, { useContext } from "react";
+import * as React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { AppBar, Typography,Toolbar } from "@material-ui/core";
 import MenuButton from "./MenuButton";
-import { UserContext } from "../components/UserContext";
 import logo from "../images/logo.svg";
+
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -22,23 +23,23 @@ const useStyles = makeStyles((theme) => ({
 
 function Page(props) {
     const classes = useStyles();
-    const user = useContext(UserContext);
+
     return (
-        <div className={classes.root}>
-            <AppBar position="fixed" className={classes.appBar}>
-                <Toolbar>
-                    <Typography className={classes.appBarTitle}>
-                        <img
-                            className={classes.logo}
-                            src={logo}
-                            alt="Chef's Menu Logo"
-                        />
-                    </Typography>
-                    <MenuButton />
-                </Toolbar>
-            </AppBar>
-            {props.children}
-        </div>
+            <div className={classes.root}>
+                <AppBar position="fixed" className={classes.appBar}>
+                    <Toolbar>
+                        <Typography className={classes.appBarTitle}>
+                            <img
+                                className={classes.logo}
+                                src={logo}
+                                alt="Chef's Menu Logo"
+                            />
+                        </Typography>
+                        <MenuButton />
+                    </Toolbar>
+                </AppBar>
+                {props.children}
+            </div>
     );
 }
 

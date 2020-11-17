@@ -1,5 +1,6 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
+const { loginRequired } = require("../middleware");
 
 const userController = require("../controllers/usersController");
 
@@ -86,6 +87,30 @@ function validationMiddleware(req, res, next) {
     }
     next();
 }
+
+router.get("/user", loginRequired, async function (req, res, next) {
+    try {
+        const { email } = req.user;
+
+        let user = await userController.findOneWithEmail(email);
+        if (!user) {
+            res.status(400).json({ errors: ["Please sign in"] });
+            return;
+        };
+        if(user.chef) {
+            user.chef = await userController.findOneWithId(id);
+        };
+        
+        delete user.password;
+        // create and return jwt with user obj
+        const responseObj = await createResponseObj(user._doc);
+        res.cookie("token", responseObj.token, { httpOnly: true });
+        res.json(responseObj);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ errors: ["Unexpected error occured"] });
+    }
+});
 
 async function createResponseObj(user) {
     const token = await jwt.sign(

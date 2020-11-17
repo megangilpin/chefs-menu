@@ -5,7 +5,7 @@ const Chef = connection.model("Chef", chefSchema);
 
 module.exports = {
   findOneWithId: async (id) => {
-    await Chef
+    return await Chef
       .findOne({id})
   },
 }

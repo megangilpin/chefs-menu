@@ -1,6 +1,6 @@
-import React from "react";
+import * as React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Typography,Toolbar } from "@material-ui/core";
+import { Toolbar } from "@material-ui/core";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -15,7 +15,6 @@ function Main(props) {
     return (
         <div className={classes.content}>
             <Toolbar />
-            <Typography>Main</Typography>
             {props.children}
         </div>
     );
