@@ -41,7 +41,9 @@ router.post("/register", validationMiddleware, async function (req, res, next) {
         // verify that user isn't already in DB
         const user = await userController.findOneWithEmail(email);
         if (user) {
-            res.status(400).json({ errors: ["User already exists"] });
+            res.status(400).json({
+                errors: ["User with given email already exists"],
+            });
             return;
         }
 
@@ -93,7 +95,7 @@ async function createResponseObj(user) {
         { expiresIn: process.env.TOKEN_TTL }
     );
     return {
-        user: userController.sanatize(user),
+        user: await userController.sanatize(user),
         token,
     };
 }

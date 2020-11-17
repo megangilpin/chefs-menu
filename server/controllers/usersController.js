@@ -9,7 +9,7 @@ const SALT_ROUNDS = Number(process.env.SALT_ROUNDS);
 
 // src: https://stackoverflow.com/questions/201323/how-to-validate-an-email-address-using-a-regular-expression
 const isValidEmailFormat = (email) =>
-    typeof email !== "string" &&
+    typeof email === "string" &&
     /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(email);
 
 const hashPassword = async (password) =>
@@ -18,7 +18,7 @@ const hashPassword = async (password) =>
 const create = async ({ email, password }) => {
     const hashedPassword = await hashPassword(password);
     const { _doc } = await User.create({ email, password: hashedPassword });
-    return _doc;
+    return _doc
 };
 
 const update = async (id, requestBody) => {
@@ -57,17 +57,17 @@ const update = async (id, requestBody) => {
     if (allergies) user.allergies = allergies;
     if (isChef) user.isChef = isChef;
 
-    const { _doc } = await user.save();
+    const { _doc } = (await user.save()) || {};
     return _doc;
 };
 
 const findOneWithEmail = async (email) => {
-    const { _doc } = await User.findOne({ email });
+    const { _doc } = (await User.findOne({ email })) || {};
     return _doc;
 };
 
 const findOneWithId = async (id) => {
-    const { _doc } = await User.findOne({ _id: id });
+    const { _doc } = (await User.findById(id)) || {};
     return _doc;
 };
 

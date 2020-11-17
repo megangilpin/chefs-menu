@@ -35,7 +35,9 @@ router.put("/", async (req, res, next) => {
             return;
         }
 
-        const user = await usersController.update(id, req.body);
+        const user = await usersController.sanatize(
+            await usersController.update(id, req.body)
+        );
         res.json(user);
     } catch (error) {
         console.error(error);
