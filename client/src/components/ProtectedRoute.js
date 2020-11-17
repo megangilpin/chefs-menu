@@ -8,7 +8,7 @@ export const ProtectedRoute = ({component: Component, ...rest}) => {
     <Route 
       {...rest} 
       render={props => {
-        if(user.profile || document.cookie.indexOf('token') === -1) {
+        if(user.profile) {
           return <Component {...props} />;
         } else {
           return (
