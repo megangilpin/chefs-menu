@@ -2,7 +2,6 @@ import * as React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Drawer, Toolbar } from "@material-ui/core";
 
-
 const drawerWidth = 300;
 
 const useStyles = makeStyles((theme) => ({
@@ -31,9 +30,7 @@ function SideBar(props) {
             }}
         >
             <Toolbar />
-            <div className={classes.drawerContainer}>
-                {props.children}
-            </div>
+            <div className={classes.drawerContainer}>{props.children}</div>
         </Drawer>
     );
 }

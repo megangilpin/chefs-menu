@@ -1,6 +1,6 @@
 import React from "react";
 
-import {Link, useLocation} from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import { Grid, Typography, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
@@ -63,7 +63,7 @@ export default function LoginSignUp(props) {
                 xs={4}
                 sm={6}
             >
-                <Grid item xs={12}  >
+                <Grid item xs={12}>
                     <Typography className={classes.bannerText} variant="body1">
                         {location.pathname === "/login"
                             ? "Don't have an account?"
@@ -71,7 +71,7 @@ export default function LoginSignUp(props) {
                     </Typography>
                 </Grid>
 
-                <Grid item xs={12} >
+                <Grid item xs={12}>
                     <Button
                         color="primary"
                         variant="contained"

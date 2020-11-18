@@ -2,7 +2,7 @@
 
 const express = require("express");
 const userController = require("../controllers/usersController");
-const { loginRequired } = require("../middleware");
+
 
 const router = express.Router();
 

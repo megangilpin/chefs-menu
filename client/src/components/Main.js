@@ -2,7 +2,6 @@ import * as React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Toolbar } from "@material-ui/core";
 
-
 const useStyles = makeStyles((theme) => ({
     content: {
         flexGrow: 1,

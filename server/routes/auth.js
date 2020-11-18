@@ -97,11 +97,10 @@ router.get("/user", loginRequired, async function (req, res, next) {
             res.status(400).json({ errors: ["Please sign in"] });
             return;
         };
-        if(user.chef) {
-            user.chef = await userController.findOneWithId(id);
+        if(user.isChef) {
+            user.isChef = await userController.findOneWithId(id);
         };
         
-        delete user.password;
         // create and return jwt with user obj
         const responseObj = await createResponseObj(user._doc);
         res.cookie("token", responseObj.token, { httpOnly: true });

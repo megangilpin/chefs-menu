@@ -1,12 +1,11 @@
 import * as React from "react";
-import { useHistory } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 import { Formik, Form, Field } from "formik";
 import { Typography, Grid, Button } from "@material-ui/core";
 import { TextField } from "formik-material-ui";
 import { makeStyles } from "@material-ui/core/styles";
 import * as Yup from "yup";
-import AuthService from "../services/AuthService";
-import { UserContext } from "../contexts/UserContextProvider";
+import { UserContext } from "../contexts/user/UserContextProvider";
 
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
@@ -48,22 +47,21 @@ export default function LoginForm(props) {
                 validationSchema={validationSchema}
                 onSubmit={(values, { setSubmitting }) => {
                     setSubmitting(false);
-                    AuthService.login(values)
-                        .then((data) => {
-                            if (data.user) {
+                    user.login(values)
+                        .then((res) => {
+                            if (res.result) {
                                 setSeverity("success");
                                 setMessage("Successfully logged in!");
                                 setOpen(true);
-                                user.setProfile(data.user)
-                                history.push("/home")
+                                history.push("/home");
                             } else {
                                 setSeverity("error");
-                                setMessage(data.errors);
+                                setMessage(res.message);
                                 setOpen(true);
                             }
                         })
                         .catch((error) => {
-                            console.log(error);
+                            console.log(error.message);
                             setSeverity("error");
                             setMessage("Error while making request");
                             setOpen(true);

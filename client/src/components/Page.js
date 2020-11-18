@@ -1,10 +1,8 @@
 import * as React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { AppBar, Typography,Toolbar } from "@material-ui/core";
+import { AppBar, Typography, Toolbar } from "@material-ui/core";
 import MenuButton from "./MenuButton";
 import logo from "../images/logo.svg";
-
-
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -18,28 +16,27 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
         marginLeft: theme.spacing(2),
     },
-    logo: {},
 }));
 
 function Page(props) {
     const classes = useStyles();
 
     return (
-            <div className={classes.root}>
-                <AppBar position="fixed" className={classes.appBar}>
-                    <Toolbar>
-                        <Typography className={classes.appBarTitle}>
-                            <img
-                                className={classes.logo}
-                                src={logo}
-                                alt="Chef's Menu Logo"
-                            />
-                        </Typography>
-                        <MenuButton />
-                    </Toolbar>
-                </AppBar>
-                {props.children}
-            </div>
+        <div className={classes.root}>
+            <AppBar position="fixed" className={classes.appBar}>
+                <Toolbar>
+                    <Typography className={classes.appBarTitle}>
+                        <img
+                            className={classes.logo}
+                            src={logo}
+                            alt="Chef's Menu Logo"
+                        />
+                    </Typography>
+                    <MenuButton />
+                </Toolbar>
+            </AppBar>
+            {props.children}
+        </div>
     );
 }
 
