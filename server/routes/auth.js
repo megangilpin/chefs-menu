@@ -77,6 +77,7 @@ router.get("/user", loginRequired, async function (req, res, next) {
         // create and return jwt with user obj
         const responseObj = await createResponseObj(user);
         res.cookie("token", responseObj.token, { httpOnly: true });
+        await new Promise(resolve => setTimeout(resolve, 2000))
         res.json(responseObj);
     } catch (error) {
         console.error(error);
