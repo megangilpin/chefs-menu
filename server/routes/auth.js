@@ -37,8 +37,8 @@ router.post("/login", validationMiddleware, async function (req, res, next) {
 
 router.post("/register", validationMiddleware, async function (req, res, next) {
     try {
-        const { email, password } = req.body;
-
+        const { email, password, chef } = req.body;
+        const isChef = !!chef;
         // verify that user isn't already in DB
         const user = await userController.findOneWithEmail(email);
         if (user) {
@@ -56,7 +56,11 @@ router.post("/register", validationMiddleware, async function (req, res, next) {
             return;
         }
 
-        const createdUser = await userController.create({ email, password });
+        const createdUser = await userController.create({
+            email,
+            password,
+            isChef,
+        });
         const responseObj = await createResponseObj(createdUser);
         res.cookie("token", responseObj.token, { httpOnly: true });
         res.status(201).json(responseObj);

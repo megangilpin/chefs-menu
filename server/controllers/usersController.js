@@ -16,9 +16,13 @@ const isValidEmailFormat = (email) =>
 const hashPassword = async (password) =>
     await bcrypt.hash(password, SALT_ROUNDS);
 
-const create = async ({ email, password }) => {
+const create = async ({ email, password, isChef }) => {
     const hashedPassword = await hashPassword(password);
-    const { _doc } = await User.create({ email, password: hashedPassword });
+    const { _doc } = await User.create({
+        email,
+        password: hashedPassword,
+        isChef,
+    });
     return _doc;
 };
 
