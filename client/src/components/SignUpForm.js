@@ -53,10 +53,10 @@ export default function SignUp() {
                     user.register(values)
                         .then((res) => {
                             if (res.result) {
+                                history.push("/home");
                                 setSeverity("success");
                                 setMessage("Successfully signed up!");
                                 setOpen(true);
-                                history.push("/home");
                             } else {
                                 setSeverity("error");
                                 setMessage(res.message);

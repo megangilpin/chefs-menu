@@ -1,6 +1,8 @@
 import * as React from "react";
 import { SET_USER, LOGOUT } from "../types";
 
+
+
 const initialState = {
     isAuthenticated: false,
     profile: null,
@@ -29,6 +31,7 @@ const UserContext = React.createContext(initialState);
 
 const UserContextProvider = ({ children }) => {
     const [state, dispatch] = React.useReducer(UserReducer, initialState);
+
     const register = async (formValues) => {
         const response = await fetch("/auth/register", {
             method: "post",

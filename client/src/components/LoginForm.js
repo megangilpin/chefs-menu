@@ -50,10 +50,10 @@ export default function LoginForm(props) {
                     user.login(values)
                         .then((res) => {
                             if (res.result) {
+                                history.push("/home");
                                 setSeverity("success");
                                 setMessage("Successfully logged in!");
                                 setOpen(true);
-                                history.push("/home");
                             } else {
                                 setSeverity("error");
                                 setMessage(res.message);
