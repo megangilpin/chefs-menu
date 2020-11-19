@@ -86,15 +86,16 @@ const UserContextProvider = ({ children }) => {
 
         if (data.user) {
             dispatch({ type: SET_USER, payload: data });
+        } else {
+            dispatch({type: LOGOUT, payload: null})
         }
     };
 
     React.useEffect(() => {
-        if(document.cookie.indexOf('token') === -1){
-            checkLogin().catch((error) => {
-                console.log(error)
-            })
-        }
+        const checkCookie = async () => await checkLogin();
+        checkCookie().catch((error) => {
+            console.log(error)
+        })
     }, [])
 
     return (
