@@ -9,20 +9,21 @@ const connection = require("../dbConnection");
 
 // Seed for users collection
 const userSeed = [
-  {
-    firstName: "Megan",
-    lastName: "Gilpin",
-    password: "1234",
-    email: "megangilpin@gmail.com",
-    primaryAddress: {
-      street: "3692 Broadway",
-      city: "New York",
-      region: "New York",
-      postalCode: "10031",
-      country: "United States",
+    {
+        firstName: "Megan",
+        lastName: "Gilpin",
+        password: "1234",
+        email: "megangilpin@gmail.com",
+        primaryAddress: {
+            street: "3692 Broadway",
+            city: "New York",
+            region: "New York",
+            postalCode: "10031",
+            country: "United States",
+        },
+        isChef: true,
     },
-  }
-]
+];
 // Seed for chefs collection
 // const chefsSeed = [
 //   {
@@ -35,7 +36,7 @@ const userSeed = [
 // ];
 
 // Seed for meals collection
-// const mealSeed = 
+// const mealSeed =
 //   {
 //     title: "Grilled cheese",
 //     price: 1,
@@ -48,20 +49,19 @@ const userSeed = [
 //     }
 //   }
 
-;(async () => {
-  try {
-    let res = await usersController.deleteAll()
-    console.log('deleteing all users', res)
+(async () => {
+    try {
+        let res = await usersController.deleteAll();
+        console.log("deleteing all users", res);
 
-    res = await Promise.all(userSeed.map(usersController.create))
-    console.log('creating all users', res)
-    process.exit(0)
-  }
-  catch (error) {
-    console.error(error)
-    rocess.exit(1)
-  }
-})()
+        res = await Promise.all(userSeed.map(usersController.create));
+        console.log("creating all users", res);
+        process.exit(0);
+    } catch (error) {
+        console.error(error);
+        process.exit(1);
+    }
+})();
 
 //  insert into chefs collection
 //  chefsDB

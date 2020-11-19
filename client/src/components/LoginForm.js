@@ -1,10 +1,11 @@
 import * as React from "react";
+import { useHistory } from "react-router-dom";
 import { Formik, Form, Field } from "formik";
 import { Typography, Grid, Button } from "@material-ui/core";
 import { TextField } from "formik-material-ui";
 import { makeStyles } from "@material-ui/core/styles";
 import * as Yup from "yup";
-import AuthService from "../services/AuthService";
+import { UserContext } from "../contexts/user/UserContextProvider";
 
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
@@ -18,13 +19,13 @@ const useStyles = makeStyles({
     },
 });
 
-export default function LoginForm() {
+export default function LoginForm(props) {
     const classes = useStyles();
-
+    const user = React.useContext(UserContext);
+    const history = useHistory();
     const [open, setOpen] = React.useState(false);
     const [severity, setSeverity] = React.useState("");
     const [message, setMessage] = React.useState("");
-
     const validationSchema = Yup.object().shape({
         email: Yup.string().email().required("Required!"),
         password: Yup.string().min(6).required("Required!"),
@@ -46,20 +47,21 @@ export default function LoginForm() {
                 validationSchema={validationSchema}
                 onSubmit={(values, { setSubmitting }) => {
                     setSubmitting(false);
-                    AuthService.login(values)
-                        .then((data) => {
-                            if (data.user) {
+                    user.login(values)
+                        .then((res) => {
+                            if (res.result) {
+                                history.push("/home");
                                 setSeverity("success");
                                 setMessage("Successfully logged in!");
                                 setOpen(true);
                             } else {
                                 setSeverity("error");
-                                setMessage(data.errors);
+                                setMessage(res.message);
                                 setOpen(true);
                             }
                         })
                         .catch((error) => {
-                            console.log(error);
+                            console.log(error.message);
                             setSeverity("error");
                             setMessage("Error while making request");
                             setOpen(true);
