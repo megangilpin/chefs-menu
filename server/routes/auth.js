@@ -66,6 +66,53 @@ router.post("/register", validationMiddleware, async function (req, res, next) {
     }
 });
 
+router.get("/user", loginRequired, async function (req, res, next) {
+    try {
+        const { id } = req.user;
+        const user = await userController.findOneWithId(id);
+        if (!user) {
+            res.status(400).json({ errors: ["Please sign in"] });
+            return;
+        }
+        // create and return jwt with user obj
+        const responseObj = await createResponseObj(user);
+        res.cookie("token", responseObj.token, { httpOnly: true });
+        res.json(responseObj);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ errors: ["Unexpected error occured"] });
+    }
+});
+
+router.put("/user", loginRequired, async (req, res, next) => {
+    try {
+        const { id } = req.user;
+        const { email, password } = req.body;
+
+        const errors = [];
+        // validate that the password is valid
+        if (email && !usersController.isValidEmailFormat(email))
+            errors.push("Invalid email");
+
+        // validate that the password is valid
+        if (password && password.length < 6)
+            errors.push("Password should be at least 6 characters long");
+
+        if (errors.length > 0) {
+            res.status(400).json({ errors });
+            return;
+        }
+
+        const user = await usersController.sanatize(
+            await usersController.update(id, req.body)
+        );
+        res.json(user);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ errors: ["Unexpected error occured"] });
+    }
+});
+
 function validationMiddleware(req, res, next) {
     const { email, password } = req.body;
     // input validation

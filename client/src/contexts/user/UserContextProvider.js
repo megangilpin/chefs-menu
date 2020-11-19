@@ -1,8 +1,6 @@
 import * as React from "react";
 import { SET_USER, LOGOUT } from "../types";
 
-
-
 const initialState = {
     isAuthenticated: false,
     profile: null,
@@ -77,9 +75,9 @@ const UserContextProvider = ({ children }) => {
     };
 
     const checkLogin = async () => {
-        const response = await fetch("/users", {
+        const response = await fetch("/auth/user", {
             method: "get",
-            credentials: 'include',
+            credentials: "include",
         });
 
         const data = await response.json();
@@ -87,16 +85,16 @@ const UserContextProvider = ({ children }) => {
         if (data.user) {
             dispatch({ type: SET_USER, payload: data });
         } else {
-            dispatch({type: LOGOUT, payload: null})
+            dispatch({ type: LOGOUT, payload: null });
         }
     };
 
     React.useEffect(() => {
         const checkCookie = async () => await checkLogin();
         checkCookie().catch((error) => {
-            console.log(error)
-        })
-    }, [])
+            console.log(error);
+        });
+    }, []);
 
     return (
         <UserContext.Provider value={{ ...state, register, login }}>

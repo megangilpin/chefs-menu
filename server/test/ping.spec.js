@@ -103,17 +103,25 @@ resetDB()
             });
             it("user info", (done) => {
                 chai.request(app)
-                    .get("/users")
+                    .get("/auth/user")
                     .set("Cookie", `token=${token}`)
                     .end((err, res) => {
                         err && console.error(err);
                         res.should.have.status(200);
-                        res.body.should.have.property("email").eql(user.email);
-                        res.body.should.have.property("isChef").eql(false);
-                        res.body.should.have.property("primaryAddress").eql({});
-                        res.body.should.have
+                        res.body.should.have.property("user");
+                        res.body.user.should.have
+                            .property("email")
+                            .eql(user.email);
+                        res.body.user.should.have.property("isChef").eql(false);
+                        res.body.user.should.have
+                            .property("primaryAddress")
+                            .eql({});
+                        res.body.user.should.have
                             .property("favoriteCuisine")
                             .eql([]);
+                        res.body.should.have.property("token");
+                        expect(res).to.have.cookie("token");
+                        token = res.body.token;
                         done();
                     });
             });
