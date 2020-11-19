@@ -54,7 +54,7 @@ export default function SignUp() {
                         .then((res) => {
                             if (res.result) {
                                 setSeverity("success");
-                                setMessage("Successfully signed in!");
+                                setMessage("Successfully signed up!");
                                 setOpen(true);
                                 history.push("/home");
                             } else {

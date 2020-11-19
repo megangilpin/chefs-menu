@@ -1,42 +1,24 @@
 import * as React from "react";
-import { SIGN_UP, LOGIN, LOGOUT } from "../types";
+import { SET_USER, LOGOUT } from "../types";
 
 const initialState = {
     isAuthenticated: false,
-    profile: {
-        _id: "",
-        email: "",
-        favoriteCuisine: [],
-        isChef: false,
-        primaryAddress: {},
-        profileImage: "",
-    },
-    token: null,
+    profile: null,
 };
 
 const UserReducer = (state, action) => {
     switch (action.type) {
-        case SIGN_UP:
-        case LOGIN:
+        case SET_USER:
             return {
                 ...state,
                 isAuthenticated: true,
-                profile: {
-                    _id: action.payload.user._id,
-                    email: action.payload.user.email,
-                    favoriteCuisine: action.payload.user.favoriteCuisine,
-                    isChef: action.payload.user.isChef,
-                    primaryAddress: {},
-                    profileImage: "",
-                },
-                token: action.payload.token,
+                profile: action.payload.user,
             };
         case LOGOUT:
             return {
                 ...state,
                 isAuthenticated: false,
                 profile: null,
-                token: null,
             };
         default:
             return state;
@@ -47,7 +29,6 @@ const UserContext = React.createContext(initialState);
 
 const UserContextProvider = ({ children }) => {
     const [state, dispatch] = React.useReducer(UserReducer, initialState);
-
     const register = async (formValues) => {
         const response = await fetch("/auth/register", {
             method: "post",
@@ -65,7 +46,7 @@ const UserContextProvider = ({ children }) => {
                 message: data.errors,
             };
         } else {
-            dispatch({ type: SIGN_UP, payload: data });
+            dispatch({ type: SET_USER, payload: data });
             return { result: true };
         }
     };
@@ -87,11 +68,31 @@ const UserContextProvider = ({ children }) => {
                 message: data.errors,
             };
         } else {
-            console.log(data);
-            dispatch({ type: LOGIN, payload: data });
+            dispatch({ type: SET_USER, payload: data });
             return { result: true };
         }
     };
+
+    const checkLogin = async () => {
+        const response = await fetch("/auth/user", {
+            method: "get",
+            credentials: 'include',
+        });
+
+        const data = await response.json();
+
+        if (data.user) {
+            dispatch({ type: SET_USER, payload: data });
+        }
+    };
+
+    React.useEffect(() => {
+        if(document.cookie.indexOf('token') === -1){
+            checkLogin().catch((error) => {
+                console.log(error)
+            })
+        }
+    }, [])
 
     return (
         <UserContext.Provider value={{ ...state, register, login }}>
