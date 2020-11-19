@@ -9,6 +9,10 @@ router.get("/", async (req, res, next) => {
         const user = await usersController.sanatize(
             await usersController.findOneWithId(id)
         );
+        if (!user) {
+            res.status(400).json({ errors: ["Please sign in"] });
+            return;
+        };
         res.json(user);
     } catch (error) {
         console.error(error);
