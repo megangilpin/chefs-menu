@@ -26,7 +26,7 @@ const create = async ({ cuisineSpecialty, userId }) => {
 const update = async (id, { cuisineSpecialty, userId }) => {
     const chef = await Chef.findById(id);
     if (cuisineSpecialty) chef.cuisineSpecialty = cuisineSpecialty;
-    if (userId) chef.userId;
+    if (userId) chef.userId = userId;
     const { _doc } = await chef.save();
     return _doc;
 };
