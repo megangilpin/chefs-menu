@@ -26,7 +26,7 @@ router.post("/login", validationMiddleware, async function (req, res, next) {
             return;
         }
         // create and return jwt with user obj
-        const responseObj = await createResponseObj(user._doc);
+        const responseObj = await createResponseObj(user);
         res.cookie("token", responseObj.token, { httpOnly: true });
         res.json(responseObj);
     } catch (error) {
@@ -42,7 +42,9 @@ router.post("/register", validationMiddleware, async function (req, res, next) {
         // verify that user isn't already in DB
         const user = await userController.findOneWithEmail(email);
         if (user) {
-            res.status(400).json({ errors: ["User already exists"] });
+            res.status(400).json({
+                errors: ["User with given email already exists"],
+            });
             return;
         }
 
@@ -55,9 +57,57 @@ router.post("/register", validationMiddleware, async function (req, res, next) {
         }
 
         const createdUser = await userController.create({ email, password });
-        const responseObj = await createResponseObj(createdUser._doc);
+        const responseObj = await createResponseObj(createdUser);
         res.cookie("token", responseObj.token, { httpOnly: true });
         res.status(201).json(responseObj);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ errors: ["Unexpected error occured"] });
+    }
+});
+
+router.get("/user", loginRequired, async function (req, res, next) {
+    try {
+        const { id } = req.user;
+        const user = await userController.findOneWithId(id);
+        if (!user) {
+            res.status(400).json({ errors: ["Please sign in"] });
+            return;
+        }
+        // create and return jwt with user obj
+        const responseObj = await createResponseObj(user);
+        res.cookie("token", responseObj.token, { httpOnly: true });
+        await new Promise(resolve => setTimeout(resolve, 2000))
+        res.json(responseObj);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ errors: ["Unexpected error occured"] });
+    }
+});
+
+router.put("/user", loginRequired, async (req, res, next) => {
+    try {
+        const { id } = req.user;
+        const { email, password } = req.body;
+
+        const errors = [];
+        // validate that the password is valid
+        if (email && !usersController.isValidEmailFormat(email))
+            errors.push("Invalid email");
+
+        // validate that the password is valid
+        if (password && password.length < 6)
+            errors.push("Password should be at least 6 characters long");
+
+        if (errors.length > 0) {
+            res.status(400).json({ errors });
+            return;
+        }
+
+        const user = await usersController.sanatize(
+            await usersController.update(id, req.body)
+        );
+        res.json(user);
     } catch (error) {
         console.error(error);
         res.status(500).json({ errors: ["Unexpected error occured"] });
@@ -77,8 +127,7 @@ function validationMiddleware(req, res, next) {
     if (password && typeof password !== "string")
         errors.push("Invalid type for password");
 
-    // src: https://stackoverflow.com/questions/201323/how-to-validate-an-email-address-using-a-regular-expression
-    if (!/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(email))
+    if (email && !userController.isValidEmailFormat(email))
         errors.push("Invalid format for email");
 
     if (errors.length > 0) {
@@ -88,29 +137,6 @@ function validationMiddleware(req, res, next) {
     next();
 }
 
-router.get("/user", loginRequired, async function (req, res, next) {
-    try {
-        const { email } = req.user;
-
-        let user = await userController.findOneWithEmail(email);
-        if (!user) {
-            res.status(400).json({ errors: ["Please sign in"] });
-            return;
-        };
-        if(user.isChef) {
-            user.isChef = await userController.findOneWithId(id);
-        };
-        
-        // create and return jwt with user obj
-        const responseObj = await createResponseObj(user._doc);
-        res.cookie("token", responseObj.token, { httpOnly: true });
-        res.json(responseObj);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ errors: ["Unexpected error occured"] });
-    }
-});
-
 async function createResponseObj(user) {
     const token = await jwt.sign(
         { email: user.email, id: user._id },
@@ -118,7 +144,7 @@ async function createResponseObj(user) {
         { expiresIn: process.env.TOKEN_TTL }
     );
     return {
-        user: { ...user, password: undefined },
+        user: await userController.sanatize(user),
         token,
     };
 }

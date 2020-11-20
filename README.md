@@ -5,20 +5,23 @@ This is a marketplace where you can book a chef in your area based on cuisine ty
 availability! Users will use this either for big events they host or small intimate family dinners
 when they want to try out a new cuisine.
 
-Who’s it for?
-Chefs and food lovers!
-Scope of Project:
-● Create a marketplace for chefs to showcase their homecooked meals and their
-availabilities. Then users can come on and filter to find chefs in their area that would be
+> Who’s it for?
+> Chefs and *food lovers!*
+
+## Scope of Project
+
+* Create a marketplace for chefs to showcase their homecooked meals and their
+availabilities.
+* Then users can come on and filter to find chefs in their area that would be
 available to cook in their kitchen on a specific date.
 
 ## Features
 
-● Login/sign up flow with e-mail address
-● Profile pages (for chefs and for users)
-● Browse page with filters for: location, cuisine, availability
-● Payments
-● Direct messaging between users
+* Login/sign up flow with e-mail address
+* Profile pages (for chefs and for users)
+* Browse page with filters for: location, cuisine, availability
+* Payments
+* Direct messaging between users
 
 ## Running the project locally
 ### Front-End
