@@ -19,7 +19,10 @@ const findOneWithUserId = async (userId) => {
 };
 
 const create = async ({ cuisineSpecialty, userId }) => {
-    const { _doc } = (await Chef.create({ cuisineSpecialty, userId })) || {};
+    const pojsoChef = {};
+    pojsoChef.userId = userId;
+    if (cuisineSpecialty) pojsoChef.cuisineSpecialty = cuisineSpecialty;
+    const { _doc } = (await Chef.create(pojsoChef)) || {};
     return _doc;
 };
 
