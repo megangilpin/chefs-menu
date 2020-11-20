@@ -25,6 +25,4 @@ const userSchema = new Schema({
     isChef: { type: Boolean, default: false },
 });
 
-const User = mongoose.model("User", userSchema);
-
 module.exports = userSchema;

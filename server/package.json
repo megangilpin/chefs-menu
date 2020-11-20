@@ -6,7 +6,7 @@
     "dev": "nodemon ./bin/www",
     "debug": "nodemon  --inspect ./bin/www",
     "seed": "node scripts/seedDB.js",
-    "test": "NODE_ENV=test ./node_modules/.bin/mocha --exit --timeout 30000"
+    "test": "NODE_ENV=test ATLAS_URI=mongodb://localhost:27017/corn-pops-test ./node_modules/.bin/mocha --exit --timeout 30000"
   },
   "dependencies": {
     "aws-sdk": "^2.794.0",

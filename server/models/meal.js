@@ -15,6 +15,4 @@ const mealSchema = new Schema({
     chefId: { type: Schema.Types.ObjectId, ref: "Chefs" },
 });
 
-const Meal = mongoose.model("Meal", mealSchema);
-
-module.exports = Meal;
+module.exports = mealSchema;

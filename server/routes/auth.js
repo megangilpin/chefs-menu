@@ -1,13 +1,14 @@
 const express = require("express");
-const jwt = require("jsonwebtoken");
-const { loginRequired } = require("../middleware");
 
+const { errorHandelingWrapper, createAuthResponseObj } = require("../util");
 const userController = require("../controllers/usersController");
 
 const router = express.Router();
 
-router.post("/login", validationMiddleware, async function (req, res, next) {
-    try {
+router.post(
+    "/login",
+    errorHandelingWrapper(validationMiddleware),
+    errorHandelingWrapper(async (req, res) => {
         const { email, password } = req.body;
         // verify that there is user for email
         const user = await userController.findOneWithEmail(email);
@@ -26,23 +27,24 @@ router.post("/login", validationMiddleware, async function (req, res, next) {
             return;
         }
         // create and return jwt with user obj
-        const responseObj = await createResponseObj(user._doc);
+        const responseObj = await createAuthResponseObj(user);
         res.cookie("token", responseObj.token, { httpOnly: true });
         res.json(responseObj);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ errors: ["Unexpected error occured"] });
-    }
-});
+    })
+);
 
-router.post("/register", validationMiddleware, async function (req, res, next) {
-    try {
-        const { email, password } = req.body;
-
+router.post(
+    "/register",
+    errorHandelingWrapper(validationMiddleware),
+    errorHandelingWrapper(async (req, res) => {
+        const { email, password, chef } = req.body;
+        const isChef = !!chef;
         // verify that user isn't already in DB
         const user = await userController.findOneWithEmail(email);
         if (user) {
-            res.status(400).json({ errors: ["User already exists"] });
+            res.status(400).json({
+                errors: ["User with given email already exists"],
+            });
             return;
         }
 
@@ -54,15 +56,16 @@ router.post("/register", validationMiddleware, async function (req, res, next) {
             return;
         }
 
-        const createdUser = await userController.create({ email, password });
-        const responseObj = await createResponseObj(createdUser._doc);
+        const createdUser = await userController.create({
+            email,
+            password,
+            isChef,
+        });
+        const responseObj = await createAuthResponseObj(createdUser);
         res.cookie("token", responseObj.token, { httpOnly: true });
         res.status(201).json(responseObj);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ errors: ["Unexpected error occured"] });
-    }
-});
+    })
+);
 
 function validationMiddleware(req, res, next) {
     const { email, password } = req.body;
@@ -77,8 +80,7 @@ function validationMiddleware(req, res, next) {
     if (password && typeof password !== "string")
         errors.push("Invalid type for password");
 
-    // src: https://stackoverflow.com/questions/201323/how-to-validate-an-email-address-using-a-regular-expression
-    if (!/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(email))
+    if (email && !userController.isValidEmailFormat(email))
         errors.push("Invalid format for email");
 
     if (errors.length > 0) {
@@ -86,41 +88,6 @@ function validationMiddleware(req, res, next) {
         return;
     }
     next();
-}
-
-router.get("/user", loginRequired, async function (req, res, next) {
-    try {
-        const { email } = req.user;
-
-        let user = await userController.findOneWithEmail(email);
-        if (!user) {
-            res.status(400).json({ errors: ["Please sign in"] });
-            return;
-        };
-        if(user.isChef) {
-            user.isChef = await userController.findOneWithId(id);
-        };
-        
-        // create and return jwt with user obj
-        const responseObj = await createResponseObj(user._doc);
-        res.cookie("token", responseObj.token, { httpOnly: true });
-        res.json(responseObj);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ errors: ["Unexpected error occured"] });
-    }
-});
-
-async function createResponseObj(user) {
-    const token = await jwt.sign(
-        { email: user.email, id: user._id },
-        process.env.SECRET,
-        { expiresIn: process.env.TOKEN_TTL }
-    );
-    return {
-        user: { ...user, password: undefined },
-        token,
-    };
 }
 
 module.exports = router;
