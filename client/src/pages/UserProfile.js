@@ -8,15 +8,15 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import Avatar from "@material-ui/core/Avatar";
 import Box from "@material-ui/core/Box";
 import EditIcon from "@material-ui/icons/Edit";
-// import IconButton from "@material-ui/core/IconButton";
+import IconButton from "@material-ui/core/IconButton";
 import sampleUser from "../images/sampleUser.png";
 
 import UserProfileMap from "../components/UserProfileMap";
 
 const useStyles = makeStyles({
     profile: {
-        margin: "2vh auto",
-        marginTop: "10vh",
+        margin: "12vh auto",
+
         width: "80%",
         height: "80vh",
         overflow: "hidden",
@@ -24,7 +24,7 @@ const useStyles = makeStyles({
     profileTopRight: {
         height: "50%",
         // if you change this height, make sure you change UserProfileMap to correspond
-        padding: "5vh 5vw 0 5vw",
+        padding: "5vh 1vw 0 5vw",
     },
     profileTopLeft: {
         borderRight: "1px solid lightgrey",
@@ -42,9 +42,18 @@ const useStyles = makeStyles({
     },
 
     sendMessageBtn: {
-       textTransform: "capitalize",
-        padding: "1vh 3vw 1vh 3vw",
+        textTransform: "capitalize",
+        padding: "10px",
     },
+
+    editRow: {
+
+        textAlign: "right",
+    },
+    editButton: {
+        color: "white",
+        background: "#FF743D"
+    }
 });
 
 export default function UserProfile() {
@@ -106,13 +115,16 @@ export default function UserProfile() {
                 spacing={2}
                 alignContent="flex-start"
                 className={classes.profileTopRight}
-            >
+            >   
+                 <Grid className={classes.editRow}item xs={12}>
+                     <IconButton className={classes.editButton} onClick={() => history.push("/editprofile")}>
+                         <EditIcon />
+                        </IconButton>
+                     </Grid>
                 <Grid item xs={12}>
                     <Typography variant="h6" component="h4">
-                        ABOUT ME:{" "}
-                      
-                            <EditIcon onClick={() => history.push("/editprofile")}/>
-           
+                        ABOUT ME:
+                       
                     </Typography>
                     <Typography variant="body1" component="h5">
                         {userData.about}
