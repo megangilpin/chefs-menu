@@ -48,7 +48,8 @@ function MenuButton(props) {
                 keepMounted
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
-            >
+            >   
+                <MenuItem onClick={()=>history.push("home")}>Home</MenuItem>
                 <MenuItem onClick={()=>history.push("profile")}>Profile</MenuItem>
                 <MenuItem onClick={handleClose}>My account</MenuItem>
                 <MenuItem onClick={handleClose}>Logout</MenuItem>
