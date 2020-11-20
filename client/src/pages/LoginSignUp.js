@@ -42,7 +42,7 @@ export default function LoginSignUp(props) {
     const classes = useStyles();
     const location = useLocation();
     const user = React.useContext(UserContext);
-    
+
     return (
         <Grid container className={classes.screen}>
             <Grid className={classes.left} container item xs={8} sm={6}>
@@ -80,7 +80,7 @@ export default function LoginSignUp(props) {
                         variant="contained"
                         component={Link}
                         to={location.pathname === "/signup" ? "/login" : "/signup"}
-                    >   
+                    >
                         {location.pathname === "/signup" ? "Sign In" : "Sign Up"}
                     </Button>
                 </Grid>

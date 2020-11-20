@@ -1,11 +1,18 @@
 import * as React from "react";
 import { ThemeProvider } from "@material-ui/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import { BrowserRouter, Route, Redirect, Switch,useHistory } from "react-router-dom";
+import {
+    BrowserRouter,
+    Route,
+    Redirect,
+    Switch,
+    useHistory,
+} from "react-router-dom";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { theme } from "./themes/theme";
 import LoginSignUp from "./pages/LoginSignUp";
 import Home from "./pages/Home";
+import Profile from "./pages/Profile";
 import Page from "./components/Page";
 import { UserContext } from "../src/contexts/user/UserContextProvider";
 
@@ -17,7 +24,8 @@ function App() {
             <div>
                 <Switch>
                     <Page>
-                        <ProtectedRoute exact path="/home" component={Home} />
+                        <ProtectedRoute exact path="/home" component={Profile} />
+                        <ProtectedRoute exact path="/profile" component={Profile} />
                     </Page>
                 </Switch>
             </div>
@@ -29,16 +37,17 @@ function App() {
             <CssBaseline />
             <BrowserRouter>
                 <Route path="/">
-                    {!user.isAuthenticated ?
-                        <Redirect to="/signup" />:
+                    {!user.isAuthenticated ? (
+                        <Redirect to="/signup" />
+                    ) : (
                         <Redirect to="/home" />
-                    }
+                    )}
                 </Route>
-                    <Switch>
-                        <Route path="/signup" component={LoginSignUp} />
-                        <Route path="/login" component={LoginSignUp} />
-                        <Route component={DefaultRoutes} />
-                    </Switch>
+                <Switch>
+                    <Route path="/signup" component={LoginSignUp} />
+                    <Route path="/login" component={LoginSignUp} />
+                    <Route component={DefaultRoutes} />
+                </Switch>
             </BrowserRouter>
         </ThemeProvider>
     );
