@@ -3,21 +3,20 @@
 const router = require("express").Router();
 const mealController = require("../controllers/mealsController");
 const chefsController = require("../controllers/chefsController");
-const util = require("../util");
+const { errorHandelingWrapper, isArrayOfStrings } = require("../util");
 
-router.get("/:id", async (req, res) => {
-    try {
+router.get(
+    "/:id",
+    errorHandelingWrapper(async (req, res) => {
         const { id } = req.params;
         const meal = await mealController.find(id);
-        return meal;
-    } catch (errors) {
-        console.error(error);
-        res.status(500).json({ errors: ["Unexpected error occured"] });
-    }
-});
+        res.json(meal);
+    })
+);
 
-router.post("/", async (req, res) => {
-    try {
+router.post(
+    "/",
+    errorHandelingWrapper(async (req, res) => {
         const {
             title,
             picURL,
@@ -54,7 +53,7 @@ router.post("/", async (req, res) => {
             errors.push("Invalid servingType type");
         if (cuisineType) {
             cuisineType = JSON.parse(cuisineType);
-            if (!util.isArrayOfStrings(cuisineType))
+            if (!isArrayOfStrings(cuisineType))
                 errors.push("Invlalid cuisineType type");
         }
         if (ingredients && typeof ingredients !== "string")
@@ -82,14 +81,12 @@ router.post("/", async (req, res) => {
         });
 
         res.json(meal);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ errors: ["Unexpected error occured"] });
-    }
-});
+    })
+);
 
-router.put("/:id", async (req, res) => {
-    try {
+router.put(
+    "/:id",
+    errorHandelingWrapper(async (req, res) => {
         const { id } = req.params;
         const {
             title,
@@ -115,7 +112,7 @@ router.put("/:id", async (req, res) => {
             errors.push("Invalid servingType type");
         if (cuisineType) {
             cuisineType = JSON.parse(cuisineType);
-            if (!util.isArrayOfStrings(cuisineType))
+            if (!isArrayOfStrings(cuisineType))
                 errors.push("Invlalid cuisineType type");
         }
         if (ingredients && typeof ingredients !== "string")
@@ -153,10 +150,7 @@ router.put("/:id", async (req, res) => {
         });
 
         res.json(newMeal);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ errors: ["Unexpected error occured"] });
-    }
-});
+    })
+);
 
 module.exports = router;
