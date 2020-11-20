@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const { loginRequired } = require("../middleware");
 
 const userController = require("../controllers/usersController");
+const chefsController = require("../controllers/chefsController");
 
 const router = express.Router();
 
@@ -77,6 +78,9 @@ router.get("/user", loginRequired, async function (req, res, next) {
         if (!user) {
             res.status(400).json({ errors: ["Please sign in"] });
             return;
+        }
+        if (user.isChef) {
+            user.chef = await chefsController.findOneWithUserId(id);
         }
         // create and return jwt with user obj
         const responseObj = await createResponseObj(user);
