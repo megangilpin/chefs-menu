@@ -7,7 +7,7 @@ const { loginRequired } = require("../middleware");
 
 const router = express.Router();
 
-router.post("/imageUpload", async function (req, res, next) {
+router.post("/imageUpload", loginRequired, async function (req, res, next) {
     console.log("I am working")
     if (req.files === null) {
         return res.status(400).json({ msg: 'No file uploaded' });

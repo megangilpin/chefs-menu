@@ -13,10 +13,10 @@ aws.config.update({
 
 // CHECKS THAT FILE IS CORRECT IMAGE TYPE
 const fileFilter = (req, file, cb) => {
-    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype ==='image/svg' || file.mimetype ==='image/svg') {
       cb(null, true);
     } else {
-      cb(new Error('Invalid file type, only JPEG and PNG is allowed!'), false);
+      cb(new Error('Invalid file type, only JPEG, PDF, PNG or SVG is allowed!'), false);
     }
   }
 
@@ -30,6 +30,7 @@ const upload = multer({
             cb(null, { fieldName: "TESTING_METADATA" });
         },
         key: function (req, file, cb) {
+            console.log(req.user)
             cb(null, Date.now().toString());
         },
     }),

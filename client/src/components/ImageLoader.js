@@ -1,15 +1,13 @@
 import * as React from "react";
-import DropZone from "./DropZone";
 import { makeStyles } from "@material-ui/core/styles";
 import { Box, CardActionArea, IconButton } from "@material-ui/core";
 import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
 import profilePic from "../images/profilePic.png";
 import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
-import Modal from "@material-ui/core/Modal";
-import Backdrop from "@material-ui/core/Backdrop";
-import Fade from "@material-ui/core/Fade";
 import { DropzoneAreaBase, DropzoneDialog } from 'material-ui-dropzone';
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -37,14 +35,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-  
-
-
-
 function ProfilePic(props) {
     const classes = useStyles();
-    const [open, setOpen] = React.useState(false);
+    const [dropzoneOpen, setDropzoneOpen] = React.useState(false);
     const [image, setImage] = React.useState(profilePic)
+    const [snackBarOpen, setSnackBarOpen] = React.useState(false);
+    const [severity, setSeverity] = React.useState("");
+    const [message, setMessage] = React.useState("");
 
     const uploadImage = async (file) => {
         console.log(file[0])
@@ -53,13 +50,27 @@ function ProfilePic(props) {
         const response = await fetch("/user/imageUpload", {
             method: "post",
             body: formData,
-            // credentials: "include",
         });
 
         const data = await response.json();
-        console.log(data)
-        setImage(data)
-        setOpen(false);
+
+        if (data.errors) {
+            console.log(data.errors)
+            setSeverity("error");
+            setMessage(data.errors.detail);
+            setSnackBarOpen(true);
+        } else {
+            console.log(data)
+            setImage(data)
+            setDropzoneOpen(false);
+        }
+    };
+
+    const snackBarClose = (event, reason) => {
+        if (reason === "clickaway") {
+            return;
+        }
+        setSnackBarOpen(false);
     };
 
     return (
@@ -74,7 +85,7 @@ function ProfilePic(props) {
                     <IconButton
                         aria-label="delete"
                         color="primary"
-                        onClick={() => setOpen(true)}
+                        onClick={() => setDropzoneOpen(true)}
                     >
                         <AddAPhotoIcon fontSize="large" />
                     </IconButton>
@@ -85,15 +96,20 @@ function ProfilePic(props) {
                 cancelButtonText={"cancel"}
                 submitButtonText={"submit"}
                 dialogTitle={"Upload Profile Picture"}
-                dropzoneText={"JPEG, PDF or PNG only"}
+                dropzoneText={"JPEG, PDF, PNG or SVG 5MB max"}
                 maxFileSize={5000000}
                 filesLimit={1}
-                open={open}
-                onClose={() => setOpen(false)}
+                open={dropzoneOpen}
+                onClose={() => setDropzoneOpen(false)}
                 onSave={(files) => uploadImage(files)}
                 showPreviews={true}
                 showFileNamesInPreview={true}
             />
+            <Snackbar open={snackBarOpen} autoHideDuration={6000} onClose={snackBarClose}>
+                <MuiAlert onClose={snackBarClose} severity={severity}>
+                    {message}
+                </MuiAlert>
+            </Snackbar>
         </div>
     );
 }
