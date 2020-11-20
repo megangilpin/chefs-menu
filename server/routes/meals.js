@@ -16,6 +16,7 @@ router.get(
 
 router.post(
     "/",
+    validationMiddleware,
     errorHandelingWrapper(async (req, res) => {
         const {
             title,
@@ -53,6 +54,7 @@ router.post(
 
 router.put(
     "/:id",
+    validationMiddleware,
     errorHandelingWrapper(async (req, res) => {
         const { id } = req.params;
         const {
