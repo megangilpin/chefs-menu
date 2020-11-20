@@ -5,6 +5,7 @@ const express = require("express");
 const { join } = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+// const cors = require("cors");
 
 const { loginRequired } = require("./middleware");
 const authRouter = require("./routes/auth");
@@ -19,6 +20,7 @@ app.use(json());
 app.use(urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(join(__dirname, "public")));
+// app.use(cors());
 
 // ROUTES
 app.use("/auth", authRouter);

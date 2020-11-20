@@ -1,5 +1,6 @@
 import * as React from "react";
 import { SET_USER, LOGOUT } from "../types";
+import { Redirect } from "react-router-dom";
 
 
 
@@ -86,6 +87,7 @@ const UserContextProvider = ({ children }) => {
 
         if (data.user) {
             dispatch({ type: SET_USER, payload: data });
+            return <Redirect to="/home" />;
         } else {
             dispatch({type: LOGOUT, payload: null})
         }
