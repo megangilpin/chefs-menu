@@ -149,9 +149,10 @@ resetDB()
                     .end((err, res) => {
                         err && console.error(err);
                         res.should.have.status(200);
-                        res.body.should.have
-                            .property("cuisineSpecialty")
-                            .eql(cuisineSpecialty);
+                        res.body.should.have.property("cuisineSpecialty");
+                        expect(JSON.parse(res.body.cuisineSpecialty)).eql(
+                            cuisineSpecialty
+                        );
                         done();
                     });
             });
@@ -183,9 +184,10 @@ resetDB()
                     .end((err, res) => {
                         err && console.error(err);
                         res.should.have.status(200);
-                        res.body.should.have
-                            .property("cuisineSpecialty")
-                            .eql(cuisineSpecialty2);
+                        res.body.should.have.property("cuisineSpecialty");
+                        expect(JSON.parse(res.body.cuisineSpecialty)).eql(
+                            cuisineSpecialty2
+                        );
                         done();
                     });
             });
