@@ -56,9 +56,7 @@ router.put("/", async (req, res) => {
             return;
         }
         const errors = [];
-        if (!cuisineSpecialty) {
-            errors.push("Missing cuisineSpecialty");
-        } else {
+        if (cuisineSpecialty) {
             cuisineSpecialty = JSON.parse(cuisineSpecialty);
             if (!isArrayOfStrings(cuisineSpecialty))
                 errors.push("Invalid cuisineSpecialty type");
@@ -92,9 +90,7 @@ router.post("/", async (req, res) => {
             return;
         }
         const errors = [];
-        if (!cuisineSpecialty) {
-            errors.push("Missing cuisineSpecialty");
-        } else {
+        if (cuisineSpecialty) {
             cuisineSpecialty = JSON.parse(cuisineSpecialty);
             if (!isArrayOfStrings(cuisineSpecialty))
                 errors.push("Invalid cuisineSpecialty type");
