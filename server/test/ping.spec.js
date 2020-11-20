@@ -103,7 +103,7 @@ resetDB()
             });
             it("user info", (done) => {
                 chai.request(app)
-                    .get("/auth/user")
+                    .get("/users")
                     .set("Cookie", `token=${token}`)
                     .end((err, res) => {
                         err && console.error(err);

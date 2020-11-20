@@ -93,7 +93,7 @@ const UserContextProvider = ({ children }) => {
 
     const checkLogin = async () => {
         isLoading(true)
-        const response = await fetch("/auth/user", {
+        const response = await fetch("/users", {
             method: "get",
             credentials: "include",
         });

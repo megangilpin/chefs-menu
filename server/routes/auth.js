@@ -1,10 +1,7 @@
 const express = require("express");
-const jwt = require("jsonwebtoken");
 
-const { loginRequired } = require("../middleware");
-const { errorHandelingWrapper } = require("../util");
+const { errorHandelingWrapper, createAuthResponseObj } = require("../util");
 const userController = require("../controllers/usersController");
-const chefsController = require("../controllers/chefsController");
 
 const router = express.Router();
 
@@ -30,7 +27,7 @@ router.post(
             return;
         }
         // create and return jwt with user obj
-        const responseObj = await createResponseObj(user);
+        const responseObj = await createAuthResponseObj(user);
         res.cookie("token", responseObj.token, { httpOnly: true });
         res.json(responseObj);
     })
@@ -64,42 +61,9 @@ router.post(
             password,
             isChef,
         });
-        const responseObj = await createResponseObj(createdUser);
+        const responseObj = await createAuthResponseObj(createdUser);
         res.cookie("token", responseObj.token, { httpOnly: true });
         res.status(201).json(responseObj);
-    })
-);
-
-router.get(
-    "/user",
-    loginRequired,
-    errorHandelingWrapper(async (req, res) => {
-        const { id } = req.user;
-        const user = await userController.findOneWithId(id);
-        if (!user) {
-            res.status(400).json({ errors: ["Please sign in"] });
-            return;
-        }
-        if (user.isChef) {
-            user.chef = await chefsController.findOneWithUserId(id);
-        }
-        // create and return jwt with user obj
-        const responseObj = await createResponseObj(user);
-        res.cookie("token", responseObj.token, { httpOnly: true });
-        res.json(responseObj);
-    })
-);
-
-router.put(
-    "/user",
-    loginRequired,
-    errorHandelingWrapper(validationMiddleware),
-    errorHandelingWrapper(async (req, res) => {
-        const { id } = req.user;
-        const user = await usersController.sanatize(
-            await usersController.update(id, req.body)
-        );
-        res.json(user);
     })
 );
 
@@ -124,18 +88,6 @@ function validationMiddleware(req, res, next) {
         return;
     }
     next();
-}
-
-async function createResponseObj(user) {
-    const token = await jwt.sign(
-        { email: user.email, id: user._id },
-        process.env.SECRET,
-        { expiresIn: process.env.TOKEN_TTL }
-    );
-    return {
-        user: await userController.sanatize(user),
-        token,
-    };
 }
 
 module.exports = router;
