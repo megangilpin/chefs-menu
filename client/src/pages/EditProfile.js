@@ -4,8 +4,8 @@ import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import Avatar from "@material-ui/core/Avatar";
 import Box from "@material-ui/core/Box";
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import IconButton from "@material-ui/core/IconButton";
+// import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+// import IconButton from "@material-ui/core/IconButton";
 import sampleUser from "../images/sampleUser.png";
 
 import { Formik, Form, Field } from "formik";
@@ -16,11 +16,11 @@ import Chip from "@material-ui/core/Chip";
 
 const useStyles = makeStyles({
     profile: {
-        marginTop: "2vh",
-        margin: "auto",
-        width: "80vw",
-        height: "90vh",
-        overflow: "scroll",
+        margin: "2vh auto",
+        marginTop: "10vh",
+        width: "80%",
+        height: "80vh",
+        overflow: "hidden",
     },
     profileTopRight: {
         padding: "5vh 5vw 0 5vw",
@@ -40,14 +40,10 @@ const useStyles = makeStyles({
         maxHeight: "18vh",
     },
 
-  
-
- 
     allergyChip: {
         background: "#CCCC00",
         color: "white",
     },
-   
 });
 
 export default function EditProfile() {
@@ -56,7 +52,8 @@ export default function EditProfile() {
     const userData = {
         firstName: "Christina",
         lastName: "Wilson",
-        city: "Toronto, Canada",
+        city: "Toronto",
+        country: "Canada",
         about:
             "Hi everyone! I'm a foodie and I love to eat healthy and I love to eat healthy and tasty meals. Also I'm a mom of two beautiful babies",
         cusine: ["Japanese", "Chinese", "Mediterranean", "Thai"],
@@ -66,20 +63,20 @@ export default function EditProfile() {
     const [cusineChipData, setCusineChipData] = React.useState(
         userData.cusine.map((cusine, index) => ({ key: index, label: cusine }))
     );
-    const [allergyChipData, setAllergyChipData] = React.useState(
-        userData.allergies.map((cusine, index) => ({ key: index, label: cusine }))
-    );
+    // const [allergyChipData, setAllergyChipData] = React.useState(
+    //     userData.allergies.map((cusine, index) => ({ key: index, label: cusine }))
+    // );
 
     const handleCusineDelete = (chipToDelete) => () => {
         setCusineChipData((chips) =>
             chips.filter((chip) => chip.key !== chipToDelete.key)
         );
     };
-    const handleAllergenDelete = (chipToDelete) => () => {
-        setAllergyChipData((chips) =>
-            chips.filter((chip) => chip.key !== chipToDelete.key)
-        );
-    };
+    // const handleAllergenDelete = (chipToDelete) => () => {
+    //     setAllergyChipData((chips) =>
+    //         chips.filter((chip) => chip.key !== chipToDelete.key)
+    //     );
+    // };
 
     return (
         <Formik
@@ -90,6 +87,8 @@ export default function EditProfile() {
                 cusine: "",
                 about: userData.about,
                 allergy: "",
+                city: userData.city,
+                country: userData.country,
             }}
             onSubmit={(values, { setSubmitting }) => {
                 setSubmitting(false);
@@ -97,7 +96,7 @@ export default function EditProfile() {
                 // all info is contained in values values can be pushed to the model here
                 // for cusine cusineChipData.map(x => x.label)
                 // for allergen allergenChipData.map(x => x.label)
-                history.push("/user");
+                history.push("/profile");
             }}
         >
             {({ submitForm, isSubmitting, values }) => (
@@ -117,11 +116,6 @@ export default function EditProfile() {
                             alignContent="flex-start"
                             className={classes.profileTopLeft}
                         >
-                            <Grid item xs={6}>
-                            <IconButton  className={classes.backButton} onClick={() => history.push("/user")}>
-                            <ArrowBackIcon />
-                        </IconButton>
-                        </Grid>
                             <Grid item xs={12}>
                                 <Box
                                     boxShadow={2}
@@ -156,9 +150,19 @@ export default function EditProfile() {
                                     fullWidth
                                     component={TextField}
                                     variant="outlined"
-                                    name="address"
+                                    name="city"
                                     type="text"
-                                    label="Address"
+                                    label="City"
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Field
+                                    fullWidth
+                                    component={TextField}
+                                    variant="outlined"
+                                    name="country"
+                                    type="text"
+                                    label="Country"
                                 />
                             </Grid>
                         </Grid>
@@ -236,6 +240,11 @@ export default function EditProfile() {
                                     );
                                 })}
                             </Grid>
+                            {/* <Grid item xs={12}>
+                                <Typography variant="h6" component="h4">
+                                    ALLERGIES
+                                </Typography>
+                            </Grid>
                             <Grid item xs={8}>
                                 <Field
                                     fullWidth
@@ -275,7 +284,7 @@ export default function EditProfile() {
                                         />
                                     );
                                 })}
-                            </Grid>
+                            </Grid> */}
                             <Grid item xs={12}>
                                 <Button
                                     disabled={isSubmitting}
@@ -283,7 +292,7 @@ export default function EditProfile() {
                                     color="primary"
                                     variant="contained"
                                 >
-                                    <Typography variant="button">
+                                    <Typography variant="h5">
                                         SUBMIT CHANGES
                                     </Typography>
                                 </Button>

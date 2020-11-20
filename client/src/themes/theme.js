@@ -26,16 +26,10 @@ export const theme = createMuiTheme({
                 fontWeight: "bold",
                 borderRadius: "0px",
                 margin: "0vh 1vw 1vh 0vw",
-                margin: "0vh 1vw 1vh 0vw",
+    
             },
         },
 
-        MuiIconButton: {
-            root: {
-                color: "white",
-                background: "#FF743D",
-            },
-        },
     },
 });
 

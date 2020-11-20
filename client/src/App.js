@@ -8,6 +8,8 @@ import LoginSignUp from "./pages/LoginSignUp";
 import Home from "./pages/Home";
 import Page from "./components/Page";
 import { UserContext } from "../src/contexts/user/UserContextProvider";
+import UserProfile from "./pages/UserProfile";
+import EditProfile from "./pages/EditProfile";
 
 function App() {
     const user = React.useContext(UserContext);
@@ -18,6 +20,8 @@ function App() {
                 <Page>
                     <Switch>
                         <ProtectedRoute exact path="/home" component={Home} />
+                        <ProtectedRoute exact path="/profile" component={UserProfile} />
+                        <ProtectedRoute exact path="/editprofile" component={EditProfile} />
                     </Switch>
                 </Page>
             </div>
@@ -32,6 +36,7 @@ function App() {
                     {user.isAuthenticated ?
                         <Redirect to="/home" />:
                         <Redirect to="/signup" />
+                        
                     }
                 </Route>
                 <Switch>

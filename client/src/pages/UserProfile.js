@@ -8,21 +8,22 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import Avatar from "@material-ui/core/Avatar";
 import Box from "@material-ui/core/Box";
 import EditIcon from "@material-ui/icons/Edit";
-import IconButton from "@material-ui/core/IconButton";
+// import IconButton from "@material-ui/core/IconButton";
 import sampleUser from "../images/sampleUser.png";
 
-import UserProfileMap from "./UserProfileMap";
+import UserProfileMap from "../components/UserProfileMap";
 
 const useStyles = makeStyles({
     profile: {
         margin: "2vh auto",
-        width: "80vw",
-        height: "90vh",
+        marginTop: "10vh",
+        width: "80%",
+        height: "80vh",
         overflow: "hidden",
     },
     profileTopRight: {
         height: "50%",
-        // if you change this height, make sure you change UserProfileMap as well
+        // if you change this height, make sure you change UserProfileMap to correspond
         padding: "5vh 5vw 0 5vw",
     },
     profileTopLeft: {
@@ -110,7 +111,7 @@ export default function UserProfile() {
                     <Typography variant="h6" component="h4">
                         ABOUT ME:{" "}
                       
-                            <EditIcon onClick={() => history.push("/edit")}/>
+                            <EditIcon onClick={() => history.push("/editprofile")}/>
            
                     </Typography>
                     <Typography variant="body1" component="h5">

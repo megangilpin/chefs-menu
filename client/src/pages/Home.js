@@ -4,6 +4,7 @@ import Main from "../components/Main";
 import { Typography } from "@material-ui/core";
 import { UserContext } from "../contexts/user/UserContextProvider";
 
+
 function Home(props) {
     const user = React.useContext(UserContext);
 
@@ -15,6 +16,7 @@ function Home(props) {
             </SideBar>
             <Main>
                 <Typography>Main</Typography>
+
             </Main>
         </React.Fragment>
     );
