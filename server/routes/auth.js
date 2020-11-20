@@ -1,14 +1,17 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
-const { loginRequired } = require("../middleware");
 
+const { loginRequired } = require("../middleware");
+const { errorHandelingWrapper } = require("../util");
 const userController = require("../controllers/usersController");
 const chefsController = require("../controllers/chefsController");
 
 const router = express.Router();
 
-router.post("/login", validationMiddleware, async function (req, res, next) {
-    try {
+router.post(
+    "/login",
+    validationMiddleware,
+    errorHandelingWrapper(async (req, res) => {
         const { email, password } = req.body;
         // verify that there is user for email
         const user = await userController.findOneWithEmail(email);
@@ -30,14 +33,13 @@ router.post("/login", validationMiddleware, async function (req, res, next) {
         const responseObj = await createResponseObj(user);
         res.cookie("token", responseObj.token, { httpOnly: true });
         res.json(responseObj);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ errors: ["Unexpected error occured"] });
-    }
-});
+    })
+);
 
-router.post("/register", validationMiddleware, async function (req, res, next) {
-    try {
+router.post(
+    "/register",
+    validationMiddleware,
+    errorHandelingWrapper(async (req, res) => {
         const { email, password, chef } = req.body;
         const isChef = !!chef;
         // verify that user isn't already in DB
@@ -65,14 +67,13 @@ router.post("/register", validationMiddleware, async function (req, res, next) {
         const responseObj = await createResponseObj(createdUser);
         res.cookie("token", responseObj.token, { httpOnly: true });
         res.status(201).json(responseObj);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ errors: ["Unexpected error occured"] });
-    }
-});
+    })
+);
 
-router.get("/user", loginRequired, async function (req, res, next) {
-    try {
+router.get(
+    "/user",
+    loginRequired,
+    errorHandelingWrapper(async (req, res) => {
         const { id } = req.user;
         const user = await userController.findOneWithId(id);
         if (!user) {
@@ -86,14 +87,13 @@ router.get("/user", loginRequired, async function (req, res, next) {
         const responseObj = await createResponseObj(user);
         res.cookie("token", responseObj.token, { httpOnly: true });
         res.json(responseObj);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ errors: ["Unexpected error occured"] });
-    }
-});
+    })
+);
 
-router.put("/user", loginRequired, async (req, res, next) => {
-    try {
+router.put(
+    "/user",
+    loginRequired,
+    errorHandelingWrapper(async (req, res) => {
         const { id } = req.user;
         const { email, password } = req.body;
 
@@ -115,11 +115,8 @@ router.put("/user", loginRequired, async (req, res, next) => {
             await usersController.update(id, req.body)
         );
         res.json(user);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ errors: ["Unexpected error occured"] });
-    }
-});
+    })
+);
 
 function validationMiddleware(req, res, next) {
     const { email, password } = req.body;
