@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.post(
     "/login",
-    validationMiddleware,
+    errorHandelingWrapper(validationMiddleware),
     errorHandelingWrapper(async (req, res) => {
         const { email, password } = req.body;
         // verify that there is user for email
@@ -38,7 +38,7 @@ router.post(
 
 router.post(
     "/register",
-    validationMiddleware,
+    errorHandelingWrapper(validationMiddleware),
     errorHandelingWrapper(async (req, res) => {
         const { email, password, chef } = req.body;
         const isChef = !!chef;
@@ -93,7 +93,7 @@ router.get(
 router.put(
     "/user",
     loginRequired,
-    validationMiddleware,
+    errorHandelingWrapper(validationMiddleware),
     errorHandelingWrapper(async (req, res) => {
         const { id } = req.user;
         const user = await usersController.sanatize(

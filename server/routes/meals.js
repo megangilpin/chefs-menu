@@ -16,7 +16,7 @@ router.get(
 
 router.post(
     "/",
-    validationMiddleware,
+    errorHandelingWrapper(validationMiddleware),
     errorHandelingWrapper(async (req, res) => {
         const {
             title,
@@ -54,7 +54,7 @@ router.post(
 
 router.put(
     "/:id",
-    validationMiddleware,
+    errorHandelingWrapper(validationMiddleware),
     errorHandelingWrapper(async (req, res) => {
         const { id } = req.params;
         const {
@@ -91,7 +91,7 @@ router.put(
     })
 );
 
-function validationMiddleware(req, res, next) {
+async function validationMiddleware(req, res, next) {
     const {
         title,
         picURL,
@@ -131,7 +131,7 @@ function validationMiddleware(req, res, next) {
     if (!chefId) {
         const userId = req.user.id;
         const { _id } = await chefsController.findOneWithUserId(userId);
-        body.chefId = String(_id);
+        req.body.chefId = String(_id);
     }
 
     next();

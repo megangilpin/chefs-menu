@@ -42,7 +42,7 @@ router.get(
 // update the chef profile for signedin user
 router.put(
     "/",
-    validationMiddleware,
+    errorHandelingWrapper(validationMiddleware),
     errorHandelingWrapper(async (req, res) => {
         const { id } = req.user;
         let { cuisineSpecialty } = req.body;
@@ -64,7 +64,7 @@ router.put(
 // create a chef profile for signedin user
 router.post(
     "/",
-    validationMiddleware,
+    errorHandelingWrapper(validationMiddleware),
     errorHandelingWrapper(async (req, res) => {
         const { id } = req.user;
         let { cuisineSpecialty } = req.body;
