@@ -42,6 +42,7 @@ router.get(
 // update the chef profile for signedin user
 router.put(
     "/",
+    validationMiddleware,
     errorHandelingWrapper(async (req, res) => {
         const { id } = req.user;
         let { cuisineSpecialty } = req.body;
@@ -50,17 +51,6 @@ router.put(
             res.status(400).json({
                 errors: ["Chef profile not found for loggedin user"],
             });
-            return;
-        }
-        const errors = [];
-        if (cuisineSpecialty) {
-            cuisineSpecialty = JSON.parse(cuisineSpecialty);
-            if (!isArrayOfStrings(cuisineSpecialty))
-                errors.push("Invalid cuisineSpecialty type");
-        }
-
-        if (errors.length > 0) {
-            res.status(400).json({ errors });
             return;
         }
         const newChef = await chefsController.update(chef, {
@@ -74,6 +64,7 @@ router.put(
 // create a chef profile for signedin user
 router.post(
     "/",
+    validationMiddleware,
     errorHandelingWrapper(async (req, res) => {
         const { id } = req.user;
         let { cuisineSpecialty } = req.body;
@@ -84,17 +75,6 @@ router.post(
             });
             return;
         }
-        const errors = [];
-        if (cuisineSpecialty) {
-            cuisineSpecialty = JSON.parse(cuisineSpecialty);
-            if (!isArrayOfStrings(cuisineSpecialty))
-                errors.push("Invalid cuisineSpecialty type");
-        }
-
-        if (errors.length > 0) {
-            res.status(400).json({ errors });
-            return;
-        }
         const newChef = await chefsController.create({
             cuisineSpecialty,
             userId: id,
@@ -103,5 +83,22 @@ router.post(
         res.json(newChef);
     })
 );
+
+function validationMiddleware(req, res, next) {
+    let { cuisineSpecialty } = req.body;
+    // input validation
+    const errors = [];
+    if (cuisineSpecialty) {
+        cuisineSpecialty = JSON.parse(cuisineSpecialty);
+        if (!isArrayOfStrings(cuisineSpecialty))
+            errors.push("Invalid cuisineSpecialty type");
+    }
+
+    if (errors.length > 0) {
+        res.status(400).json({ errors });
+        return;
+    }
+    next();
+}
 
 module.exports = router;
