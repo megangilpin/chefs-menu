@@ -44,7 +44,7 @@ resetDB()
                 title: "pizza",
                 price: 20.5,
                 servingSize: "X-large",
-                cuisineType: ["Pizza", "fast food"],
+                cuisineType: ["Pizza", "fast food", "Italian"],
                 ingredients: "bread, onion, extra-cheese",
             };
             let mealId = null;
@@ -103,7 +103,7 @@ resetDB()
             });
             it("user info", (done) => {
                 chai.request(app)
-                    .get("/auth/user")
+                    .get("/users")
                     .set("Cookie", `token=${token}`)
                     .end((err, res) => {
                         err && console.error(err);
@@ -149,9 +149,10 @@ resetDB()
                     .end((err, res) => {
                         err && console.error(err);
                         res.should.have.status(200);
-                        res.body.should.have
-                            .property("cuisineSpecialty")
-                            .eql(cuisineSpecialty);
+                        res.body.should.have.property("cuisineSpecialty");
+                        expect(JSON.parse(res.body.cuisineSpecialty)).eql(
+                            cuisineSpecialty
+                        );
                         done();
                     });
             });
@@ -183,9 +184,10 @@ resetDB()
                     .end((err, res) => {
                         err && console.error(err);
                         res.should.have.status(200);
-                        res.body.should.have
-                            .property("cuisineSpecialty")
-                            .eql(cuisineSpecialty2);
+                        res.body.should.have.property("cuisineSpecialty");
+                        expect(JSON.parse(res.body.cuisineSpecialty)).eql(
+                            cuisineSpecialty2
+                        );
                         done();
                     });
             });
@@ -201,9 +203,10 @@ resetDB()
                     .end((err, res) => {
                         err && console.error(err);
                         res.should.have.status(200);
-                        res.body.should.have
-                            .property("cuisineType")
-                            .eql(meal.cuisineType);
+                        res.body.should.have.property("cuisineType");
+                        expect(JSON.parse(res.body.cuisineType)).eql(
+                            meal.cuisineType
+                        );
                         res.body.should.have.property("title").eql(meal.title);
                         res.body.should.have.property("price").eql(meal.price);
                         res.body.should.have
@@ -228,9 +231,10 @@ resetDB()
                     .end((err, res) => {
                         err && console.error(err);
                         res.should.have.status(200);
-                        res.body.should.have
-                            .property("cuisineType")
-                            .eql(meal2.cuisineType);
+                        res.body.should.have.property("cuisineType");
+                        expect(JSON.parse(res.body.cuisineType)).eql(
+                            meal2.cuisineType
+                        );
                         res.body.should.have.property("title").eql(meal2.title);
                         res.body.should.have.property("price").eql(meal2.price);
                         res.body.should.have

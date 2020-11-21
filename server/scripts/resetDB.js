@@ -1,5 +1,4 @@
 require("dotenv").config();
-// require("../dbConnection");
 const chefsController = require("../controllers/chefsController");
 const mealController = require("../controllers/mealsController");
 const usersController = require("../controllers/usersController");

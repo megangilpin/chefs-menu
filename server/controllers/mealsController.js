@@ -22,20 +22,20 @@ const create = async ({
     updatedAt,
     chefId,
 }) => {
-    const { _doc } =
-        (await Meal.create({
-            title,
-            picURL,
-            price,
-            servingSize,
-            servingType,
-            cuisineType,
-            ingredients,
-            requirements,
-            createdAt,
-            updatedAt,
-            chefId,
-        })) || {};
+    const pojsoMeal = {};
+    if (title) pojsoMeal.title = title;
+    if (picURL) pojsoMeal.picURL = picURL;
+    if (price) pojsoMeal.price = price;
+    if (servingSize) pojsoMeal.servingSize = servingSize;
+    if (servingType) pojsoMeal.servingType = servingType;
+    if (cuisineType) pojsoMeal.cuisineType = cuisineType;
+    if (ingredients) pojsoMeal.ingredients = ingredients;
+    if (requirements) pojsoMeal.requirements = requirements;
+    if (createdAt) pojsoMeal.createdAt = createdAt;
+    if (updatedAt) pojsoMeal.updatedAt = updatedAt;
+    if (chefId) pojsoMeal.chefId = chefId;
+
+    const { _doc } = (await Meal.create(pojsoMeal)) || {};
     return _doc;
 };
 
