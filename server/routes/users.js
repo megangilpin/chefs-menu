@@ -28,9 +28,17 @@ router.get(
 router.put(
     "/",
     errorHandelingWrapper(async (req, res) => {
-        const { id } = req.user;
+        const { id, password, email } = req.user;
         const errors = [];
-
+        
+        if (password && (typeof password !== "string" || password.length < 6))
+            errors.push("Invalid password");
+        if (email && !usersController.isValidEmailFormat(email))
+            errors.push("Invalid email");
+        if (errors.length > 0) {
+            res.status(400).json({ errors });
+            return;
+        }
 
         if (errors.length > 0) {
             res.status(400).json({ errors });
