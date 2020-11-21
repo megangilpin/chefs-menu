@@ -30,6 +30,7 @@ const UserReducer = (state, action) => {
                 ...state,
                 isLoading: action.payload,
             };
+    
         default:
             return state;
     }
@@ -101,9 +102,34 @@ const UserContextProvider = ({ children }) => {
         const data = await response.json();
 
         if (data.user) {
+        
             dispatch({ type: SET_USER, payload: data });
         } else {
+            console.log(data.user);
             dispatch({ type: LOGOUT, payload: null });
+        }
+    };
+
+    const updateUser = async (formValues) => {
+        isLoading(true)
+        const response = await fetch("/users", {
+            method: "put",
+            body: JSON.stringify(formValues),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        const data = await response.json();
+
+        if (!data.user) {
+            return {
+                result: false,
+                message: data.errors,
+            };
+        } else {
+            dispatch({ type: SET_USER, payload: data });
+            return { result: true };
         }
     };
 
@@ -115,7 +141,7 @@ const UserContextProvider = ({ children }) => {
     }, []);
 
     return (
-        <UserContext.Provider value={{ ...state, register, login }}>
+        <UserContext.Provider value={{ ...state, register, login, updateUser }}>
             {children}
         </UserContext.Provider>
     );

@@ -6,6 +6,7 @@ import Avatar from "@material-ui/core/Avatar";
 import Box from "@material-ui/core/Box";
 // import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 // import IconButton from "@material-ui/core/IconButton";
+import { UserContext } from "../contexts/user/UserContextProvider";
 import sampleUser from "../images/sampleUser.png";
 
 import { Formik, Form, Field } from "formik";
@@ -47,56 +48,83 @@ const useStyles = makeStyles({
 });
 
 export default function EditProfile() {
+    
     const classes = useStyles();
     const history = useHistory();
-    const userData = {
-        firstName: "Christina",
-        lastName: "Wilson",
-        city: "Toronto",
-        country: "Canada",
-        about:
-            "Hi everyone! I'm a foodie and I love to eat healthy and I love to eat healthy and tasty meals. Also I'm a mom of two beautiful babies",
-        cusine: ["Japanese", "Chinese", "Mediterranean", "Thai"],
-        allergies: ["Peanuts"],
-    };
+    const user = React.useContext(UserContext);
+    const userData = user.profile;
+
 
     const [cusineChipData, setCusineChipData] = React.useState(
-        userData.cusine.map((cusine, index) => ({ key: index, label: cusine }))
+        userData.favoriteCuisine? userData.favoriteCuisine.map((cusine, index) => ({ key: index, label: cusine })) : []
     );
-    // const [allergyChipData, setAllergyChipData] = React.useState(
-    //     userData.allergies.map((cusine, index) => ({ key: index, label: cusine }))
-    // );
+    const [allergyChipData, setAllergyChipData] = React.useState(
+        userData.allergies? userData.allergies.map((cusine, index) => ({ key: index, label: cusine })) : []
+    );
 
     const handleCusineDelete = (chipToDelete) => () => {
         setCusineChipData((chips) =>
             chips.filter((chip) => chip.key !== chipToDelete.key)
         );
     };
-    // const handleAllergenDelete = (chipToDelete) => () => {
-    //     setAllergyChipData((chips) =>
-    //         chips.filter((chip) => chip.key !== chipToDelete.key)
-    //     );
-    // };
+    const handleAllergenDelete = (chipToDelete) => () => {
+        setAllergyChipData((chips) =>
+            chips.filter((chip) => chip.key !== chipToDelete.key)
+        );
+    };
 
     return (
         <Formik
             initialValues={{
-                address: userData.city,
+         
                 firstName: userData.firstName,
                 lastName: userData.lastName,
                 cusine: "",
-                about: userData.about,
+                about: userData.bio,
                 allergy: "",
-                city: userData.city,
-                country: userData.country,
+                city: userData.primaryAddress["city"],
+                country: userData.primaryAddress["country"],
+                
             }}
             onSubmit={(values, { setSubmitting }) => {
                 setSubmitting(false);
 
+                const editedVals ={
+                    firstName: values.firstName,
+                    lastName: values.lastName,
+                    bio: values.about,
+                    primaryAddress: {
+                
+                        city: values.city,
+                 
+                        country: values.country,
+                    },
+               
+                    favoriteCuisine: cusineChipData.map(x => x.label),
+                    
+                }
+                
+                user.updateUser(editedVals)
+                        .then((res) => {
+                            if (res.result) {
+                                history.push("/profile");
+                                
+                          
+                            } else {
+                               
+                            }
+                        })
+                        .catch((error) => {
+                            console.log(error.message);
+                     
+                        });
+                
                 // all info is contained in values values can be pushed to the model here
                 // for cusine cusineChipData.map(x => x.label)
                 // for allergen allergenChipData.map(x => x.label)
-                history.push("/profile");
+
+
+                
             }}
         >
             {({ submitForm, isSubmitting, values }) => (
@@ -240,7 +268,7 @@ export default function EditProfile() {
                                     );
                                 })}
                             </Grid>
-                            {/* <Grid item xs={12}>
+                            <Grid item xs={12}>
                                 <Typography variant="h6" component="h4">
                                     ALLERGIES
                                 </Typography>
@@ -284,7 +312,7 @@ export default function EditProfile() {
                                         />
                                     );
                                 })}
-                            </Grid> */}
+                            </Grid>
                             <Grid item xs={12}>
                                 <Button
                                     disabled={isSubmitting}

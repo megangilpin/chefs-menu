@@ -12,6 +12,7 @@ import IconButton from "@material-ui/core/IconButton";
 import sampleUser from "../images/sampleUser.png";
 
 import UserProfileMap from "../components/UserProfileMap";
+import { UserContext } from "../contexts/user/UserContextProvider";
 
 const useStyles = makeStyles({
     profile: {
@@ -59,15 +60,14 @@ const useStyles = makeStyles({
 export default function UserProfile() {
     const classes = useStyles();
     const history = useHistory();
-
+    const user = React.useContext(UserContext);
     //  dummy value for now, will make backend call later or maybe get info
     // from user context?
     const userData = {
-        name: "Christina Wilson",
-        city: "Toronto, Canada",
-        about:
-            "Hi everyone! I'm a foodie and I love to eat healthy and I love to eat healthy and tasty meals. Also I'm a mom of two beautiful babies",
-        cusine: ["Japanese", "Chinese", "Mediterranean", "Thai"],
+        name: user.profile.firstName + " " + user.profile.lastName,
+        location: user.profile.primaryAddress.city  + ", " + user.profile.primaryAddress.country ,
+        about: user.profile.bio,
+        cusine: user.profile.favoriteCuisine
     };
 
     return (
@@ -94,7 +94,7 @@ export default function UserProfile() {
                         {userData.name}
                     </Typography>
                     <Typography variant="body1" component="h3">
-                        {userData.city}
+                        {userData.location}
                     </Typography>
                 </Grid>
                 <Grid item xs={12}>

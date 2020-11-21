@@ -21,7 +21,7 @@ const userSchema = new Schema({
     profilePicURL: String,
     bio: String,
     favoriteCuisine: [{ type: String }],
-    allergies: String,
+    allergies: [{ type: String }],
     isChef: { type: Boolean, default: false },
 });
 
