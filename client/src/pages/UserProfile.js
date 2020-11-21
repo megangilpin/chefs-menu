@@ -1,14 +1,13 @@
 import * as React from "react";
-
 import { useHistory } from "react-router-dom";
 
 import { Typography, Grid, Button } from "@material-ui/core";
-
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Avatar from "@material-ui/core/Avatar";
 import Box from "@material-ui/core/Box";
 import EditIcon from "@material-ui/icons/Edit";
 import IconButton from "@material-ui/core/IconButton";
+
 import sampleUser from "../images/sampleUser.png";
 
 import UserProfileMap from "../components/UserProfileMap";
@@ -23,8 +22,9 @@ const useStyles = makeStyles({
         overflow: "hidden",
     },
     profileTopRight: {
+        //  if changing this, change UserProfileMap styles height to correspond 
         height: "50%",
-        // if you change this height, make sure you change UserProfileMap to correspond
+        
         padding: "5vh 1vw 0 5vw",
     },
     profileTopLeft: {
@@ -48,26 +48,28 @@ const useStyles = makeStyles({
     },
 
     editRow: {
-
         textAlign: "right",
     },
     editButton: {
         color: "white",
-        background: "#FF743D"
-    }
+        background: "#FF743D",
+    },
 });
 
 export default function UserProfile() {
     const classes = useStyles();
     const history = useHistory();
     const user = React.useContext(UserContext);
-    //  dummy value for now, will make backend call later or maybe get info
-    // from user context?
+
+    // populate user data using profile from context
     const userData = {
         name: user.profile.firstName + " " + user.profile.lastName,
-        location: user.profile.primaryAddress.city  + ", " + user.profile.primaryAddress.country ,
+        location:
+            user.profile.primaryAddress.city +
+            ", " +
+            user.profile.primaryAddress.country,
         about: user.profile.bio,
-        cusine: user.profile.favoriteCuisine
+        cusine: user.profile.favoriteCuisine,
     };
 
     return (
@@ -115,16 +117,18 @@ export default function UserProfile() {
                 spacing={2}
                 alignContent="flex-start"
                 className={classes.profileTopRight}
-            >   
-                 <Grid className={classes.editRow}item xs={12}>
-                     <IconButton className={classes.editButton} onClick={() => history.push("/editprofile")}>
-                         <EditIcon />
-                        </IconButton>
-                     </Grid>
+            >
+                <Grid className={classes.editRow} item xs={12}>
+                    <IconButton
+                        className={classes.editButton}
+                        onClick={() => history.push("/editprofile")}
+                    >
+                        <EditIcon />
+                    </IconButton>
+                </Grid>
                 <Grid item xs={12}>
                     <Typography variant="h6" component="h4">
                         ABOUT ME:
-                       
                     </Typography>
                     <Typography variant="body1" component="h5">
                         {userData.about}
