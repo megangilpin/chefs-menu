@@ -10,7 +10,7 @@ const useStyles = makeStyles({
         backgroundImage: `url(${placeHolderMap})`,
         backgroundPosition: "center center",
         backgroundSize: "cover",
-        height: "60%",
+        height: "50%",
     },
 });
 

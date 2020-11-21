@@ -23,15 +23,13 @@ export default function LoginForm(props) {
     const classes = useStyles();
     const user = React.useContext(UserContext);
     const history = useHistory();
-    
+
     const validationSchema = Yup.object().shape({
         email: Yup.string().email().required("Required!"),
         password: Yup.string().min(6).required("Required!"),
     });
 
-
     const [open, setOpen] = React.useState(false);
-
     const [message, setMessage] = React.useState("");
 
     const snackBarClose = (event, reason) => {

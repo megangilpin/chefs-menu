@@ -4,7 +4,7 @@ import { SET_USER, LOGOUT, SET_IS_LOADING } from "../types";
 const initialState = {
     isAuthenticated: false,
     profile: {
-        email: ""
+        email: "",
     },
     isLoading: true,
 };
@@ -30,7 +30,7 @@ const UserReducer = (state, action) => {
                 ...state,
                 isLoading: action.payload,
             };
-    
+
         default:
             return state;
     }
@@ -47,7 +47,7 @@ const UserContextProvider = ({ children }) => {
     };
 
     const register = async (formValues) => {
-        isLoading(true)
+        isLoading(true);
         const response = await fetch("/auth/register", {
             method: "post",
             body: JSON.stringify(formValues),
@@ -70,7 +70,7 @@ const UserContextProvider = ({ children }) => {
     };
 
     const login = async (formValues) => {
-        isLoading(true)
+        isLoading(true);
         const response = await fetch("/auth/login", {
             method: "post",
             body: JSON.stringify(formValues),
@@ -93,7 +93,7 @@ const UserContextProvider = ({ children }) => {
     };
 
     const checkLogin = async () => {
-        isLoading(true)
+        isLoading(true);
         const response = await fetch("/users", {
             method: "get",
             credentials: "include",
@@ -102,16 +102,14 @@ const UserContextProvider = ({ children }) => {
         const data = await response.json();
 
         if (data.user) {
-        
             dispatch({ type: SET_USER, payload: data });
         } else {
-            console.log(data.user);
             dispatch({ type: LOGOUT, payload: null });
         }
     };
 
     const updateUser = async (formValues) => {
-        isLoading(true)
+        isLoading(true);
         const response = await fetch("/users", {
             method: "put",
             body: JSON.stringify(formValues),
