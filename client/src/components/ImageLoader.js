@@ -1,13 +1,10 @@
 import * as React from "react";
+import { DropzoneDialog } from 'material-ui-dropzone';
 import { makeStyles } from "@material-ui/core/styles";
-import { Box, CardActionArea, IconButton } from "@material-ui/core";
-import Card from "@material-ui/core/Card";
-import CardMedia from "@material-ui/core/CardMedia";
-import profilePic from "../images/profilePic.png";
+import { Box, CardMedia, Card, IconButton, LinearProgress, Snackbar } from "@material-ui/core";
 import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
-import { DropzoneAreaBase, DropzoneDialog } from 'material-ui-dropzone';
-import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
+import profilePic from "../images/profilePic.png";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -42,29 +39,55 @@ function ProfilePic(props) {
     const [snackBarOpen, setSnackBarOpen] = React.useState(false);
     const [severity, setSeverity] = React.useState("");
     const [message, setMessage] = React.useState("");
+    const [loading, setLoading] = React.useState(false);
 
-    const uploadImage = async (file) => {
-        console.log(file[0])
-        let formData = new FormData();
-        formData.append("image", file[0]);
-        const response = await fetch("/user/imageUpload", {
+    const uploadImage = async (formData) => {
+        const response = await fetch("/user/singleImageUpload", {
             method: "post",
             body: formData,
-        });
+        })
 
         const data = await response.json();
 
         if (data.errors) {
-            console.log(data.errors)
-            setSeverity("error");
-            setMessage(data.errors.detail);
-            setSnackBarOpen(true);
+            return {
+                result: false,
+                message: data.errors,
+            };
         } else {
-            console.log(data)
-            setImage(data)
-            setDropzoneOpen(false);
+            return { 
+                result: true,
+                data, 
+            };
         }
     };
+
+    const handleUpload = (file) => {
+        setLoading(true)
+        let formData = new FormData();
+        formData.append("image", file[0]);
+        uploadImage(formData)
+        .then((res) => {
+            setLoading(true)
+            if (res.result) {
+                setSeverity("success");
+                setMessage("Profile Picture updated");
+                setSnackBarOpen(true);
+                setImage(res.data)
+                setDropzoneOpen(false);
+            } else {
+                setSeverity("error");
+                setMessage(res.message);
+                setSnackBarOpen(true);
+            }
+        })
+        .catch((error) => {
+            console.log(error.message);
+            setSeverity("error");
+            setMessage("Error while making request");
+            setSnackBarOpen(true);
+        });
+    }
 
     const snackBarClose = (event, reason) => {
         if (reason === "clickaway") {
@@ -92,16 +115,16 @@ function ProfilePic(props) {
                 </Box>
             </Card>
             <DropzoneDialog
-                acceptedFiles={['image/*']}
+                acceptedFiles={['image/png', 'image/jpeg']}
                 cancelButtonText={"cancel"}
                 submitButtonText={"submit"}
-                dialogTitle={"Upload Profile Picture"}
-                dropzoneText={"JPEG, PDF, PNG or SVG 5MB max"}
+                dialogTitle={!loading ? "Upload Profile Picture" : <LinearProgress color="secondary" />}
+                dropzoneText={"JPEG or PNG  -  5MB max"}
                 maxFileSize={5000000}
                 filesLimit={1}
                 open={dropzoneOpen}
                 onClose={() => setDropzoneOpen(false)}
-                onSave={(files) => uploadImage(files)}
+                onSave={(files) => handleUpload(files)}
                 showPreviews={true}
                 showFileNamesInPreview={true}
             />

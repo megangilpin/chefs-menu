@@ -13,13 +13,14 @@ aws.config.update({
 
 // CHECKS THAT FILE IS CORRECT IMAGE TYPE
 const fileFilter = (req, file, cb) => {
-    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype ==='image/svg' || file.mimetype ==='image/svg') {
+    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
       cb(null, true);
     } else {
-      cb(new Error('Invalid file type, only JPEG, PDF, PNG or SVG is allowed!'), false);
+      cb(new Error('Invalid file type, only JPEG or PNG!'), false);
     }
   }
 
+  // MIDDLEWARE TO EASILY HANDLE MULTIPART/FORM-DATA UPLOAD
 const upload = multer({
     fileFilter,
     storage: multerS3({
@@ -27,11 +28,10 @@ const upload = multer({
         s3,
         bucket: process.env.AWS_BUCKET,
         metadata: function (req, file, cb) {
-            cb(null, { fieldName: "TESTING_METADATA" });
+            cb(null, { fieldName: "PROFILE_PICTURE" });
         },
         key: function (req, file, cb) {
-            console.log(req.user)
-            cb(null, Date.now().toString());
+            cb(null, `${req.user.id}-${Date.now().toString()}`);
         },
     }),
 });
