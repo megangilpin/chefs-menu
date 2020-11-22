@@ -84,6 +84,7 @@ router.post(
     })
 );
 
+
 function validationMiddleware(req, res, next) {
     let { cuisineSpecialty } = req.body;
     // input validation

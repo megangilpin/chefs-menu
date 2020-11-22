@@ -2,7 +2,7 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 const usersController = require("../controllers/usersController");
 const chefsDB = require("../models/chef");
-const mealsDB = require("../models/meal");
+const mealsController = require("../controllers/mealsController");
 const connection = require("../dbConnection");
 
 // This file can empty and seed all the Users, Chefs, and Meals collections.
@@ -36,32 +36,55 @@ const userSeed = [
 // ];
 
 // Seed for meals collection
-// const mealSeed =
-//   {
-//     title: "Grilled cheese",
-//     price: 1,
-//     servingSize: "1 person",
-//     // cuisineType: ["American"],
-//     ingredients: "Bread and american cheese",
-//     requirements: {
-//       hasReq: true,
-//       list: "Spatula"
-//     }
-//   }
+const mealSeed =
+  [{
+    title: "Grilled cheese",
+    price: 1,
+    servingSize: "1 person",
+    cuisineType: ["American"],
+    ingredients: "Bread and american cheese",
+ 
+  },
+  {
+    title: "Shawarma",
+    price: 1,
+    servingSize: "1 person",
+    cuisineType: ["Lebanese"],
+    ingredients: "Bread and american cheese",
+ 
+  },
+  {
+    title: "Big Mac",
+    price: 1,
+    servingSize: "1 person",
+    cuisineType: ["American"],
+    ingredients: "Bread and american cheese",
+ 
+  },
+  {
+    title: "Pizza",
+    price: 1,
+    servingSize: "1 person",
+    cuisineType: ["American"],
+    ingredients: "Bread and american cheese",
+ 
+  }];
+
+
 
 (async () => {
     try {
-        let res = await usersController.deleteAll();
+        let res = await mealsController.deleteAll();
         console.log("deleteing all users", res);
 
-        res = await Promise.all(userSeed.map(usersController.create));
+        res = await Promise.all(mealSeed.map(mealsController.create));
         console.log("creating all users", res);
         process.exit(0);
     } catch (error) {
         console.error(error);
         process.exit(1);
     }
-})();
+}) ();
 
 //  insert into chefs collection
 //  chefsDB

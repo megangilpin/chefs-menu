@@ -3,7 +3,7 @@ const router = require("express").Router();
 const chefsController = require("../controllers/chefsController");
 const mealsController = require("../controllers/mealsController");
 
-// get all chefs for certain cusine
+
 router.get("/", async (req, res) => {
 
     if (! ["chefs", "meals"].includes(req.query.searchType)) {
@@ -12,12 +12,12 @@ router.get("/", async (req, res) => {
     } 
 
     if (req.query.searchType === "chefs"){
-        const query = req.query.cusine ?  {cuisineSpecialty: {$all: [req.query.cusine]}} : {}
+        const query = req.query.cuisine ?  {cuisineSpecialty: {$all: [req.query.cuisine]}} : {}
         chefs = await chefsController.findAllChef(query);
         res.json(chefs);
     }
     if (req.query.searchType === "meals"){
-        const query = req.query.cusine ?  {cusineType: {$all: [req.query.cusine]}} : {}
+        const query = req.query.cuisine ?  {cuisineType: {$all: [req.query.cuisine]}} : {}
         meals = await mealsController.findAllMeals(query);
         res.json(meals);
     }
