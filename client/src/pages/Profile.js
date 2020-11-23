@@ -1,6 +1,6 @@
 import React from "react";
 import Main from "../components/Main";
-import ProfilePic from "../components/ImageLoader";
+import ProfileImage from "../components/ProfileImage";
 import { Typography } from "@material-ui/core";
 import { UserContext } from "../contexts/user/UserContextProvider";
 
@@ -10,7 +10,7 @@ function Profile(props) {
     return (
         <React.Fragment>
             <Main>
-                <ProfilePic></ProfilePic>
+                <ProfileImage></ProfileImage>
             </Main>
         </React.Fragment>
     );
