@@ -51,18 +51,18 @@ export default function EditProfile() {
     const user = React.useContext(UserContext);
     const userData = user.profile;
 
-    const [cusineChipData, setCusineChipData] = React.useState(
-        userData.favoriteCuisine.map((cusine, index) => ({
+    const [cuisineChipData, setCuisineChipData] = React.useState(
+        userData.favoriteCuisine.map((cuisine, index) => ({
             key: index,
-            label: cusine,
+            label: cuisine,
         }))
     );
     const [allergyChipData, setAllergyChipData] = React.useState(
-        userData.allergies.map((cusine, index) => ({ key: index, label: cusine }))
+        userData.allergies.map((cuisine, index) => ({ key: index, label: cuisine }))
     );
 
-    const handleCusineDelete = (chipToDelete) => () => {
-        setCusineChipData((chips) =>
+    const handleCuisineDelete = (chipToDelete) => () => {
+        setCuisineChipData((chips) =>
             chips.filter((chip) => chip.key !== chipToDelete.key)
         );
     };
@@ -88,7 +88,7 @@ export default function EditProfile() {
                 initialValues={{
                     firstName: userData.firstName,
                     lastName: userData.lastName,
-                    cusine: "",
+                    cuisine: "",
                     about: userData.bio,
                     allergy: "",
                     city: userData.primaryAddress["city"],
@@ -105,8 +105,8 @@ export default function EditProfile() {
                             city: values.city,
                             country: values.country,
                         },
-                        favoriteCuisine: cusineChipData.map(
-                            (cusine) => cusine.label
+                        favoriteCuisine: cuisineChipData.map(
+                            (cuisine) => cuisine.label
                         ),
                         allergies: allergyChipData.map((allergen) => allergen.label),
                     };
@@ -223,7 +223,7 @@ export default function EditProfile() {
                                 </Grid>
                                 <Grid item xs={12}>
                                     <Typography variant="h6" component="h4">
-                                        FAVOURITE CUSINE:
+                                        FAVOURITE CUISINE:
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={8}>
@@ -231,37 +231,37 @@ export default function EditProfile() {
                                         fullWidth
                                         component={TextField}
                                         variant="outlined"
-                                        name="cusine"
+                                        name="cuisine"
                                         type="text"
-                                        label="Cusine Name"
+                                        label="Cuisine Name"
                                     />
                                 </Grid>
                                 <Grid item xs={4}>
                                     <Button
-                                        className={classes.cusineButton}
+                                        className={classes.cuisineButton}
                                         color="primary"
                                         variant="outlined"
                                         onClick={() =>
-                                            setCusineChipData([
-                                                ...cusineChipData,
+                                            setCuisineChipData([
+                                                ...cuisineChipData,
                                                 {
-                                                    key: [cusineChipData.size],
-                                                    label: values.cusine,
+                                                    key: [cuisineChipData.size],
+                                                    label: values.cuisine,
                                                 },
                                             ])
                                         }
                                     >
-                                        Add Cusine
+                                        Add Cuisine
                                     </Button>
                                 </Grid>
                                 <Grid item xs={12}>
-                                    {cusineChipData.map((data) => {
+                                    {cuisineChipData.map((data) => {
                                         return (
                                             <Chip
                                                 color="primary"
                                                 key={data.key}
                                                 label={data.label}
-                                                onDelete={handleCusineDelete(data)}
+                                                onDelete={handleCuisineDelete(data)}
                                                 className={classes.chip}
                                             />
                                         );
@@ -284,7 +284,7 @@ export default function EditProfile() {
                                 </Grid>
                                 <Grid item xs={4}>
                                     <Button
-                                        className={classes.cusineButton}
+                                        className={classes.cuisineButton}
                                         color="primary"
                                         variant="outlined"
                                         onClick={() =>
