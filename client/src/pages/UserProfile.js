@@ -69,7 +69,7 @@ export default function UserProfile() {
             ", " +
             user.profile.primaryAddress.country,
         about: user.profile.bio,
-        cusine: user.profile.favoriteCuisine,
+        cuisine: user.profile.favoriteCuisine,
     };
 
     return (
@@ -137,15 +137,16 @@ export default function UserProfile() {
 
                 <Grid item xs={12}>
                     <Typography variant="h6" component="h4">
-                        FAVOURITE CUSINE:
+                        FAVOURITE CUISINE:
                     </Typography>
-                    {userData.cusine.map((cusine) => (
+                    {userData.cuisine.map((cuisine) => (
                         <Button
-                            className={classes.cusineButton}
+                            key={cuisine}
+                            className={classes.cuisineButton}
                             color="primary"
                             variant="contained"
                         >
-                            <Typography variant="button">{cusine}</Typography>
+                            <Typography variant="button">{cuisine}</Typography>
                         </Button>
                     ))}
                 </Grid>
