@@ -19,9 +19,16 @@ const hashPassword = async (password) =>
 const create = async ({ email, password, isChef }) => {
     const hashedPassword = await hashPassword(password);
     const { _doc } = await User.create({
+        firstName: "",
+        lastName: "",
+        primaryAddress: { street: "", city: "", region: "", postalCode: "", country: "" },
+        bio: "",
         email,
         password: hashedPassword,
         isChef,
+        favoriteCuisine: [],
+        allergies: []
+
     });
     return _doc;
 };

@@ -1,7 +1,7 @@
 const express = require("express");
 
 const { errorHandelingWrapper, createAuthResponseObj } = require("../util");
-const userController = require("../controllers/usersController");
+const usersController = require("../controllers/usersController");
 const chefsController = require("../controllers/chefsController");
 
 const router = express.Router();
@@ -10,7 +10,7 @@ router.get(
     "/",
     errorHandelingWrapper(async (req, res) => {
         const { id } = req.user;
-        const user = await userController.findOneWithId(id);
+        const user = await usersController.findOneWithId(id);
         if (!user) {
             res.status(400).json({ errors: ["Please sign in"] });
             return;
@@ -28,13 +28,18 @@ router.get(
 router.put(
     "/",
     errorHandelingWrapper(async (req, res) => {
-        const { id } = req.user;
+        const { id, password, email } = req.user;
         const errors = [];
-
+        
         if (password && (typeof password !== "string" || password.length < 6))
             errors.push("Invalid password");
-        if (email && !userController.isValidEmailFormat(email))
+        if (email && !usersController.isValidEmailFormat(email))
             errors.push("Invalid email");
+        if (errors.length > 0) {
+            res.status(400).json({ errors });
+            return;
+        }
+
         if (errors.length > 0) {
             res.status(400).json({ errors });
             return;
@@ -43,7 +48,8 @@ router.put(
         const user = await usersController.sanatize(
             await usersController.update(id, req.body)
         );
-        res.json(user);
+        const responseObj = await createAuthResponseObj(user);
+        res.json(responseObj);
     })
 );
 
