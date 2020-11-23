@@ -1,10 +1,12 @@
 import * as React from "react";
-import { SET_USER, LOGOUT } from "../types";
-import { Redirect } from "react-router-dom";
+import { SET_USER, LOGOUT, SET_IS_LOADING } from "../types";
 
 const initialState = {
     isAuthenticated: false,
-    profile: null,
+    profile: {
+        email: "",
+    },
+    isLoading: true,
 };
 
 const UserReducer = (state, action) => {
@@ -12,14 +14,21 @@ const UserReducer = (state, action) => {
         case SET_USER:
             return {
                 ...state,
+                isLoading: false,
                 isAuthenticated: true,
                 profile: action.payload.user,
             };
         case LOGOUT:
             return {
                 ...state,
+                isLoading: false,
                 isAuthenticated: false,
                 profile: null,
+            };
+        case SET_IS_LOADING:
+            return {
+                ...state,
+                isLoading: action.payload,
             };
         default:
             return state;
@@ -31,7 +40,13 @@ const UserContext = React.createContext(initialState);
 const UserContextProvider = ({ children }) => {
     const [state, dispatch] = React.useReducer(UserReducer, initialState);
 
+    const isLoading = (data) => {
+        data = !!data;
+        dispatch({ type: SET_IS_LOADING, payload: data });
+    };
+
     const register = async (formValues) => {
+        isLoading(true);
         const response = await fetch("/auth/register", {
             method: "post",
             body: JSON.stringify(formValues),
@@ -54,6 +69,7 @@ const UserContextProvider = ({ children }) => {
     };
 
     const login = async (formValues) => {
+        isLoading(true);
         const response = await fetch("/auth/login", {
             method: "post",
             body: JSON.stringify(formValues),
@@ -76,7 +92,8 @@ const UserContextProvider = ({ children }) => {
     };
 
     const checkLogin = async () => {
-        const response = await fetch("/auth/user", {
+        isLoading(true);
+        const response = await fetch("/users", {
             method: "get",
             credentials: "include",
         });
@@ -85,7 +102,6 @@ const UserContextProvider = ({ children }) => {
 
         if (data.user) {
             dispatch({ type: SET_USER, payload: data });
-            return <Redirect to="/home" />;
         } else {
             dispatch({ type: LOGOUT, payload: null });
         }

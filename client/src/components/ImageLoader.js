@@ -1,7 +1,14 @@
 import * as React from "react";
-import { DropzoneDialog } from 'material-ui-dropzone';
+import { DropzoneDialog } from "material-ui-dropzone";
 import { makeStyles } from "@material-ui/core/styles";
-import { Box, CardMedia, Card, IconButton, LinearProgress, Snackbar } from "@material-ui/core";
+import {
+    Box,
+    CardMedia,
+    Card,
+    IconButton,
+    LinearProgress,
+    Snackbar,
+} from "@material-ui/core";
 import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
 import MuiAlert from "@material-ui/lab/Alert";
 import profilePic from "../images/profilePic.png";
@@ -10,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     root: {
         maxWidth: 345,
         background: "none",
-        boxShadow: "none",
+        boxShadow: theme[0],
     },
     media: {
         height: 140,
@@ -31,21 +38,20 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-
 function ProfilePic(props) {
     const classes = useStyles();
     const [dropzoneOpen, setDropzoneOpen] = React.useState(false);
-    const [image, setImage] = React.useState(profilePic)
+    const [image, setImage] = React.useState(profilePic);
     const [snackBarOpen, setSnackBarOpen] = React.useState(false);
     const [severity, setSeverity] = React.useState("");
     const [message, setMessage] = React.useState("");
     const [loading, setLoading] = React.useState(false);
 
     const uploadImage = async (formData) => {
-        const response = await fetch("/user/singleImageUpload", {
+        const response = await fetch("/users/singleImageUpload", {
             method: "post",
             body: formData,
-        })
+        });
 
         const data = await response.json();
 
@@ -55,39 +61,40 @@ function ProfilePic(props) {
                 message: data.errors,
             };
         } else {
-            return { 
+            return {
                 result: true,
-                data, 
+                data,
             };
         }
     };
 
     const handleUpload = (file) => {
-        setLoading(true)
+        setLoading(true);
         let formData = new FormData();
         formData.append("image", file[0]);
         uploadImage(formData)
-        .then((res) => {
-            setLoading(true)
-            if (res.result) {
-                setSeverity("success");
-                setMessage("Profile Picture updated");
-                setSnackBarOpen(true);
-                setImage(res.data)
-                setDropzoneOpen(false);
-            } else {
+            .then((res) => {
+                setLoading(false);
+                if (res.result) {
+                    setSeverity("success");
+                    setMessage("Profile Picture updated");
+                    setSnackBarOpen(true);
+                    setImage(res.data);
+                    setDropzoneOpen(false);
+                } else {
+                    setSeverity("error");
+                    setMessage(res.message);
+                    setSnackBarOpen(true);
+                }
+            })
+            .catch((error) => {
+                setLoading(false);
+                console.log(error.message);
                 setSeverity("error");
-                setMessage(res.message);
+                setMessage("Error while making request");
                 setSnackBarOpen(true);
-            }
-        })
-        .catch((error) => {
-            console.log(error.message);
-            setSeverity("error");
-            setMessage("Error while making request");
-            setSnackBarOpen(true);
-        });
-    }
+            });
+    };
 
     const snackBarClose = (event, reason) => {
         if (reason === "clickaway") {
@@ -115,10 +122,16 @@ function ProfilePic(props) {
                 </Box>
             </Card>
             <DropzoneDialog
-                acceptedFiles={['image/png', 'image/jpeg']}
+                acceptedFiles={["image/png", "image/jpeg"]}
                 cancelButtonText={"cancel"}
                 submitButtonText={"submit"}
-                dialogTitle={!loading ? "Upload Profile Picture" : <LinearProgress color="secondary" />}
+                dialogTitle={
+                    !loading ? (
+                        "Upload Profile Picture"
+                    ) : (
+                        <LinearProgress color="secondary" />
+                    )
+                }
                 dropzoneText={"JPEG or PNG  -  5MB max"}
                 maxFileSize={5000000}
                 filesLimit={1}
@@ -128,7 +141,11 @@ function ProfilePic(props) {
                 showPreviews={true}
                 showFileNamesInPreview={true}
             />
-            <Snackbar open={snackBarOpen} autoHideDuration={6000} onClose={snackBarClose}>
+            <Snackbar
+                open={snackBarOpen}
+                autoHideDuration={6000}
+                onClose={snackBarClose}
+            >
                 <MuiAlert onClose={snackBarClose} severity={severity}>
                     {message}
                 </MuiAlert>

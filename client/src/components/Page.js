@@ -2,6 +2,7 @@ import * as React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { AppBar, Typography, Toolbar } from "@material-ui/core";
 import MenuButton from "./MenuButton";
+import ShoppingCart from "./ShoppingCart";
 import logo from "../images/logo.svg";
 
 const useStyles = makeStyles((theme) => ({
@@ -11,6 +12,7 @@ const useStyles = makeStyles((theme) => ({
     appBar: {
         zIndex: theme.zIndex.drawer + 1,
         background: "#FFFFFF",
+        boxShadow: "0px 0px 10px 5px rgba(7,7,7,0.07)",
     },
     appBarTitle: {
         flexGrow: 1,
@@ -26,13 +28,10 @@ function Page(props) {
             <AppBar position="fixed" className={classes.appBar}>
                 <Toolbar>
                     <Typography className={classes.appBarTitle}>
-                        <img
-                            className={classes.logo}
-                            src={logo}
-                            alt="Chef's Menu Logo"
-                        />
+                        <img src={logo} alt="Chef's Menu Logo" />
                     </Typography>
                     <MenuButton />
+                    <ShoppingCart />
                 </Toolbar>
             </AppBar>
             {props.children}
