@@ -1,21 +1,20 @@
 import React from "react";
-import ResponsiveSideBar from "../components/ResponsiveSideBar";
+import SideBar from "../components/SideBar";
 import Main from "../components/Main";
 import { Typography } from "@material-ui/core";
 import { UserContext } from "../contexts/user/UserContextProvider";
-import MealCard from "../components/MealCard";
 
 function Home(props) {
     const user = React.useContext(UserContext);
 
     return (
         <React.Fragment>
-            <ResponsiveSideBar>
+            <SideBar>
                 <Typography>Side Bar</Typography>
                 <Typography>{user.profile.email}</Typography>
-            </ResponsiveSideBar>
+            </SideBar>
             <Main>
-                <MealCard />
+                <Typography>Main</Typography>
             </Main>
         </React.Fragment>
     );

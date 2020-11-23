@@ -103,7 +103,7 @@ const UserContextProvider = ({ children }) => {
         if (data.user) {
             dispatch({ type: SET_USER, payload: data });
         } else {
-            dispatch({ type: LOGOUT, payload: null });
+            dispatch({ type: LOGOUT, payload: initialState });
         }
     };
 

@@ -2,7 +2,6 @@ import * as React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { AppBar, Typography, Toolbar } from "@material-ui/core";
 import MenuButton from "./MenuButton";
-import ShoppingCart from "./ShoppingCart";
 import logo from "../images/logo.svg";
 
 const useStyles = makeStyles((theme) => ({
@@ -31,7 +30,6 @@ function Page(props) {
                         <img src={logo} alt="Chef's Menu Logo" />
                     </Typography>
                     <MenuButton />
-                    <ShoppingCart />
                 </Toolbar>
             </AppBar>
             {props.children}
