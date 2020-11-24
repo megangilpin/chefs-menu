@@ -58,7 +58,6 @@ export default function UserProfile() {
     const classes = useStyles();
     const history = useHistory();
     const user = React.useContext(UserContext);
-    console.log(user.profile);
 
     // populate user data using profile from context
     const userData = {

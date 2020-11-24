@@ -111,7 +111,7 @@ const UserContextProvider = ({ children }) => {
         if (data.user) {
             dispatch({ type: SET_USER, payload: data });
         } else {
-            dispatch({ type: LOGOUT, payload: initialState });
+            dispatch({ type: LOGOUT, payload: null });
         }
     };
 
@@ -122,25 +122,18 @@ const UserContextProvider = ({ children }) => {
         });
 
         const data = await response.json();
-        console.log(data);
 
-        if (data) {
+        if (data.errors) {
+            return {
+                result: false,
+                message: data.errors,
+            };
+        } else {
             dispatch({ type: SET_PROFILE_IMAGE, payload: data });
             return {
                 result: true,
             };
         }
-        // if (data.errors) {
-        //     return {
-        //         result: false,
-        //         message: data.errors,
-        //     };
-        // } else {
-        //     dispatch({ type: SET_PROFILE_IMAGE, payload: data });
-        //     return {
-        //         result: true,
-        //     };
-        // }
     };
 
     const updateUser = async (formValues) => {

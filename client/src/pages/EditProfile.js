@@ -52,13 +52,20 @@ export default function EditProfile() {
     const userData = user.profile;
 
     const [cuisineChipData, setCuisineChipData] = React.useState(
-        userData.favoriteCuisine.map((cuisine, index) => ({
-            key: index,
-            label: cuisine,
-        }))
+        !userData.favoriteCuisine
+            ? ""
+            : userData.favoriteCuisine.map((cuisine, index) => ({
+                  key: index,
+                  label: cuisine,
+              }))
     );
     const [allergyChipData, setAllergyChipData] = React.useState(
-        userData.allergies.map((cuisine, index) => ({ key: index, label: cuisine }))
+        !userData.allergies
+            ? ""
+            : userData.allergies.map((cuisine, index) => ({
+                  key: index,
+                  label: cuisine,
+              }))
     );
 
     const handleCuisineDelete = (chipToDelete) => () => {
@@ -91,8 +98,12 @@ export default function EditProfile() {
                     cuisine: "",
                     about: userData.bio,
                     allergy: "",
-                    city: userData.primaryAddress["city"],
-                    country: userData.primaryAddress["country"],
+                    city: !userData.primaryAddress
+                        ? ""
+                        : userData.primaryAddress["city"],
+                    country: !userData.PrimaryAddress
+                        ? ""
+                        : userData.primaryAddress["country"],
                 }}
                 onSubmit={(values, { setSubmitting }) => {
                     setSubmitting(false);
@@ -258,17 +269,21 @@ export default function EditProfile() {
                                     </Button>
                                 </Grid>
                                 <Grid item xs={12}>
-                                    {cuisineChipData.map((data) => {
-                                        return (
-                                            <Chip
-                                                color="primary"
-                                                key={data.key}
-                                                label={data.label}
-                                                onDelete={handleCuisineDelete(data)}
-                                                className={classes.chip}
-                                            />
-                                        );
-                                    })}
+                                    {!cuisineChipData
+                                        ? ""
+                                        : cuisineChipData.map((data) => {
+                                              return (
+                                                  <Chip
+                                                      color="primary"
+                                                      key={data.key}
+                                                      label={data.label}
+                                                      onDelete={handleCuisineDelete(
+                                                          data
+                                                      )}
+                                                      className={classes.chip}
+                                                  />
+                                              );
+                                          })}
                                 </Grid>
                                 <Grid item xs={12}>
                                     <Typography variant="h6" component="h4">
@@ -304,16 +319,20 @@ export default function EditProfile() {
                                     </Button>
                                 </Grid>
                                 <Grid item xs={12}>
-                                    {allergyChipData.map((data) => {
-                                        return (
-                                            <Chip
-                                                key={data.key}
-                                                label={data.label}
-                                                onDelete={handleAllergenDelete(data)}
-                                                className={classes.allergyChip}
-                                            />
-                                        );
-                                    })}
+                                    {!allergyChipData
+                                        ? ""
+                                        : allergyChipData.map((data) => {
+                                              return (
+                                                  <Chip
+                                                      key={data.key}
+                                                      label={data.label}
+                                                      onDelete={handleAllergenDelete(
+                                                          data
+                                                      )}
+                                                      className={classes.allergyChip}
+                                                  />
+                                              );
+                                          })}
                                 </Grid>
                                 <Grid item xs={12}>
                                     <Button
