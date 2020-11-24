@@ -3,6 +3,7 @@ import SideBar from "../components/SideBar";
 import Main from "../components/Main";
 import { Typography } from "@material-ui/core";
 import { UserContext } from "../contexts/user/UserContextProvider";
+import MealCard from "../components/MealCard";
 
 function Home(props) {
     const user = React.useContext(UserContext);
@@ -14,7 +15,7 @@ function Home(props) {
                 <Typography>{user.profile.email}</Typography>
             </SideBar>
             <Main>
-                <Typography>Main</Typography>
+                <MealCard></MealCard>
             </Main>
         </React.Fragment>
     );

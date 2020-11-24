@@ -12,7 +12,6 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 import { theme } from "./themes/theme";
 import LoginSignUp from "./pages/LoginSignUp";
 import Home from "./pages/Home";
-import Profile from "./pages/Profile";
 import Page from "./components/Page";
 
 function App() {
@@ -21,8 +20,7 @@ function App() {
             <div>
                 <Switch>
                     <Page>
-                        <ProtectedRoute exact path="/home" component={Profile} />
-                        <ProtectedRoute exact path="/profile" component={Profile} />
+                        <ProtectedRoute exact path="/home" component={Home} />
                     </Page>
                 </Switch>
             </div>
