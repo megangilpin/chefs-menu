@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function ProfilePic(props) {
+function ProfileImgUpdateBttn(props) {
     const classes = useStyles();
     const user = React.useContext(UserContext);
     const [dropzoneOpen, setDropzoneOpen] = React.useState(false);
@@ -81,23 +81,15 @@ function ProfilePic(props) {
 
     return (
         <div>
-            {/* temporary layout until merged with user profile page */}
-            <Card className={classes.root}>
-                <CardMedia
-                    className={classes.media}
-                    image={`${user.profile.profilePicURL}`}
-                    title="Contemplative Reptile"
-                />
-                <Box ml={4}>
-                    <IconButton
-                        aria-label="delete"
-                        color="primary"
-                        onClick={() => setDropzoneOpen(true)}
-                    >
-                        <AddAPhotoIcon fontSize="large" />
-                    </IconButton>
-                </Box>
-            </Card>
+            <Box ml={4}>
+                <IconButton
+                    aria-label="delete"
+                    color="primary"
+                    onClick={() => setDropzoneOpen(true)}
+                >
+                    <AddAPhotoIcon fontSize="large" />
+                </IconButton>
+            </Box>
             <DropzoneDialog
                 acceptedFiles={["image/png", "image/jpeg"]}
                 cancelButtonText={"cancel"}
@@ -131,4 +123,4 @@ function ProfilePic(props) {
     );
 }
 
-export default ProfilePic;
+export default ProfileImgUpdateBttn;

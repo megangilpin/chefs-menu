@@ -24,7 +24,6 @@ export default function SignUp() {
     const user = React.useContext(UserContext);
     const history = useHistory();
     const [open, setOpen] = React.useState(false);
-    const [severity, setSeverity] = React.useState("");
     const [message, setMessage] = React.useState("");
     const validationSchema = Yup.object().shape({
         name: Yup.string().required("Required!"),
@@ -53,19 +52,13 @@ export default function SignUp() {
                     user.register(values)
                         .then((res) => {
                             if (res.result) {
-                                setSeverity("success");
-                                setMessage("Successfully signed up!");
-                                setOpen(true);
                                 history.push("/home");
                             } else {
-                                setSeverity("error");
                                 setMessage(res.message);
                                 setOpen(true);
                             }
                         })
                         .catch((error) => {
-                            console.log(error.message);
-                            setSeverity("error");
                             setMessage("Error while making request");
                             setOpen(true);
                         });
@@ -137,7 +130,7 @@ export default function SignUp() {
                 )}
             </Formik>
             <Snackbar open={open} autoHideDuration={6000} onClose={snackBarClose}>
-                <MuiAlert onClose={snackBarClose} severity={severity}>
+                <MuiAlert onClose={snackBarClose} severity="error">
                     {message}
                 </MuiAlert>
             </Snackbar>

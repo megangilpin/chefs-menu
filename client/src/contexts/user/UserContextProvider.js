@@ -136,6 +136,29 @@ const UserContextProvider = ({ children }) => {
         }
     };
 
+    const updateUser = async (formValues) => {
+        isLoading(true);
+        const response = await fetch("/users", {
+            method: "put",
+            body: JSON.stringify(formValues),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        const data = await response.json();
+
+        if (!data.user) {
+            return {
+                result: false,
+                message: data.errors,
+            };
+        } else {
+            dispatch({ type: SET_USER, payload: data });
+            return { result: true };
+        }
+    };
+
     React.useEffect(() => {
         const checkCookie = async () => await checkLogin();
         checkCookie().catch((error) => {
@@ -145,7 +168,7 @@ const UserContextProvider = ({ children }) => {
 
     return (
         <UserContext.Provider
-            value={{ ...state, register, login, uploadProfileImage }}
+            value={{ ...state, register, login, updateUser, uploadProfileImage }}
         >
             {children}
         </UserContext.Provider>

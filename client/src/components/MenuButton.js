@@ -1,19 +1,9 @@
 import * as React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Menu, MenuItem, IconButton } from "@material-ui/core";
-import PersonOutlineIcon from "@material-ui/icons/PersonOutline";
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        marginLeft: theme.spacing(0.5),
-    },
-    menuIcon: {
-        marginRight: theme.spacing(2),
-    },
-}));
+import { useHistory } from "react-router-dom";
 
 function MenuButton(props) {
-    const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const handleClick = (event) => {
@@ -24,10 +14,11 @@ function MenuButton(props) {
         setAnchorEl(null);
     };
 
+    const history = useHistory();
+
     return (
         <div>
             <IconButton
-                className={classes.root}
                 edge="start"
                 aria-label="menu"
                 aria-haspopup="true"
@@ -57,13 +48,8 @@ function MenuButton(props) {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
-                <MenuItem onClick={handleClose}>
-                    <PersonOutlineIcon
-                        className={classes.menuIcon}
-                        fontSize="small"
-                    />
-                    Profile
-                </MenuItem>
+                <MenuItem onClick={() => history.push("profile")}>Profile</MenuItem>
+                <MenuItem onClick={handleClose}>My account</MenuItem>
                 <MenuItem onClick={handleClose}>Logout</MenuItem>
             </Menu>
         </div>

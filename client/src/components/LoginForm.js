@@ -23,13 +23,14 @@ export default function LoginForm(props) {
     const classes = useStyles();
     const user = React.useContext(UserContext);
     const history = useHistory();
-    const [open, setOpen] = React.useState(false);
-    const [severity, setSeverity] = React.useState("");
-    const [message, setMessage] = React.useState("");
+
     const validationSchema = Yup.object().shape({
         email: Yup.string().email().required("Required!"),
         password: Yup.string().min(6).required("Required!"),
     });
+
+    const [open, setOpen] = React.useState(false);
+    const [message, setMessage] = React.useState("");
 
     const snackBarClose = (event, reason) => {
         if (reason === "clickaway") {
@@ -37,6 +38,7 @@ export default function LoginForm(props) {
         }
         setOpen(false);
     };
+
     return (
         <>
             <Formik
@@ -50,19 +52,13 @@ export default function LoginForm(props) {
                     user.login(values)
                         .then((res) => {
                             if (res.result) {
-                                setSeverity("success");
-                                setMessage("Successfully logged in!");
-                                setOpen(true);
                                 history.push("/home");
                             } else {
-                                setSeverity("error");
                                 setMessage(res.message);
                                 setOpen(true);
                             }
                         })
                         .catch((error) => {
-                            console.log(error.message);
-                            setSeverity("error");
                             setMessage("Error while making request");
                             setOpen(true);
                         });
@@ -118,7 +114,7 @@ export default function LoginForm(props) {
                 )}
             </Formik>
             <Snackbar open={open} autoHideDuration={6000} onClose={snackBarClose}>
-                <MuiAlert onClose={snackBarClose} severity={severity}>
+                <MuiAlert onClose={snackBarClose} severity="error">
                     {message}
                 </MuiAlert>
             </Snackbar>
