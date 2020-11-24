@@ -155,13 +155,22 @@ export default function EditProfile() {
                                 className={classes.profileTopLeft}
                             >
                                 <Grid item xs={12}>
-                                    <Box
-                                        boxShadow={2}
-                                        component={Avatar}
-                                        src={user.profile.profilePicURL}
-                                        alt="user"
-                                        className={classes.userImage}
-                                    />
+                                    {!user.profile.profilePicURL ? (
+                                        <Box
+                                            boxShadow={2}
+                                            component={Avatar}
+                                            src={user.profile.profilePicURL}
+                                            alt="profile image"
+                                            className={classes.userImage}
+                                        />
+                                    ) : (
+                                        <Box
+                                            boxShadow={2}
+                                            component={Avatar}
+                                            src={user.profile.profilePicURL}
+                                            className={classes.userImage}
+                                        />
+                                    )}
                                     <Grid item xs={6} mb={2}>
                                         <ProfilePicLoader />
                                     </Grid>

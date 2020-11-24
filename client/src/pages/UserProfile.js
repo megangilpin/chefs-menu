@@ -81,13 +81,22 @@ export default function UserProfile() {
                 className={classes.profileTopLeft}
             >
                 <Grid item xs={12}>
-                    <Box
-                        boxShadow={2}
-                        component={Avatar}
-                        src={user.profile.profilePicURL}
-                        alt="user"
-                        className={classes.userImage}
-                    />
+                    {!user.profile.profilePicURL ? (
+                        <Box
+                            boxShadow={2}
+                            component={Avatar}
+                            src={user.profile.profilePicURL}
+                            alt="profile image"
+                            className={classes.userImage}
+                        />
+                    ) : (
+                        <Box
+                            boxShadow={2}
+                            component={Avatar}
+                            src={user.profile.profilePicURL}
+                            className={classes.userImage}
+                        />
+                    )}
                 </Grid>
                 <Grid item xs={12}>
                     <Typography variant="h6" component="h2">
