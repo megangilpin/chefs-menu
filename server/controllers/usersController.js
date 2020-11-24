@@ -15,17 +15,27 @@ const isValidEmailFormat = (email) =>
 const hashPassword = async (password) =>
     await bcrypt.hash(password, SALT_ROUNDS);
 
-const create = async ({ email, password, isChef }) => {
+const create = async ({
+    firstName,
+    lastName,
+    street,
+    city,
+    region,
+    country,
+    email,
+    password,
+    isChef,
+}) => {
     const hashedPassword = await hashPassword(password);
     const { _doc } = await User.create({
-        firstName: "",
-        lastName: "",
+        firstName,
+        lastName,
         primaryAddress: {
-            street: "",
-            city: "",
-            region: "",
+            street,
+            city,
+            region,
             postalCode: "",
-            country: "",
+            country,
         },
         bio: "",
         email,
@@ -51,7 +61,7 @@ const update = async (id, requestBody) => {
         allergies,
         isChef,
     } = requestBody;
-    const { street, city, region, postalCode, country } = primaryAddress || {}
+    const { street, city, region, postalCode, country } = primaryAddress || {};
 
     const user = await User.findOne({ _id: id });
 

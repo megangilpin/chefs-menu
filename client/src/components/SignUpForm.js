@@ -25,8 +25,12 @@ export default function SignUp() {
     const history = useHistory();
     const [open, setOpen] = React.useState(false);
     const [message, setMessage] = React.useState("");
+    const [address, setAddress] = React.useState("");
+    const [predictions, setPredictions] = React.useState(undefined);
+
     const validationSchema = Yup.object().shape({
         name: Yup.string().required("Required!"),
+        address: Yup.string().required("Required!"),
         email: Yup.string().email().required("Required!"),
         password: Yup.string().min(6).required("Required!"),
     });
@@ -37,11 +41,25 @@ export default function SignUp() {
         }
         setOpen(false);
     };
+
+    const handleChange = (e) => {
+        setAddress(e.target.value);
+
+        fetch(`/maps/autocomplete?input=${e.target.value}`, {
+            method: "get",
+            headers: { "Content-Type": "application/json" },
+        })
+            .then((response) => response.json())
+            .then(({ predictions }) => setPredictions(predictions))
+            .catch(console.error);
+    };
+
     return (
         <>
             <Formik
                 initialValues={{
                     name: "",
+                    address: "",
                     email: "",
                     password: "",
                     chef: false,
@@ -49,7 +67,7 @@ export default function SignUp() {
                 validationSchema={validationSchema}
                 onSubmit={(values, { setSubmitting }) => {
                     setSubmitting(false);
-                    user.register(values)
+                    user.register({ ...values, address })
                         .then((res) => {
                             if (res.result) {
                                 history.push("/home");
@@ -90,6 +108,18 @@ export default function SignUp() {
                                     fullWidth
                                     component={TextField}
                                     variant="outlined"
+                                    name="address"
+                                    label="Address"
+                                    onChange={handleChange}
+                                    value={address}
+                                />
+                                {JSON.stringify(predictions, null, 4)}
+                            </Grid>
+                            <Grid className={classes.formItem} item xs={12}>
+                                <Field
+                                    fullWidth
+                                    component={TextField}
+                                    variant="outlined"
                                     name="email"
                                     type="email"
                                     label="Email"
@@ -113,7 +143,6 @@ export default function SignUp() {
                                     Label={{ label: "Sign up as chef!" }}
                                 />
                             </Grid>
-
                             <Grid item xs={12}>
                                 <Button
                                     className={classes.formItem}

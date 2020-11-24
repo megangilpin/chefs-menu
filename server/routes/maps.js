@@ -2,12 +2,33 @@ const express = require("express");
 const axios = require("axios");
 
 const { errorHandelingWrapper } = require("../util");
+const { loginRequired } = require("../middleware");
 const userController = require("../controllers/usersController");
 
 const router = express.Router();
 
+// https://maps.googleapis.com/maps/api/place/autocomplete/output?parameters
+
+router.get(
+    "/autocomplete",
+    errorHandelingWrapper(async (req, res) => {
+        const { input } = req.query;
+        const url =
+            "https://maps.googleapis.com/maps/api/place/autocomplete/json" +
+            `?input=${input}` +
+            `&key=${process.env.GOOGLE_MAPS_API_KEY}`;
+
+        const { data } = await axios.get(url);
+        const predictions = data.predictions.map(
+            ({ description, reference }) => ({ description, reference })
+        );
+        res.json({ predictions });
+    })
+);
+
 router.get(
     "/static",
+    loginRequired,
     errorHandelingWrapper(async (req, res) => {
         let { center } = req.query;
         const { id } = req.user;
@@ -16,29 +37,25 @@ router.get(
         if (!center) {
             const user = await userController.findOneWithId(id);
             const {
-                primaryAddress: { city, region },
+                primaryAddress: { city, region, country },
             } = user;
             center = city + "," + region;
+            if (country) center = center + "," + country;
         }
+
+        const url =
+            "https://maps.googleapis.com/maps/api/staticmap" +
+            `?center=${center}` +
+            "&scale=2&zoom=13&size=600x300&maptype=roadmap" +
+            `&key=${process.env.GOOGLE_MAPS_API_KEY}`;
 
         const { headers, data, status } = await axios({
             method: "get",
-            url: `https://maps.googleapis.com/maps/api/staticmap?center=${center}&scale=2&zoom=13&size=600x300&maptype=roadmap&key=${process.env.GOOGLE_MAPS_API_KEY}`,
+            url,
             responseType: "stream",
         });
 
-        res.set({
-            "content-type": headers["content-type"],
-            date: headers.date,
-            vary: "Accept-Language",
-            expires: headers.expires,
-            "cache-control": headers["cache-control"],
-            "content-length": headers["content-length"],
-            connection: headers.connection,
-            "x-xss-protection": "0",
-            "x-frame-options": "SAMEORIGIN",
-            connection: "close",
-        });
+        res.set(headers);
         res.status(status);
         data.pipe(res);
     })
