@@ -9,6 +9,7 @@ const chefSchema = new Schema({
     //     time: { type: Number },
     // },
     userId: { type: Schema.Types.ObjectId, ref: "Users" },
+    meals: [{ type: Schema.Types.ObjectId, ref: 'Meal'}]
 });
 
 module.exports = chefSchema;
