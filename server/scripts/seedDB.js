@@ -42,7 +42,7 @@ const mealSeed =
     price: 1,
     servingSize: "1 person",
     cuisineType: ["American"],
-    ingredients: "Bread and american cheese",
+    ingredients: "Bread with cheese",
  
   },
   {
@@ -50,7 +50,7 @@ const mealSeed =
     price: 1,
     servingSize: "1 person",
     cuisineType: ["Lebanese"],
-    ingredients: "Bread and american cheese",
+    ingredients: "God's gift to the earth",
  
   },
   {
@@ -58,15 +58,23 @@ const mealSeed =
     price: 1,
     servingSize: "1 person",
     cuisineType: ["American"],
-    ingredients: "Bread and american cheese",
+    ingredients: "bread with high calorie stuff in between",
  
   },
   {
     title: "Pizza",
     price: 1,
     servingSize: "1 person",
-    cuisineType: ["American"],
-    ingredients: "Bread and american cheese",
+    cuisineType: ["Italian"],
+    ingredients: "Bread with cheese but better",
+ 
+  },
+  {
+    title: "Roti",
+    price: 1,
+    servingSize: "1 person",
+    cuisineType: ["Indian"],
+    ingredients: "Bread but thin and round ",
  
   }];
 

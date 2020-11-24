@@ -108,6 +108,11 @@ const UserContextProvider = ({ children }) => {
         }
     };
 
+    const logoutUser = async () => {
+        dispatch({ type: LOGOUT, payload: null });
+
+    }
+
     const updateUser = async (formValues) => {
         isLoading(true);
         const response = await fetch("/users", {
@@ -139,7 +144,7 @@ const UserContextProvider = ({ children }) => {
     }, []);
 
     return (
-        <UserContext.Provider value={{ ...state, register, login, updateUser }}>
+        <UserContext.Provider value={{ ...state, register, login, logoutUser,updateUser }}>
             {children}
         </UserContext.Provider>
     );
