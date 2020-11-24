@@ -1,6 +1,5 @@
 const express = require("express");
 const axios = require("axios");
-const fs = require("fs");
 
 const { errorHandelingWrapper } = require("../util");
 const userController = require("../controllers/usersController");
