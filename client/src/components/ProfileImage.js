@@ -12,7 +12,6 @@ import {
 } from "@material-ui/core";
 import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
 import MuiAlert from "@material-ui/lab/Alert";
-import profilePic from "../images/profilePic.png";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -82,14 +81,11 @@ function ProfilePic(props) {
 
     return (
         <div>
+            {/* temporary layout until merged with user profile page */}
             <Card className={classes.root}>
                 <CardMedia
                     className={classes.media}
-                    image={
-                        !user.profile.profilePicURL
-                            ? `${profilePic}`
-                            : user.profile.profilePicURL
-                    }
+                    image={`${user.profile.profilePicURL}`}
                     title="Contemplative Reptile"
                 />
                 <Box ml={4}>

@@ -6,7 +6,6 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 import { theme } from "./themes/theme";
 import LoginSignUp from "./pages/LoginSignUp";
 import Home from "./pages/Home";
-import Profile from "./pages/Profile";
 import Page from "./components/Page";
 
 function App() {
@@ -16,7 +15,6 @@ function App() {
                 <Switch>
                     <Page>
                         <ProtectedRoute exact path="/home" component={Home} />
-                        <ProtectedRoute exact path="/profile" component={Profile} />
                     </Page>
                 </Switch>
             </div>
@@ -28,7 +26,7 @@ function App() {
             <CssBaseline />
             <BrowserRouter>
                 <Route path="/">
-                    <Redirect to="/profile" />
+                    <Redirect to="/home" />
                 </Route>
                 <Switch>
                     <Route path="/signup" component={LoginSignUp} />

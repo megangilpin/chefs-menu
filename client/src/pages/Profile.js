@@ -6,7 +6,7 @@ function Profile(props) {
     return (
         <React.Fragment>
             <Main>
-                <ProfileImage></ProfileImage>
+                <Profile />
             </Main>
         </React.Fragment>
     );
