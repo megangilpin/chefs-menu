@@ -51,9 +51,7 @@ const update = async (id, requestBody) => {
         allergies,
         isChef,
     } = requestBody;
-    const { street, city, region, postalCode, country } = JSON.parse(
-        primaryAddress || "{}"
-    );
+    const { street, city, region, postalCode, country } = primaryAddress || {}
 
     const user = await User.findOne({ _id: id });
 
