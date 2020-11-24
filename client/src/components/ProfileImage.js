@@ -1,5 +1,6 @@
 import * as React from "react";
 import { DropzoneDialog } from "material-ui-dropzone";
+import { UserContext } from "../contexts/user/UserContextProvider";
 import { makeStyles } from "@material-ui/core/styles";
 import {
     Box,
@@ -17,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     root: {
         maxWidth: 345,
         background: "none",
-        boxShadow: theme[0],
+        boxShadow: "none",
     },
     media: {
         height: 140,
@@ -26,60 +27,36 @@ const useStyles = makeStyles((theme) => ({
         margin: "28px",
         marginBottom: "10px",
     },
-    modal: {
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    paper: {
-        backgroundColor: theme.palette.background.paper,
-        // border: "2px solid #000",
-        padding: theme.spacing(2, 4, 3),
+    profile: {
+        maxWidth: 140,
+        background: theme.palette.primary,
+        paddingTop: "81.25%",
+        borderRadius: "50%",
+        margin: "28px",
+        marginBottom: "10px",
     },
 }));
 
 function ProfilePic(props) {
     const classes = useStyles();
+    const user = React.useContext(UserContext);
     const [dropzoneOpen, setDropzoneOpen] = React.useState(false);
-    const [image, setImage] = React.useState(profilePic);
     const [snackBarOpen, setSnackBarOpen] = React.useState(false);
     const [severity, setSeverity] = React.useState("");
     const [message, setMessage] = React.useState("");
     const [loading, setLoading] = React.useState(false);
 
-    const uploadImage = async (formData) => {
-        const response = await fetch("/users/singleImageUpload", {
-            method: "post",
-            body: formData,
-        });
-
-        const data = await response.json();
-
-        if (data.errors) {
-            return {
-                result: false,
-                message: data.errors,
-            };
-        } else {
-            return {
-                result: true,
-                data,
-            };
-        }
-    };
-
     const handleUpload = (file) => {
         setLoading(true);
         let formData = new FormData();
         formData.append("image", file[0]);
-        uploadImage(formData)
+        user.uploadProfileImage(formData)
             .then((res) => {
                 setLoading(false);
                 if (res.result) {
                     setSeverity("success");
                     setMessage("Profile Picture updated");
                     setSnackBarOpen(true);
-                    setImage(res.data);
                     setDropzoneOpen(false);
                 } else {
                     setSeverity("error");
@@ -108,7 +85,11 @@ function ProfilePic(props) {
             <Card className={classes.root}>
                 <CardMedia
                     className={classes.media}
-                    image={image}
+                    image={
+                        !user.profile.profilePicURL
+                            ? `${profilePic}`
+                            : user.profile.profilePicURL
+                    }
                     title="Contemplative Reptile"
                 />
                 <Box ml={4}>

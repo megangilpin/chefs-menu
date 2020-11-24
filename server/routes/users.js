@@ -3,6 +3,8 @@ const express = require("express");
 const { errorHandelingWrapper, createAuthResponseObj } = require("../util");
 const userController = require("../controllers/usersController");
 const chefsController = require("../controllers/chefsController");
+const upload = require("../services/s3");
+const profileImgUpload = upload.single("image");
 
 const router = express.Router();
 
@@ -47,10 +49,14 @@ router.put(
   })
 );
 
+// uploads image to AWS s3 and updates user schema with url of profile image
 router.post("/profileImageUpload", async function (req, res, next) {
   if (req.files === null) {
     return res.status(400).json({ msg: "No file uploaded" });
   }
+  const { id } = req.user;
+
+  // upload image to s3 with the help of multer-s3
   profileImgUpload(req, res, (error) => {
     if (error) {
       return res.status(400).json({
@@ -67,11 +73,16 @@ router.post("/profileImageUpload", async function (req, res, next) {
       }
     }
 
-    const imageLocation = req.file.location;
-    const bucket = req.file.bucket;
-    console.log(bucket);
-    // RETURN IMAGE URL FROM AWS S3
-    return res.json(imageLocation);
+    const body = {};
+    body.profilePicURL = req.file.location;
+
+    // save the url to the user and return url
+    userController
+      .update(id, body)
+      .then((user) => {
+        return res.json(user.profilePicURL);
+      })
+      .catch((error) => console.log(error));
   });
 });
 

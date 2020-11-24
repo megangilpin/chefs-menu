@@ -1,12 +1,12 @@
 import React from "react";
 import Main from "../components/Main";
-import ProfilePic from "../components/ImageLoader";
+import ProfileImage from "../components/ProfileImage";
 
 function Profile(props) {
     return (
         <React.Fragment>
             <Main>
-                <ProfilePic></ProfilePic>
+                <ProfileImage></ProfileImage>
             </Main>
         </React.Fragment>
     );

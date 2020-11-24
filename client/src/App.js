@@ -28,7 +28,7 @@ function App() {
             <CssBaseline />
             <BrowserRouter>
                 <Route path="/">
-                    <Redirect to="/home" />
+                    <Redirect to="/profile" />
                 </Route>
                 <Switch>
                     <Route path="/signup" component={LoginSignUp} />
