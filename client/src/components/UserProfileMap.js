@@ -1,13 +1,11 @@
-import * as React from "react";
+import React from "react";
 import Grid from "@material-ui/core/Grid";
 
 import makeStyles from "@material-ui/core/styles/makeStyles";
 
-import placeHolderMap from "../images/placeHolderMap.png";
-
 const useStyles = makeStyles({
     map: {
-        backgroundImage: `url(${placeHolderMap})`,
+        backgroundImage: "url(/maps/static)",
         backgroundPosition: "center center",
         backgroundSize: "cover",
         height: "50%",
@@ -16,6 +14,5 @@ const useStyles = makeStyles({
 
 export default function UserProfileMap() {
     const classes = useStyles();
-
-    return <Grid className={classes.map} item xs={12}></Grid>;
+    return <Grid className={classes.map} item xs={12} />;
 }

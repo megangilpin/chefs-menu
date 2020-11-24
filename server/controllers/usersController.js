@@ -3,7 +3,6 @@ const bcrypt = require("bcrypt");
 const connection = require("../dbConnection");
 const userSchema = require("../models/user");
 
-
 const User = connection.model("User", userSchema);
 
 const SALT_ROUNDS = Number(process.env.SALT_ROUNDS);
@@ -21,14 +20,19 @@ const create = async ({ email, password, isChef }) => {
     const { _doc } = await User.create({
         firstName: "",
         lastName: "",
-        primaryAddress: { street: "", city: "", region: "", postalCode: "", country: "" },
+        primaryAddress: {
+            street: "",
+            city: "",
+            region: "",
+            postalCode: "",
+            country: "",
+        },
         bio: "",
         email,
         password: hashedPassword,
         isChef,
         favoriteCuisine: [],
-        allergies: []
-
+        allergies: [],
     });
     return _doc;
 };
@@ -47,7 +51,9 @@ const update = async (id, requestBody) => {
         allergies,
         isChef,
     } = requestBody;
-    const { street, city, region, postalCode, country } = primaryAddress || {};
+    const { street, city, region, postalCode, country } = JSON.parse(
+        primaryAddress || "{}"
+    );
 
     const user = await User.findOne({ _id: id });
 

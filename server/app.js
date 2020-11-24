@@ -10,6 +10,7 @@ const authRouter = require("./routes/auth");
 const usersRouter = require("./routes/users");
 const chefsRouter = require("./routes/chefs");
 const mealsRouter = require("./routes/meals");
+const mapsRouter = require("./routes/maps");
 
 const { json, urlencoded } = express;
 
@@ -28,6 +29,7 @@ app.get("/ping", loginRequired, (req, res) => res.json({ success: true }));
 app.use("/users", loginRequired, usersRouter);
 app.use("/chefs", loginRequired, chefsRouter);
 app.use("/meals", loginRequired, mealsRouter);
+app.use("/maps", loginRequired, mapsRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
