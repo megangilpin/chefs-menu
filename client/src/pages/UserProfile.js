@@ -8,8 +8,6 @@ import Box from "@material-ui/core/Box";
 import EditIcon from "@material-ui/icons/Edit";
 import IconButton from "@material-ui/core/IconButton";
 
-import sampleUser from "../images/sampleUser.png";
-
 import UserProfileMap from "../components/UserProfileMap";
 import { UserContext } from "../contexts/user/UserContextProvider";
 
@@ -60,6 +58,7 @@ export default function UserProfile() {
     const classes = useStyles();
     const history = useHistory();
     const user = React.useContext(UserContext);
+    console.log(user.profile);
 
     // populate user data using profile from context
     const userData = {
@@ -86,7 +85,7 @@ export default function UserProfile() {
                     <Box
                         boxShadow={2}
                         component={Avatar}
-                        src={sampleUser}
+                        src={user.profile.profilePicURL}
                         alt="user"
                         className={classes.userImage}
                     />

@@ -83,7 +83,7 @@ router.post("/profileImageUpload", async function (req, res, next) {
     body.profilePicURL = req.file.location;
 
     // save the url to the user and return url
-    userController
+    usersController
       .update(id, body)
       .then((user) => {
         return res.json(user.profilePicURL);

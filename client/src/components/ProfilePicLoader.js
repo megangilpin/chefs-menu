@@ -2,41 +2,17 @@ import * as React from "react";
 import { DropzoneDialog } from "material-ui-dropzone";
 import { UserContext } from "../contexts/user/UserContextProvider";
 import { makeStyles } from "@material-ui/core/styles";
-import {
-    Box,
-    CardMedia,
-    Card,
-    IconButton,
-    LinearProgress,
-    Snackbar,
-} from "@material-ui/core";
+import { IconButton, LinearProgress, Snackbar } from "@material-ui/core";
 import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
 import MuiAlert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        maxWidth: 345,
-        background: "none",
-        boxShadow: "none",
-    },
-    media: {
-        height: 140,
-        paddingTop: "81.25%",
-        borderRadius: "50%",
-        margin: "28px",
-        marginBottom: "10px",
-    },
-    profile: {
-        maxWidth: 140,
-        background: theme.palette.primary,
-        paddingTop: "81.25%",
-        borderRadius: "50%",
-        margin: "28px",
-        marginBottom: "10px",
+        marginBottom: theme.spacing(2),
     },
 }));
 
-function ProfileImgUpdateBttn(props) {
+function ProfilePicLoader(props) {
     const classes = useStyles();
     const user = React.useContext(UserContext);
     const [dropzoneOpen, setDropzoneOpen] = React.useState(false);
@@ -81,15 +57,14 @@ function ProfileImgUpdateBttn(props) {
 
     return (
         <div>
-            <Box ml={4}>
-                <IconButton
-                    aria-label="delete"
-                    color="primary"
-                    onClick={() => setDropzoneOpen(true)}
-                >
-                    <AddAPhotoIcon fontSize="large" />
-                </IconButton>
-            </Box>
+            <IconButton
+                className={classes.root}
+                aria-label="update profile image"
+                color="primary"
+                onClick={() => setDropzoneOpen(true)}
+            >
+                <AddAPhotoIcon />
+            </IconButton>
             <DropzoneDialog
                 acceptedFiles={["image/png", "image/jpeg"]}
                 cancelButtonText={"cancel"}
@@ -123,4 +98,4 @@ function ProfileImgUpdateBttn(props) {
     );
 }
 
-export default ProfileImgUpdateBttn;
+export default ProfilePicLoader;

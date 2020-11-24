@@ -10,7 +10,7 @@ import MuiAlert from "@material-ui/lab/Alert";
 import Chip from "@material-ui/core/Chip";
 
 import { UserContext } from "../contexts/user/UserContextProvider";
-import sampleUser from "../images/sampleUser.png";
+import ProfilePicLoader from "../components/ProfilePicLoader";
 
 import { Formik, Form, Field } from "formik";
 import { TextField } from "formik-material-ui";
@@ -147,10 +147,13 @@ export default function EditProfile() {
                                     <Box
                                         boxShadow={2}
                                         component={Avatar}
-                                        src={sampleUser}
+                                        src={user.profile.profilePicURL}
                                         alt="user"
                                         className={classes.userImage}
                                     />
+                                    <Grid item xs={6} mb={2}>
+                                        <ProfilePicLoader />
+                                    </Grid>
                                 </Grid>
                                 <Grid item xs={12}>
                                     <Field

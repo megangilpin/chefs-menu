@@ -122,18 +122,25 @@ const UserContextProvider = ({ children }) => {
         });
 
         const data = await response.json();
+        console.log(data);
 
-        if (data.errors) {
-            return {
-                result: false,
-                message: data.errors,
-            };
-        } else {
+        if (data) {
             dispatch({ type: SET_PROFILE_IMAGE, payload: data });
             return {
                 result: true,
             };
         }
+        // if (data.errors) {
+        //     return {
+        //         result: false,
+        //         message: data.errors,
+        //     };
+        // } else {
+        //     dispatch({ type: SET_PROFILE_IMAGE, payload: data });
+        //     return {
+        //         result: true,
+        //     };
+        // }
     };
 
     const updateUser = async (formValues) => {
