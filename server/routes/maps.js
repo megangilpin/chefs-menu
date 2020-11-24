@@ -7,8 +7,6 @@ const userController = require("../controllers/usersController");
 
 const router = express.Router();
 
-// https://maps.googleapis.com/maps/api/place/autocomplete/output?parameters
-
 router.get(
     "/autocomplete",
     errorHandelingWrapper(async (req, res) => {
@@ -20,7 +18,7 @@ router.get(
 
         const { data } = await axios.get(url);
         const predictions = data.predictions.map(
-            ({ description, reference }) => ({ description, reference })
+            ({ description }) => description
         );
         res.json({ predictions });
     })

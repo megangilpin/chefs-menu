@@ -1,7 +1,14 @@
 import * as React from "react";
 import { useHistory } from "react-router-dom";
 import { Formik, Form, Field } from "formik";
-import { Typography, Grid, Button } from "@material-ui/core";
+import {
+    Typography,
+    Grid,
+    Button,
+    List,
+    ListItem,
+    ListItemText,
+} from "@material-ui/core";
 import { TextField, CheckboxWithLabel } from "formik-material-ui";
 import { makeStyles } from "@material-ui/core/styles";
 import * as Yup from "yup";
@@ -30,7 +37,6 @@ export default function SignUp() {
 
     const validationSchema = Yup.object().shape({
         name: Yup.string().required("Required!"),
-        address: Yup.string().required("Required!"),
         email: Yup.string().email().required("Required!"),
         password: Yup.string().min(6).required("Required!"),
     });
@@ -44,14 +50,14 @@ export default function SignUp() {
 
     const handleChange = (e) => {
         setAddress(e.target.value);
-
-        fetch(`/maps/autocomplete?input=${e.target.value}`, {
-            method: "get",
-            headers: { "Content-Type": "application/json" },
-        })
-            .then((response) => response.json())
-            .then(({ predictions }) => setPredictions(predictions))
-            .catch(console.error);
+        address && address.length > 3 &&
+            fetch(`/maps/autocomplete?input=${e.target.value}`, {
+                method: "get",
+                headers: { "Content-Type": "application/json" },
+            })
+                .then((response) => response.json())
+                .then(({ predictions }) => setPredictions(predictions))
+                .catch(console.error);
     };
 
     return (
@@ -59,7 +65,6 @@ export default function SignUp() {
             <Formik
                 initialValues={{
                     name: "",
-                    address: "",
                     email: "",
                     password: "",
                     chef: false,
@@ -113,7 +118,25 @@ export default function SignUp() {
                                     onChange={handleChange}
                                     value={address}
                                 />
-                                {JSON.stringify(predictions, null, 4)}
+                                {predictions && (
+                                    <List
+                                        component="nav"
+                                        aria-label="secondary mailbox folders"
+                                    >
+                                        {predictions.map((prediction) => (
+                                            <ListItem
+                                                button
+                                                key={prediction}
+                                                onClick={() => {
+                                                    setAddress(prediction);
+                                                    setPredictions(null);
+                                                }}
+                                            >
+                                                <ListItemText primary={prediction} />
+                                            </ListItem>
+                                        ))}
+                                    </List>
+                                )}
                             </Grid>
                             <Grid className={classes.formItem} item xs={12}>
                                 <Field
