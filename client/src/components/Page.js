@@ -4,6 +4,7 @@ import { AppBar, Typography, Toolbar } from "@material-ui/core";
 import MenuButton from "./MenuButton";
 import ShoppingCart from "./ShoppingCart";
 import logo from "../images/logo.svg";
+import { CartContextProvider } from "../contexts/cart/CartContextProvider";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -34,7 +35,9 @@ function Page(props) {
                         />
                     </Typography>
                     <MenuButton />
-                    <ShoppingCart />
+                    <CartContextProvider>
+                        <ShoppingCart />
+                    </CartContextProvider>
                 </Toolbar>
             </AppBar>
             {props.children}

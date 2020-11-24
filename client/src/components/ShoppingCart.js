@@ -4,6 +4,7 @@ import { IconButton, Typography, Drawer, Toolbar, Divider } from "@material-ui/c
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import Badge from "@material-ui/core/Badge";
 import { UserContext } from "../contexts/user/UserContextProvider";
+import { CartContext } from "../contexts/cart/CartContextProvider";
 
 const drawerWidth = 250;
 
@@ -24,6 +25,7 @@ function ShoppingCart(props) {
     const classes = useStyles();
     const [cartOpen, setCartOpen] = React.useState(false);
     const user = React.useContext(UserContext);
+    const cart = React.useContext(CartContext);
 
     const toggleCart = () => {
         let open = !cartOpen;
@@ -37,7 +39,7 @@ function ShoppingCart(props) {
                 className={classes.root}
                 aria-label="shopping cart"
             >
-                <Badge badgeContent={4} color="primary">
+                <Badge badgeContent={0} color="primary">
                     <ShoppingCartIcon fontSize="inherit" />
                 </Badge>
             </IconButton>
