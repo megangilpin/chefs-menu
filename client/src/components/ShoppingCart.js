@@ -21,6 +21,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import { UserContext } from "../contexts/user/UserContextProvider";
 import { CartContext } from "../contexts/cart/CartContextProvider";
+import { dollarFormatter, calcServiceFee } from "../lib/utils";
 
 const drawerWidth = 250;
 
@@ -118,7 +119,10 @@ function ShoppingCart(props) {
                 <Grid item xs={12} className={classes.container}>
                     <Box mt={1}>
                         <Typography color="primary" variant="h5">
-                            {user ? `${user.profile.firstName}'s ` : "Your"}Cart
+                            {user.profile.firstName
+                                ? `${user.profile.firstName}'s `
+                                : "Your"}
+                            Cart
                         </Typography>
                     </Box>
                     <Divider />
@@ -144,7 +148,11 @@ function ShoppingCart(props) {
                                                 <Avatar src={meal.mealPic} />
                                             </ListItemAvatar>
                                             <ListItemText
-                                                primary={`${meal.title} - $${meal.price}`}
+                                                primary={`${
+                                                    meal.title
+                                                } - ${dollarFormatter.format(
+                                                    meal.price / 100
+                                                )}`}
                                                 secondary={
                                                     meal.quanity ? null : (
                                                         <div>
@@ -203,13 +211,14 @@ function ShoppingCart(props) {
                     </div>
                     <Divider />
                     <Typography variant="subtitle2">
-                        SubTotal: ${totalPrice}
+                        SubTotal: {dollarFormatter.format(totalPrice / 100)}
                     </Typography>
-                    <Typography variant="subtitle2">Service Fee 10%</Typography>
+                    <Typography variant="subtitle2">10% Service Fee</Typography>
                     <Divider />
                     <Box pt={2}>
                         <Typography variant="h6">
-                            Total: ${totalPrice * 10 + totalPrice}
+                            Total:{" "}
+                            {dollarFormatter.format(calcServiceFee(totalPrice))}
                         </Typography>
                     </Box>
                 </Grid>

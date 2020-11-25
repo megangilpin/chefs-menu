@@ -12,8 +12,8 @@ const initialState = {
     cart: [],
     chef: false,
     chefName: "",
-    totalPrice: 0,
     totalItems: 0,
+    totalPrice: 0,
 };
 
 const CartReducer = (state, action) => {
@@ -21,26 +21,20 @@ const CartReducer = (state, action) => {
         case SET_CART:
             return {
                 ...state,
-                totalPrice: action.payload.totalPrice,
-                totalItems: action.payload.totalItems,
                 cart: [...action.payload.cart],
                 chef: action.payload.chef,
                 chefName: action.payload.chefName,
+                totalItems: action.payload.totalItems,
+                totalPrice: action.payload.totalPrice,
             };
         case ADD_TO_CART:
         case UPDATE_CART_ITEM:
-            return {
-                ...state,
-                totalPrice: action.payload.totalPrice,
-                totalItems: action.payload.totalItems,
-                cart: [...action.payload.cart],
-            };
         case DELETE_CART_ITEM:
             return {
                 ...state,
-                totalPrice: action.payload.totalPrice,
-                totalItems: action.payload.totalItems,
                 cart: [...action.payload.cart],
+                totalItems: action.payload.totalItems,
+                totalPrice: action.payload.totalPrice,
             };
         case DELETE_CART_CHEF:
         case SET_CART_CHEF:

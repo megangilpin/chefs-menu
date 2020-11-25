@@ -5,6 +5,7 @@ const initialState = {
     isAuthenticated: false,
     profile: {
         email: "",
+        firstName: "",
         primaryAddress: {},
         favoriteCuisine: [],
     },
