@@ -1,7 +1,14 @@
 import * as React from "react";
 import { useHistory } from "react-router-dom";
 import { Formik, Form, Field } from "formik";
-import { Typography, Grid, Button } from "@material-ui/core";
+import {
+    Typography,
+    Grid,
+    Button,
+    List,
+    ListItem,
+    ListItemText,
+} from "@material-ui/core";
 import { TextField, CheckboxWithLabel } from "formik-material-ui";
 import { makeStyles } from "@material-ui/core/styles";
 import * as Yup from "yup";
@@ -24,8 +31,10 @@ export default function SignUp() {
     const user = React.useContext(UserContext);
     const history = useHistory();
     const [open, setOpen] = React.useState(false);
-    const [severity, setSeverity] = React.useState("");
     const [message, setMessage] = React.useState("");
+    const [address, setAddress] = React.useState("");
+    const [predictions, setPredictions] = React.useState(undefined);
+
     const validationSchema = Yup.object().shape({
         name: Yup.string().required("Required!"),
         email: Yup.string().email().required("Required!"),
@@ -38,6 +47,19 @@ export default function SignUp() {
         }
         setOpen(false);
     };
+
+    const handleChange = (e) => {
+        setAddress(e.target.value);
+        address && address.length > 3 &&
+            fetch(`/maps/autocomplete?input=${e.target.value}`, {
+                method: "get",
+                headers: { "Content-Type": "application/json" },
+            })
+                .then((response) => response.json())
+                .then(({ predictions }) => setPredictions(predictions))
+                .catch(console.error);
+    };
+
     return (
         <>
             <Formik
@@ -50,22 +72,16 @@ export default function SignUp() {
                 validationSchema={validationSchema}
                 onSubmit={(values, { setSubmitting }) => {
                     setSubmitting(false);
-                    user.register(values)
+                    user.register({ ...values, address })
                         .then((res) => {
                             if (res.result) {
-                                setSeverity("success");
-                                setMessage("Successfully signed up!");
-                                setOpen(true);
                                 history.push("/home");
                             } else {
-                                setSeverity("error");
                                 setMessage(res.message);
                                 setOpen(true);
                             }
                         })
                         .catch((error) => {
-                            console.log(error.message);
-                            setSeverity("error");
                             setMessage("Error while making request");
                             setOpen(true);
                         });
@@ -97,6 +113,36 @@ export default function SignUp() {
                                     fullWidth
                                     component={TextField}
                                     variant="outlined"
+                                    name="address"
+                                    label="Address"
+                                    onChange={handleChange}
+                                    value={address}
+                                />
+                                {predictions && (
+                                    <List
+                                        component="nav"
+                                        aria-label="secondary mailbox folders"
+                                    >
+                                        {predictions.map((prediction) => (
+                                            <ListItem
+                                                button
+                                                key={prediction}
+                                                onClick={() => {
+                                                    setAddress(prediction);
+                                                    setPredictions(null);
+                                                }}
+                                            >
+                                                <ListItemText primary={prediction} />
+                                            </ListItem>
+                                        ))}
+                                    </List>
+                                )}
+                            </Grid>
+                            <Grid className={classes.formItem} item xs={12}>
+                                <Field
+                                    fullWidth
+                                    component={TextField}
+                                    variant="outlined"
                                     name="email"
                                     type="email"
                                     label="Email"
@@ -120,7 +166,6 @@ export default function SignUp() {
                                     Label={{ label: "Sign up as chef!" }}
                                 />
                             </Grid>
-
                             <Grid item xs={12}>
                                 <Button
                                     className={classes.formItem}
@@ -137,7 +182,7 @@ export default function SignUp() {
                 )}
             </Formik>
             <Snackbar open={open} autoHideDuration={6000} onClose={snackBarClose}>
-                <MuiAlert onClose={snackBarClose} severity={severity}>
+                <MuiAlert onClose={snackBarClose} severity="error">
                     {message}
                 </MuiAlert>
             </Snackbar>

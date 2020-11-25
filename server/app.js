@@ -4,13 +4,16 @@ const express = require("express");
 const { join } = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
-// const cors = require("cors");
 
 const { loginRequired } = require("./middleware");
 const authRouter = require("./routes/auth");
 const usersRouter = require("./routes/users");
 const chefsRouter = require("./routes/chefs");
 const mealsRouter = require("./routes/meals");
+const searchRouter = require("./routes/search");
+
+const mapsRouter = require("./routes/maps");
+
 
 const { json, urlencoded } = express;
 
@@ -21,7 +24,6 @@ app.use(json());
 app.use(urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(join(__dirname, "public")));
-// app.use(cors());
 
 // ROUTES
 app.get("/health", (req, res) => res.json({ success: true }));
@@ -30,6 +32,9 @@ app.get("/ping", loginRequired, (req, res) => res.json({ success: true }));
 app.use("/users", loginRequired, usersRouter);
 app.use("/chefs", loginRequired, chefsRouter);
 app.use("/meals", loginRequired, mealsRouter);
+app.use("/search", loginRequired, searchRouter);
+app.use("/maps", mapsRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -12,11 +12,8 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import DeleteIcon from "@material-ui/icons/Delete";
 import MealCard from "../components/MealCard";
-import meal1 from "../images/meal1.png";
-import meal2 from "../images/meal2.png";
-import meal3 from "../images/meal3.png";
-import chef1 from "../images/profilePic.png";
 import { CartContext } from "../contexts/cart/CartContextProvider";
+import meals from "../lib/mockedMeals";
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -31,45 +28,6 @@ const useStyles = makeStyles((theme) => ({
         width: "300px",
     },
 }));
-
-const meals = [
-    {
-        id: 123,
-        title: "4 specialty rolls",
-        mealPic: meal1,
-        price: 25,
-        servingSize: "2 people",
-        cuisineType: "Japanese",
-        ingredients: "rice, fish",
-        chefName: "Atsushi Mikazuki",
-        chefId: 899,
-        chefPic: chef1,
-        location: "Toronto, Canada",
-    },
-    {
-        id: 456,
-        title: "Hamburger",
-        mealPic: meal2,
-        price: 5,
-        servingSize: "1 person",
-        cuisineType: "American",
-        ingredients: "Bread, Beef",
-        chefName: "Jane Doe",
-        chefId: 123,
-        chefPic: chef1,
-        location: "Toronto, Canada",
-    },
-    {
-        id: 789,
-        title: "Grilled Cheese",
-        price: 10,
-        mealPic: meal3,
-        chefName: "Jane Doe",
-        chefId: 123,
-        chefPic: chef1,
-        location: "Toronto, Canada",
-    },
-];
 
 function Main(props) {
     const classes = useStyles();

@@ -37,7 +37,7 @@ router.post(
     "/register",
     errorHandelingWrapper(validationMiddleware),
     errorHandelingWrapper(async (req, res) => {
-        const { email, password, chef } = req.body;
+        const { name, address, email, password, chef } = req.body;
         const isChef = !!chef;
         // verify that user isn't already in DB
         const user = await userController.findOneWithEmail(email);
@@ -56,7 +56,45 @@ router.post(
             return;
         }
 
+        const [firstName, ...rest] = name.split(" ");
+        const lastName = rest.join(" ");
+
+        const addressArr = address.split(", ");
+
+        let street = "";
+        let city = "";
+        let region = "";
+        let country = "";
+
+        if (addressArr.length === 2) {
+            [city, country] = addressArr;
+        }
+        if (addressArr.length === 3) {
+            [city, region, country] = addressArr;
+        }
+        if (addressArr.length === 4) {
+            [street, city, region, country] = addressArr;
+        }
+
+        console.log({
+            firstName,
+            lastName,
+            street,
+            city,
+            region,
+            country,
+            email,
+            password,
+            isChef,
+        });
+
         const createdUser = await userController.create({
+            firstName,
+            lastName,
+            street,
+            city,
+            region,
+            country,
             email,
             password,
             isChef,

@@ -1,18 +1,24 @@
 import * as React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { IconButton, Typography, Drawer, Divider, Button } from "@material-ui/core";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
-import ListItemText from "@material-ui/core/ListItemText";
-import Avatar from "@material-ui/core/Avatar";
-
-import Grid from "@material-ui/core/Grid";
+import {
+    Avatar,
+    Badge,
+    Button,
+    Box,
+    Divider,
+    Grid,
+    IconButton,
+    List,
+    ListItem,
+    ListItemAvatar,
+    ListItemSecondaryAction,
+    ListItemText,
+    Popover,
+    Typography,
+} from "@material-ui/core";
 
 import DeleteIcon from "@material-ui/icons/Delete";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
-import Badge from "@material-ui/core/Badge";
 import { UserContext } from "../contexts/user/UserContextProvider";
 import { CartContext } from "../contexts/cart/CartContextProvider";
 
@@ -22,24 +28,31 @@ const useStyles = makeStyles((theme) => ({
     root: {
         marginRight: theme.spacing(0.5),
     },
-    drawerPaper: {
-        width: drawerWidth,
+    container: {
+        padding: theme.spacing(2),
     },
-    drawerContainer: {
-        overflow: "auto",
-        padding: theme.spacing(3),
+    empty: {
+        fontSize: ".8rem",
+        paddingTop: theme.spacing(1),
+        paddingBottom: theme.spacing(1),
+    },
+    quantityBttnPlus: {
+        minWidth: "43px",
+        padding: 0,
+        margin: 0,
+        marginRight: theme.spacing(1),
+    },
+    quantityBttnMinus: {
+        minWidth: "43px",
+        padding: 0,
+        margin: 0,
+        marginLeft: theme.spacing(1),
     },
 }));
 
 function ShoppingCart(props) {
     const classes = useStyles();
-    const [cartOpen, setCartOpen] = React.useState(false);
     const user = React.useContext(UserContext);
-
-    const toggleCart = () => {
-        let open = !cartOpen;
-        setCartOpen(open);
-    };
 
     const {
         chefName,
@@ -63,88 +76,144 @@ function ShoppingCart(props) {
         deleteCartItem(id);
     };
 
+    const [anchorEl, setAnchorEl] = React.useState(null);
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const open = Boolean(anchorEl);
+    const id = open ? "simple-popover" : undefined;
+
     return (
         <div>
             <IconButton
-                onClick={toggleCart}
+                aria-describedby={id}
+                onClick={handleClick}
                 className={classes.root}
                 aria-label="shopping cart"
             >
-                <Badge badgeContent={0} color="primary">
+                <Badge badgeContent={totalItems} color="primary">
                     <ShoppingCartIcon fontSize="inherit" />
                 </Badge>
             </IconButton>
-            <Drawer
-                onClose={toggleCart}
-                variant="temporary"
-                anchor="right"
-                open={cartOpen}
-                classes={{
-                    paper: classes.drawerPaper,
+            <Popover
+                id={id}
+                open={open}
+                anchorEl={anchorEl}
+                onClose={handleClose}
+                anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "left",
+                }}
+                transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
                 }}
             >
-                <Grid item xs={12}>
-                    <Typography variant="h6" className={classes.title}>
-                        {!user ? "Your " : `${user.profile.firstName}'s `}Cart
-                    </Typography>
-                    <Typography variant="h6" className={classes.title}>
-                        {chefName}
-                    </Typography>
+                <Grid item xs={12} className={classes.container}>
+                    <Box mt={1}>
+                        <Typography color="primary" variant="h5">
+                            {user ? `${user.profile.firstName}'s ` : "Your"}Cart
+                        </Typography>
+                    </Box>
                     <Divider />
-                    <div className={classes.demo}>
+                    {chefName ? (
+                        <Box p={2}>
+                            <Typography variant="subtitle2">
+                                Selected Chef:
+                            </Typography>
+                            <Typography variant="caption">{chefName}</Typography>
+                        </Box>
+                    ) : null}
+                    <Divider />
+                    <div>
                         <List>
-                            {cart.map((meal, index) => {
-                                return (
-                                    <ListItem key={index}>
-                                        <ListItemAvatar>
-                                            <Avatar src={meal.mealPic} />
-                                        </ListItemAvatar>
-                                        <ListItemText
-                                            primary={meal.title}
-                                            secondary={
-                                                meal.quanity ? null : (
-                                                    <React.Fragment>
-                                                        <Button
-                                                            value={meal.id}
-                                                            name="add"
-                                                            color="primary"
-                                                            onClick={updateQuantity}
-                                                        >
-                                                            +
-                                                        </Button>
-                                                        {meal.quantity}
-                                                        <Button
-                                                            value={meal.id}
-                                                            name="minus"
-                                                            color="primary"
-                                                            onClick={updateQuantity}
-                                                        >
-                                                            -
-                                                        </Button>
-                                                    </React.Fragment>
-                                                )
-                                            }
-                                        />
-                                        <ListItemSecondaryAction>
-                                            <IconButton
-                                                value={meal.id}
-                                                edge="end"
-                                                aria-label="delete"
-                                                onClick={deleteMeal}
-                                            >
-                                                <DeleteIcon />
-                                            </IconButton>
-                                        </ListItemSecondaryAction>
-                                    </ListItem>
-                                );
-                            })}
+                            {cart.length > 0 ? (
+                                cart.map((meal, index) => {
+                                    return (
+                                        <ListItem
+                                            key={index}
+                                            alignItems="flex-start"
+                                        >
+                                            <ListItemAvatar>
+                                                <Avatar src={meal.mealPic} />
+                                            </ListItemAvatar>
+                                            <ListItemText
+                                                primary={`${meal.title} - $${meal.price}`}
+                                                secondary={
+                                                    meal.quanity ? null : (
+                                                        <div>
+                                                            <Button
+                                                                className={
+                                                                    classes.quantityBttnPlus
+                                                                }
+                                                                value={meal.id}
+                                                                name="add"
+                                                                color="primary"
+                                                                onClick={
+                                                                    updateQuantity
+                                                                }
+                                                            >
+                                                                +
+                                                            </Button>
+
+                                                            {meal.quantity}
+
+                                                            <Button
+                                                                className={
+                                                                    classes.quantityBttnMinus
+                                                                }
+                                                                value={meal.id}
+                                                                name="minus"
+                                                                color="primary"
+                                                                onClick={
+                                                                    updateQuantity
+                                                                }
+                                                            >
+                                                                -
+                                                            </Button>
+                                                        </div>
+                                                    )
+                                                }
+                                            />
+                                            <ListItemSecondaryAction>
+                                                <IconButton
+                                                    value={meal.id}
+                                                    edge="end"
+                                                    aria-label="delete"
+                                                    onClick={deleteMeal}
+                                                >
+                                                    <DeleteIcon />
+                                                </IconButton>
+                                            </ListItemSecondaryAction>
+                                        </ListItem>
+                                    );
+                                })
+                            ) : (
+                                <Typography className={classes.empty}>
+                                    Your cart is empty
+                                </Typography>
+                            )}
                         </List>
                     </div>
                     <Divider />
-                    <Typography>Total: {totalPrice}</Typography>
-                    <Typography>Total Items: {totalItems}</Typography>
+                    <Typography variant="subtitle2">
+                        SubTotal: ${totalPrice}
+                    </Typography>
+                    <Typography variant="subtitle2">Service Fee 10%</Typography>
+                    <Divider />
+                    <Box pt={2}>
+                        <Typography variant="h6">
+                            Total: ${totalPrice * 10 + totalPrice}
+                        </Typography>
+                    </Box>
                 </Grid>
-            </Drawer>
+            </Popover>
         </div>
     );
 }

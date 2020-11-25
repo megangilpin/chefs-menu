@@ -13,6 +13,7 @@ const useStyles = makeStyles((theme) => ({
     appBar: {
         zIndex: theme.zIndex.drawer + 1,
         background: "#FFFFFF",
+        boxShadow: "0px 0px 10px 5px rgba(7,7,7,0.07)",
     },
     appBarTitle: {
         flexGrow: 1,
@@ -25,23 +26,18 @@ function Page(props) {
 
     return (
         <div className={classes.root}>
-            <AppBar position="fixed" className={classes.appBar}>
-                <CartContextProvider>
+            <CartContextProvider>
+                <AppBar position="fixed" className={classes.appBar}>
                     <Toolbar>
                         <Typography className={classes.appBarTitle}>
-                            <img
-                                className={classes.logo}
-                                src={logo}
-                                alt="Chef's Menu Logo"
-                            />
+                            <img src={logo} alt="Chef's Menu Logo" />
                         </Typography>
                         <MenuButton />
-
                         <ShoppingCart />
                     </Toolbar>
-                </CartContextProvider>
-            </AppBar>
-            {props.children}
+                </AppBar>
+                {props.children}
+            </CartContextProvider>
         </div>
     );
 }

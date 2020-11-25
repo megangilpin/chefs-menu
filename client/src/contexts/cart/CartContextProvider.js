@@ -78,7 +78,6 @@ const CartContextProvider = ({ children }) => {
     const addToCart = (meal, id) => {
         const cart = [...state.cart];
         const newMeal = { ...meal };
-        const mealId = parseFloat(id);
         let totalPrice = state.totalPrice;
         let totalItems = state.totalItems;
 
@@ -89,7 +88,7 @@ const CartContextProvider = ({ children }) => {
             });
         }
 
-        const mealIndex = cart.findIndex((meal) => meal.id === mealId);
+        const mealIndex = cart.findIndex((meal) => meal.id === id);
 
         if (mealIndex < 0) {
             cart.push({ ...newMeal, quantity: 1 });

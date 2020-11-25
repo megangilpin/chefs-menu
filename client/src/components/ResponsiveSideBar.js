@@ -23,7 +23,6 @@ const useStyles = makeStyles((theme) => ({
     },
     menuButton: {
         margin: theme.spacing(3),
-        // position: 'absolute',
     },
 }));
 
@@ -32,7 +31,7 @@ function ResponsiveSideBar(props) {
     const [mobileOpen, setMobileOpen] = React.useState(false);
 
     function handleDrawerToggle() {
-        setMobileOpen(!mobileOpen);
+        setMobileOpen((previous) => !previous);
     }
 
     return (
@@ -51,7 +50,6 @@ function ResponsiveSideBar(props) {
                 </Fab>
                 <Drawer
                     variant="temporary"
-                    // anchor={theme.direction === 'rtl' ? 'right' : 'left'}
                     open={mobileOpen}
                     onClose={handleDrawerToggle}
                     classes={{

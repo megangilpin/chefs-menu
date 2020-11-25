@@ -76,10 +76,16 @@ const remove = async (id) => {
     return await Meal.findByIdAndDelete(id);
 };
 
+const findAllMeals = async (query) => {
+    const meals = await Meal.find(query);
+    return meals;
+};
+
 const deleteAll = async () => await Meal.deleteMany({});
 
 module.exports = {
     findOneWithId,
+    findAllMeals,
     create,
     update,
     remove,

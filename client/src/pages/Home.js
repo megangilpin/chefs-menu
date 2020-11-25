@@ -1,8 +1,7 @@
 import React from "react";
+import ResponsiveSideBar from "../components/ResponsiveSideBar";
 import Main from "../components/Main";
 import { Typography } from "@material-ui/core";
-import ResponsiveSideBar from "../components/ResponsiveSideBar";
-import { CartContextProvider } from "../contexts/cart/CartContextProvider";
 
 function Home(props) {
     return (
@@ -10,9 +9,7 @@ function Home(props) {
             <ResponsiveSideBar>
                 <Typography>Responsive Side Bar</Typography>
             </ResponsiveSideBar>
-            <CartContextProvider>
-                <Main></Main>
-            </CartContextProvider>
+            <Main></Main>
         </React.Fragment>
     );
 }

@@ -1,85 +1,37 @@
 import * as React from "react";
 import { DropzoneDialog } from "material-ui-dropzone";
+import { UserContext } from "../contexts/user/UserContextProvider";
 import { makeStyles } from "@material-ui/core/styles";
-import {
-    Box,
-    CardMedia,
-    Card,
-    IconButton,
-    LinearProgress,
-    Snackbar,
-} from "@material-ui/core";
+import { IconButton, LinearProgress, Snackbar } from "@material-ui/core";
 import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
 import MuiAlert from "@material-ui/lab/Alert";
-import profilePic from "../images/profilePic.png";
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        maxWidth: 345,
-        background: "none",
-        boxShadow: "none",
-    },
-    media: {
-        height: 140,
-        paddingTop: "81.25%",
-        borderRadius: "50%",
-        margin: "28px",
-        marginBottom: "10px",
-    },
-    modal: {
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    paper: {
-        backgroundColor: theme.palette.background.paper,
-        // border: "2px solid #000",
-        padding: theme.spacing(2, 4, 3),
+        marginBottom: theme.spacing(2),
     },
 }));
 
-function ProfilePic(props) {
+function ProfilePicLoader(props) {
     const classes = useStyles();
+    const user = React.useContext(UserContext);
     const [dropzoneOpen, setDropzoneOpen] = React.useState(false);
-    const [image, setImage] = React.useState(profilePic);
     const [snackBarOpen, setSnackBarOpen] = React.useState(false);
     const [severity, setSeverity] = React.useState("");
     const [message, setMessage] = React.useState("");
     const [loading, setLoading] = React.useState(false);
 
-    const uploadImage = async (formData) => {
-        const response = await fetch("/users/profileImageUpload", {
-            method: "post",
-            body: formData,
-        });
-
-        const data = await response.json();
-
-        if (data.errors) {
-            return {
-                result: false,
-                message: data.errors,
-            };
-        } else {
-            return {
-                result: true,
-                data,
-            };
-        }
-    };
-
     const handleUpload = (file) => {
         setLoading(true);
-        let formData = new FormData();
+        const formData = new FormData();
         formData.append("image", file[0]);
-        uploadImage(formData)
+        user.uploadProfileImage(formData)
             .then((res) => {
-                setLoading(true);
+                setLoading(false);
                 if (res.result) {
                     setSeverity("success");
                     setMessage("Profile Picture updated");
                     setSnackBarOpen(true);
-                    setImage(res.data);
                     setDropzoneOpen(false);
                 } else {
                     setSeverity("error");
@@ -88,7 +40,7 @@ function ProfilePic(props) {
                 }
             })
             .catch((error) => {
-                console.log(error.message);
+                setLoading(false);
                 setSeverity("error");
                 setMessage("Error while making request");
                 setSnackBarOpen(true);
@@ -104,22 +56,14 @@ function ProfilePic(props) {
 
     return (
         <div>
-            <Card className={classes.root}>
-                <CardMedia
-                    className={classes.media}
-                    image={image}
-                    title="Contemplative Reptile"
-                />
-                <Box ml={4}>
-                    <IconButton
-                        aria-label="delete"
-                        color="primary"
-                        onClick={() => setDropzoneOpen(true)}
-                    >
-                        <AddAPhotoIcon fontSize="large" />
-                    </IconButton>
-                </Box>
-            </Card>
+            <IconButton
+                className={classes.root}
+                aria-label="update profile image"
+                color="primary"
+                onClick={() => setDropzoneOpen(true)}
+            >
+                <AddAPhotoIcon />
+            </IconButton>
             <DropzoneDialog
                 acceptedFiles={["image/png", "image/jpeg"]}
                 cancelButtonText={"cancel"}
@@ -153,4 +97,4 @@ function ProfilePic(props) {
     );
 }
 
-export default ProfilePic;
+export default ProfilePicLoader;
