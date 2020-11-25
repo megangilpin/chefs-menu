@@ -17,8 +17,6 @@ function MenuButton(props) {
 
     const history = useHistory();
 
-  
-
     return (
         <div>
             <IconButton
@@ -51,7 +49,7 @@ function MenuButton(props) {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
-                <MenuItem onClick={()=>history.push("profile")}>Profile</MenuItem>
+                <MenuItem onClick={() => history.push("profile")}>Profile</MenuItem>
                 <MenuItem onClick={handleClose}>My account</MenuItem>
                 <MenuItem onClick={()=> user.logoutUser()}>Logout</MenuItem>
             </Menu>

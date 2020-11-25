@@ -1,5 +1,5 @@
 import * as React from "react";
-import { SET_USER, LOGOUT, SET_IS_LOADING } from "../types";
+import { SET_USER, LOGOUT, SET_IS_LOADING, SET_PROFILE_IMAGE } from "../types";
 
 const initialState = {
     isAuthenticated: false,
@@ -32,7 +32,14 @@ const UserReducer = (state, action) => {
                 ...state,
                 isLoading: action.payload,
             };
-
+        case SET_PROFILE_IMAGE:
+            return {
+                ...state,
+                profile: {
+                    ...state.profile,
+                    profilePicURL: action.payload,
+                },
+            };
         default:
             return state;
     }
@@ -110,10 +117,29 @@ const UserContextProvider = ({ children }) => {
         }
     };
 
+    const uploadProfileImage = async (formData) => {
+        const response = await fetch("/users/profileImageUpload", {
+            method: "post",
+            body: formData,
+        });
+
+        const data = await response.json();
+
+        if (data.errors) {
+            return {
+                result: false,
+                message: data.errors,
+            };
+        } else {
+            dispatch({ type: SET_PROFILE_IMAGE, payload: data });
+            return {
+                result: true,
+            };
+        }
+    };
     const logoutUser = async () => {
         dispatch({ type: LOGOUT, payload: null });
-
-    }
+    };
 
     const updateUser = async (formValues) => {
         isLoading(true);
@@ -146,7 +172,16 @@ const UserContextProvider = ({ children }) => {
     }, []);
 
     return (
-        <UserContext.Provider value={{ ...state, register, login, logoutUser,updateUser }}>
+        <UserContext.Provider
+            value={{
+                ...state,
+                register,
+                login,
+                logoutUser,
+                updateUser,
+                uploadProfileImage,
+            }}
+        >
             {children}
         </UserContext.Provider>
     );

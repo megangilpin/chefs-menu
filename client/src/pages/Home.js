@@ -1,5 +1,6 @@
 import React from "react";
 import SideBar from "../components/SideBar";
+import ResponsiveSideBar from "../components/ResponsiveSideBar";
 import Main from "../components/Main";
 import { Typography } from "@material-ui/core";
 import { UserContext } from "../contexts/user/UserContextProvider";
@@ -9,10 +10,10 @@ function Home(props) {
 
     return (
         <React.Fragment>
-            <SideBar>
+            <ResponsiveSideBar>
                 <Typography>Side Bar</Typography>
                 <Typography>{user.profile.email}</Typography>
-            </SideBar>
+            </ResponsiveSideBar>
             <Main>
                 <Typography>Main</Typography>
             </Main>

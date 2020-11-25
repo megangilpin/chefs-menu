@@ -10,7 +10,7 @@ import MuiAlert from "@material-ui/lab/Alert";
 import Chip from "@material-ui/core/Chip";
 
 import { UserContext } from "../contexts/user/UserContextProvider";
-import sampleUser from "../images/sampleUser.png";
+import ProfilePicLoader from "../components/ProfilePicLoader";
 
 import { Formik, Form, Field } from "formik";
 import { TextField } from "formik-material-ui";
@@ -52,13 +52,20 @@ export default function EditProfile() {
     const userData = user.profile;
 
     const [cuisineChipData, setCuisineChipData] = React.useState(
-        userData.favoriteCuisine.map((cuisine, index) => ({
-            key: index,
-            label: cuisine,
-        }))
+        !userData.favoriteCuisine
+            ? []
+            : userData.favoriteCuisine.map((cuisine, index) => ({
+                  key: index,
+                  label: cuisine,
+              }))
     );
     const [allergyChipData, setAllergyChipData] = React.useState(
-        userData.allergies.map((cuisine, index) => ({ key: index, label: cuisine }))
+        !userData.allergies
+            ? ""
+            : userData.allergies.map((allergy, index) => ({
+                  key: index,
+                  label: allergy,
+              }))
     );
 
     const handleCuisineDelete = (chipToDelete) => () => {
@@ -149,10 +156,17 @@ export default function EditProfile() {
                                     <Box
                                         boxShadow={2}
                                         component={Avatar}
-                                        src={sampleUser}
-                                        alt="user"
+                                        src={user.profile.profilePicURL}
+                                        alt={
+                                            user.profile.profilePicURL
+                                                ? "profile image"
+                                                : ""
+                                        }
                                         className={classes.userImage}
                                     />
+                                    <Grid item xs={6} mb={2}>
+                                        <ProfilePicLoader />
+                                    </Grid>
                                 </Grid>
                                 <Grid item xs={12}>
                                     <Field
@@ -313,16 +327,20 @@ export default function EditProfile() {
                                     </Button>
                                 </Grid>
                                 <Grid item xs={12}>
-                                    {allergyChipData.map((data) => {
-                                        return (
-                                            <Chip
-                                                key={data.key}
-                                                label={data.label}
-                                                onDelete={handleAllergenDelete(data)}
-                                                className={classes.allergyChip}
-                                            />
-                                        );
-                                    })}
+                                    {!allergyChipData
+                                        ? ""
+                                        : allergyChipData.map((data) => {
+                                              return (
+                                                  <Chip
+                                                      key={data.key}
+                                                      label={data.label}
+                                                      onDelete={handleAllergenDelete(
+                                                          data
+                                                      )}
+                                                      className={classes.allergyChip}
+                                                  />
+                                              );
+                                          })}
                                 </Grid>
                                 <Grid item xs={12}>
                                     <Button
