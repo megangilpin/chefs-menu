@@ -76,7 +76,8 @@ function Main(props) {
     const {
         chefName,
         cart,
-        total,
+        totalPrice,
+        totalItems,
         updateCartItem,
         deleteCartItem,
     } = React.useContext(CartContext);
@@ -178,7 +179,8 @@ function Main(props) {
                             </List>
                         </div>
                         <Divider />
-                        <Typography>Total: {total}</Typography>
+                        <Typography>Total: {totalPrice}</Typography>
+                        <Typography>Total Items: {totalItems}</Typography>
                     </Grid>
                 </Card>
             </div>
