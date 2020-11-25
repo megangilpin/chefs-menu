@@ -23,7 +23,7 @@ function ProfilePicLoader(props) {
 
     const handleUpload = (file) => {
         setLoading(true);
-        let formData = new FormData();
+        const formData = new FormData();
         formData.append("image", file[0]);
         user.uploadProfileImage(formData)
             .then((res) => {
@@ -41,7 +41,6 @@ function ProfilePicLoader(props) {
             })
             .catch((error) => {
                 setLoading(false);
-                console.log(error.message);
                 setSeverity("error");
                 setMessage("Error while making request");
                 setSnackBarOpen(true);

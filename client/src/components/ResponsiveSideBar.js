@@ -1,15 +1,9 @@
 import * as React from "react";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
-import { Drawer, IconButton, Toolbar } from "@material-ui/core";
-import MenuIcon from "@material-ui/icons/Menu";
+import { makeStyles } from "@material-ui/core/styles";
+import { Drawer, Toolbar } from "@material-ui/core";
 import Hidden from "@material-ui/core/Hidden";
 import SearchIcon from "@material-ui/icons/Search";
 import Fab from "@material-ui/core/Fab";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import CloseIcon from "@material-ui/icons/Close";
-import Typography from "@material-ui/core/Typography";
 
 const drawerWidth = 250;
 
@@ -29,17 +23,15 @@ const useStyles = makeStyles((theme) => ({
     },
     menuButton: {
         margin: theme.spacing(3),
-        // position: 'absolute',
     },
 }));
 
 function ResponsiveSideBar(props) {
     const classes = useStyles();
-    const theme = useTheme();
     const [mobileOpen, setMobileOpen] = React.useState(false);
 
     function handleDrawerToggle() {
-        setMobileOpen(!mobileOpen);
+        setMobileOpen((previous) => !previous);
     }
 
     return (
@@ -58,7 +50,6 @@ function ResponsiveSideBar(props) {
                 </Fab>
                 <Drawer
                     variant="temporary"
-                    // anchor={theme.direction === 'rtl' ? 'right' : 'left'}
                     open={mobileOpen}
                     onClose={handleDrawerToggle}
                     classes={{

@@ -53,7 +53,7 @@ export default function EditProfile() {
 
     const [cuisineChipData, setCuisineChipData] = React.useState(
         !userData.favoriteCuisine
-            ? ""
+            ? []
             : userData.favoriteCuisine.map((cuisine, index) => ({
                   key: index,
                   label: cuisine,
@@ -62,9 +62,9 @@ export default function EditProfile() {
     const [allergyChipData, setAllergyChipData] = React.useState(
         !userData.allergies
             ? ""
-            : userData.allergies.map((cuisine, index) => ({
+            : userData.allergies.map((allergy, index) => ({
                   key: index,
-                  label: cuisine,
+                  label: allergy,
               }))
     );
 
@@ -155,22 +155,17 @@ export default function EditProfile() {
                                 className={classes.profileTopLeft}
                             >
                                 <Grid item xs={12}>
-                                    {!user.profile.profilePicURL ? (
-                                        <Box
-                                            boxShadow={2}
-                                            component={Avatar}
-                                            src={user.profile.profilePicURL}
-                                            alt="profile image"
-                                            className={classes.userImage}
-                                        />
-                                    ) : (
-                                        <Box
-                                            boxShadow={2}
-                                            component={Avatar}
-                                            src={user.profile.profilePicURL}
-                                            className={classes.userImage}
-                                        />
-                                    )}
+                                    <Box
+                                        boxShadow={2}
+                                        component={Avatar}
+                                        src={user.profile.profilePicURL}
+                                        alt={
+                                            user.profile.profilePicURL
+                                                ? "profile image"
+                                                : ""
+                                        }
+                                        className={classes.userImage}
+                                    />
                                     <Grid item xs={6} mb={2}>
                                         <ProfilePicLoader />
                                     </Grid>
@@ -278,21 +273,17 @@ export default function EditProfile() {
                                     </Button>
                                 </Grid>
                                 <Grid item xs={12}>
-                                    {!cuisineChipData
-                                        ? ""
-                                        : cuisineChipData.map((data) => {
-                                              return (
-                                                  <Chip
-                                                      color="primary"
-                                                      key={data.key}
-                                                      label={data.label}
-                                                      onDelete={handleCuisineDelete(
-                                                          data
-                                                      )}
-                                                      className={classes.chip}
-                                                  />
-                                              );
-                                          })}
+                                    {cuisineChipData.map((data) => {
+                                        return (
+                                            <Chip
+                                                color="primary"
+                                                key={data.key}
+                                                label={data.label}
+                                                onDelete={handleCuisineDelete(data)}
+                                                className={classes.chip}
+                                            />
+                                        );
+                                    })}
                                 </Grid>
                                 <Grid item xs={12}>
                                     <Typography variant="h6" component="h4">
