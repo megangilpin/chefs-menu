@@ -12,7 +12,7 @@ const mealSchema = new Schema({
     requirements: String,
     createdAt: { type: Date, default: Date.now },
     updatedAt: Date,
-    chefId: { type: Schema.Types.ObjectId, ref: "Chefs" },
+    chefId: { type: Schema.Types.ObjectId, ref: "Chef" },
 });
 
 module.exports = mealSchema;

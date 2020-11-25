@@ -8,7 +8,7 @@ const chefSchema = new Schema({
     //     date: { type: Date },
     //     time: { type: Number },
     // },
-    userId: { type: Schema.Types.ObjectId, ref: "Users" },
+    userId: { type: Schema.Types.ObjectId, ref: "Users" }
 });
 
 module.exports = chefSchema;
