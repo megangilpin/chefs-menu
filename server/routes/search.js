@@ -20,8 +20,14 @@ router.get("/", async (req, res) => {
         }
         meals = await mealsController.findAllMeals(
             { chefId: { $in: chefs.map((chef) => chef._id) } });
-        res.json({ chefs, meals });
-    }
+        
+        chefMeals = {}
+        chefs.forEach(chef=> chefMeals[chef._id] = []);
+        meals.forEach(meal => chefMeals[meal.chefId].push(meal));
+        res.json({ chefs, chefMeals });
+        }
+      
+    
        
     if (req.query.searchType === "meals") {
         const query = req.query.cuisine ? { cuisineType: { $in: req.query.cuisine.split(",") } } : {};
@@ -31,8 +37,14 @@ router.get("/", async (req, res) => {
         }
         const chefs = await chefsController.findAllChefs(
             { _id: { $in: meals.map((meal) => meal.chefId) } });
-        res.json({ meals, chefs });
-        }
+        
+        const chefIndex = {}
+        chefs.forEach(chef => chefIndex[chef._id] = chef)
+        meals.forEach(meal => meal["chefId"]= chefIndex[meal.chefId])
+
+        res.json({ meals  });
+
+    }
     
     return;
 });
