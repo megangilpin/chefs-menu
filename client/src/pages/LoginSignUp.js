@@ -1,5 +1,4 @@
 import React from "react";
-import { UserContext } from "../contexts/user/UserContextProvider";
 
 import { Link, useLocation } from "react-router-dom";
 
@@ -41,7 +40,6 @@ const useStyles = makeStyles({
 export default function LoginSignUp(props) {
     const classes = useStyles();
     const location = useLocation();
-    const user = React.useContext(UserContext);
 
     return (
         <Grid container className={classes.screen}>

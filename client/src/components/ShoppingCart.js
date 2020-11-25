@@ -1,6 +1,6 @@
 import * as React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { IconButton, Typography, Drawer, Toolbar, Divider } from "@material-ui/core";
+import { IconButton, Typography, Drawer, Divider } from "@material-ui/core";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import Badge from "@material-ui/core/Badge";
 import { UserContext } from "../contexts/user/UserContextProvider";
@@ -25,7 +25,7 @@ function ShoppingCart(props) {
     const classes = useStyles();
     const [cartOpen, setCartOpen] = React.useState(false);
     const user = React.useContext(UserContext);
-    const cart = React.useContext(CartContext);
+    // const { cart } = React.useContext(CartContext);
 
     const toggleCart = () => {
         let open = !cartOpen;

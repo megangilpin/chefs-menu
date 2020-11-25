@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import Divider from "@material-ui/core/Divider";
@@ -9,15 +9,15 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
-import meal1 from "../images/meal1.png";
-import chef1 from "../images/profilePic.png";
 import { theme } from "../themes/theme";
+import { CartContext } from "../contexts/cart/CartContextProvider";
 
 const useStyles = makeStyles({
     root: {
         maxWidth: 225,
         borderRadius: "0px",
         boxShadow: "0px 0px 10px 5px rgba(7,7,7,0.05)",
+        margin: theme.spacing(3),
     },
     small: {
         marginTop: theme.spacing(0.5),
@@ -44,10 +44,21 @@ const useStyles = makeStyles({
 
 function MealCard(props) {
     const classes = useStyles();
-    const addToCart = (e) => {
+    const { chef, addToCart } = useContext(CartContext);
+    const { mealPic, title, price, chefName, chefPic, location, id, chefId } = props;
+
+    const addMeal = (e) => {
         e.preventDefault();
-        console.log(e.currentTarget.value);
+        const id = parseFloat(e.currentTarget.value);
+        if (chef && chefId !== chef) {
+            console.log(chef);
+            alert("cart can only have one chef");
+        } else {
+            const meal = { id, mealPic, title, price, chefName, chefId };
+            addToCart(meal, id);
+        }
     };
+
     return (
         <div>
             <Card className={classes.root}>
@@ -55,19 +66,19 @@ function MealCard(props) {
                     component="img"
                     alt="meal1"
                     height="150"
-                    image={meal1}
+                    image={mealPic}
                     title="meal1"
                 />
                 <CardContent>
                     <Typography gutterBottom className={classes.subtitle}>
-                        4 specialty rolls
+                        {title}
                     </Typography>
                     <Typography
                         gutterBottom
                         className={classes.subtitle1}
                         color="secondary"
                     >
-                        $15.00
+                        {price}
                     </Typography>
                 </CardContent>
                 <Divider />
@@ -76,8 +87,8 @@ function MealCard(props) {
                         <Grid item>
                             <Avatar
                                 className={classes.small}
-                                alt="Atsushi Mikazuki"
-                                src={chef1}
+                                alt={chefName}
+                                src={chefPic}
                             />
                         </Grid>
                         <Grid item xs={12} sm container alignItems="center">
@@ -87,19 +98,19 @@ function MealCard(props) {
                                         className={classes.subtitle2}
                                         variant="subtitle1"
                                     >
-                                        Atsushi Mikazuki
+                                        {chefName}
                                     </Typography>
                                     <Typography
                                         className={classes.subtitle3}
                                         gutterBottom
                                     >
-                                        Toronto, Canada
+                                        {location}
                                     </Typography>
                                 </Grid>
                             </Grid>
                         </Grid>
                         <Grid item>
-                            <Button value="123" color="primary" onClick={addToCart}>
+                            <Button value={id} color="primary" onClick={addMeal}>
                                 add to Cart
                             </Button>
                         </Grid>
