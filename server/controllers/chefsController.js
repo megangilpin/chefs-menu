@@ -8,7 +8,7 @@ const findOneWithId = async (id) => {
     return _doc;
 };
 
-const findAllChef = async (query) => {
+const findAllChefs = async (query) => {
     const chefs = await Chef.find(query);
     return chefs;
 };
@@ -40,7 +40,7 @@ module.exports = {
     create,
     update,
     findOneWithId,
-    findAllChef,
+    findAllChefs,
     findOneWithUserId,
     deleteAll,
 };
