@@ -131,7 +131,7 @@ function Main(props) {
                                     return (
                                         <ListItem key={index}>
                                             <ListItemAvatar>
-                                                <Avatar />
+                                                <Avatar src={meal.mealPic} />
                                             </ListItemAvatar>
                                             <ListItemText
                                                 primary={meal.title}

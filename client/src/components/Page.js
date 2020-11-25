@@ -26,19 +26,20 @@ function Page(props) {
     return (
         <div className={classes.root}>
             <AppBar position="fixed" className={classes.appBar}>
-                <Toolbar>
-                    <Typography className={classes.appBarTitle}>
-                        <img
-                            className={classes.logo}
-                            src={logo}
-                            alt="Chef's Menu Logo"
-                        />
-                    </Typography>
-                    <MenuButton />
-                    <CartContextProvider>
+                <CartContextProvider>
+                    <Toolbar>
+                        <Typography className={classes.appBarTitle}>
+                            <img
+                                className={classes.logo}
+                                src={logo}
+                                alt="Chef's Menu Logo"
+                            />
+                        </Typography>
+                        <MenuButton />
+
                         <ShoppingCart />
-                    </CartContextProvider>
-                </Toolbar>
+                    </Toolbar>
+                </CartContextProvider>
             </AppBar>
             {props.children}
         </div>

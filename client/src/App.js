@@ -1,5 +1,6 @@
 import * as React from "react";
 import { ThemeProvider } from "@material-ui/styles";
+import { CartContextProvider } from "../src/contexts/cart/CartContextProvider";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
 import { ProtectedRoute } from "./components/ProtectedRoute";
@@ -13,9 +14,11 @@ function App() {
         return (
             <div>
                 <Switch>
-                    <Page>
-                        <ProtectedRoute exact path="/home" component={Home} />
-                    </Page>
+                    <CartContextProvider>
+                        <Page>
+                            <ProtectedRoute exact path="/home" component={Home} />
+                        </Page>
+                    </CartContextProvider>
                 </Switch>
             </div>
         );
