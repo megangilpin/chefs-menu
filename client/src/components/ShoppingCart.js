@@ -35,7 +35,7 @@ function ShoppingCart(props) {
     const classes = useStyles();
     const [cartOpen, setCartOpen] = React.useState(false);
     const user = React.useContext(UserContext);
-    console.log(user.profile.firstName);
+
     const toggleCart = () => {
         let open = !cartOpen;
         setCartOpen(open);
