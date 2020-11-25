@@ -65,6 +65,8 @@ export default function UserProfile() {
         location:
             user.profile.primaryAddress.city +
             ", " +
+            user.profile.primaryAddress.region +
+            ", " +
             user.profile.primaryAddress.country,
         about: user.profile.bio,
         cuisine: user.profile.favoriteCuisine,

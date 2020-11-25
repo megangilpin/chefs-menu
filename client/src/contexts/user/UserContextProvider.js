@@ -5,6 +5,8 @@ const initialState = {
     isAuthenticated: false,
     profile: {
         email: "",
+        primaryAddress: {},
+        favoriteCuisine: [],
     },
     isLoading: true,
 };
@@ -135,6 +137,9 @@ const UserContextProvider = ({ children }) => {
             };
         }
     };
+    const logoutUser = async () => {
+        dispatch({ type: LOGOUT, payload: null });
+    };
 
     const updateUser = async (formValues) => {
         isLoading(true);
@@ -168,7 +173,14 @@ const UserContextProvider = ({ children }) => {
 
     return (
         <UserContext.Provider
-            value={{ ...state, register, login, updateUser, uploadProfileImage }}
+            value={{
+                ...state,
+                register,
+                login,
+                logoutUser,
+                updateUser,
+                uploadProfileImage,
+            }}
         >
             {children}
         </UserContext.Provider>

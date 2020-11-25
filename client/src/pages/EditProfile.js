@@ -98,12 +98,9 @@ export default function EditProfile() {
                     cuisine: "",
                     about: userData.bio,
                     allergy: "",
-                    city: !userData.primaryAddress
-                        ? ""
-                        : userData.primaryAddress["city"],
-                    country: !userData.PrimaryAddress
-                        ? ""
-                        : userData.primaryAddress["country"],
+                    city: userData.primaryAddress["city"],
+                    region: userData.primaryAddress["region"],
+                    country: userData.primaryAddress["country"],
                 }}
                 onSubmit={(values, { setSubmitting }) => {
                     setSubmitting(false);
@@ -114,6 +111,7 @@ export default function EditProfile() {
                         bio: values.about,
                         primaryAddress: {
                             city: values.city,
+                            region: values.region,
                             country: values.country,
                         },
                         favoriteCuisine: cuisineChipData.map(
@@ -198,6 +196,16 @@ export default function EditProfile() {
                                         name="city"
                                         type="text"
                                         label="City"
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Field
+                                        fullWidth
+                                        component={TextField}
+                                        variant="outlined"
+                                        name="region"
+                                        type="text"
+                                        label="Province/State"
                                     />
                                 </Grid>
                                 <Grid item xs={12}>

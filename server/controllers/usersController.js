@@ -3,7 +3,6 @@ const bcrypt = require("bcrypt");
 const connection = require("../dbConnection");
 const userSchema = require("../models/user");
 
-
 const User = connection.model("User", userSchema);
 
 const SALT_ROUNDS = Number(process.env.SALT_ROUNDS);
@@ -16,19 +15,34 @@ const isValidEmailFormat = (email) =>
 const hashPassword = async (password) =>
     await bcrypt.hash(password, SALT_ROUNDS);
 
-const create = async ({ email, password, isChef }) => {
+const create = async ({
+    firstName,
+    lastName,
+    street,
+    city,
+    region,
+    country,
+    email,
+    password,
+    isChef,
+}) => {
     const hashedPassword = await hashPassword(password);
     const { _doc } = await User.create({
-        firstName: "",
-        lastName: "",
-        primaryAddress: { street: "", city: "", region: "", postalCode: "", country: "" },
+        firstName,
+        lastName,
+        primaryAddress: {
+            street,
+            city,
+            region,
+            postalCode: "",
+            country,
+        },
         bio: "",
         email,
         password: hashedPassword,
         isChef,
         favoriteCuisine: [],
-        allergies: []
-
+        allergies: [],
     });
     return _doc;
 };

@@ -76,7 +76,7 @@ router.post(
             }
 
             if (errors.length > 0) {
-                res.json({ errors });
+                return res.status(400).json({ errors });
             }
             const body = {};
             body.profilePicURL = req.file.location;
