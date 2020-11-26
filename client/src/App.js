@@ -20,8 +20,16 @@ function App() {
                 <Page>
                     <Switch>
                         <ProtectedRoute exact path="/home" component={Home} />
-                        <ProtectedRoute exact path="/profile" component={UserProfile} />
-                        <ProtectedRoute exact path="/editprofile" component={EditProfile} />
+                        <ProtectedRoute
+                            exact
+                            path="/profile"
+                            component={UserProfile}
+                        />
+                        <ProtectedRoute
+                            exact
+                            path="/editprofile"
+                            component={EditProfile}
+                        />
                     </Switch>
                 </Page>
             </div>
@@ -33,15 +41,15 @@ function App() {
             <CssBaseline />
             <BrowserRouter>
                 <Route path="/">
-                    {user.isAuthenticated ?
-                        <Redirect to="/home" />:
+                    {user.isAuthenticated ? (
+                        <Redirect to="/home" />
+                    ) : (
                         <Redirect to="/signup" />
-                        
-                    }
+                    )}
                 </Route>
                 <Switch>
-                    <Route path="/login" component={LoginSignUp} />
                     <Route path="/signup" component={LoginSignUp} />
+                    <Route path="/login" component={LoginSignUp} />
                     <Route component={DefaultRoutes} />
                 </Switch>
             </BrowserRouter>

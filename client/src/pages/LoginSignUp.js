@@ -40,6 +40,7 @@ const useStyles = makeStyles({
 export default function LoginSignUp(props) {
     const classes = useStyles();
     const location = useLocation();
+
     return (
         <Grid container className={classes.screen}>
             <Grid className={classes.left} container item xs={8} sm={6}>

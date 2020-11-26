@@ -8,8 +8,6 @@ import Box from "@material-ui/core/Box";
 import EditIcon from "@material-ui/icons/Edit";
 import IconButton from "@material-ui/core/IconButton";
 
-import sampleUser from "../images/sampleUser.png";
-
 import UserProfileMap from "../components/UserProfileMap";
 import { UserContext } from "../contexts/user/UserContextProvider";
 
@@ -22,9 +20,9 @@ const useStyles = makeStyles({
         overflow: "hidden",
     },
     profileTopRight: {
-        //  if changing this, change UserProfileMap styles height to correspond 
+        //  if changing this, change UserProfileMap styles height to correspond
         height: "50%",
-        
+
         padding: "5vh 1vw 0 5vw",
     },
     profileTopLeft: {
@@ -88,8 +86,8 @@ export default function UserProfile() {
                     <Box
                         boxShadow={2}
                         component={Avatar}
-                        src={sampleUser}
-                        alt="user"
+                        src={user.profile.profilePicURL}
+                        alt={user.profile.profilePicURL ? "Profile Image" : ""}
                         className={classes.userImage}
                     />
                 </Grid>
