@@ -9,7 +9,7 @@ const findOneWithId = async (id) => {
 };
 
 const findAllChefs = async (query) => {
-    const chefs = await Chef.find(query);
+    const chefs = await Chef.find(query).populate('userId').exec();
     return chefs;
 };
 

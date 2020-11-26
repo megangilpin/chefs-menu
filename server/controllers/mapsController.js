@@ -5,7 +5,7 @@ const urlHead = "https://maps.googleapis.com/maps/api"
 
 const getAutoCompletePredictions = async (input) => {
     const url =
-        "/place/autocomplete/json" +
+        "https://maps.googleapis.com/maps/api/place/autocomplete/json" +
         `?input=${input}&type=address&location=43.653225,-79.383186&radius=5000000&key=${KEY}`;
 
     const { data } = await axios.get(url);
@@ -21,7 +21,6 @@ const getStaticMapImage = async (center) => {
 };
 
 const getLocationCoordinates = async (formattedAddress) => {
-    console.log({formattedAddress})
     const url =
         "https://maps.googleapis.com/maps/api/geocode/json" +
         `?address=${encodeURIComponent(formattedAddress)}&key=${KEY}`;

@@ -11,9 +11,7 @@ const usersRouter = require("./routes/users");
 const chefsRouter = require("./routes/chefs");
 const mealsRouter = require("./routes/meals");
 const searchRouter = require("./routes/search");
-
 const mapsRouter = require("./routes/maps");
-
 
 const { json, urlencoded } = express;
 
