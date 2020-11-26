@@ -1,9 +1,9 @@
 const express = require("express");
-const axios = require("axios");
 
 const { errorHandelingWrapper } = require("../util");
 const { loginRequired } = require("../middleware");
 const userController = require("../controllers/usersController");
+const mapsController = require("../controllers/mapsController");
 
 const router = express.Router();
 
@@ -11,14 +11,8 @@ router.get(
     "/autocomplete",
     errorHandelingWrapper(async (req, res) => {
         const { input } = req.query;
-        const url =
-            "https://maps.googleapis.com/maps/api/place/autocomplete/json" +
-            `?input=${input}` +
-            `&key=${process.env.GOOGLE_MAPS_API_KEY}`;
-
-        const { data } = await axios.get(url);
-        const predictions = data.predictions.map(
-            ({ description }) => description
+        const predictions = await mapsController.getAutoCompletePredictions(
+            input
         );
         res.json({ predictions });
     })
@@ -41,17 +35,11 @@ router.get(
             if (country) center = center + "," + country;
         }
 
-        const url =
-            "https://maps.googleapis.com/maps/api/staticmap" +
-            `?center=${center}` +
-            "&scale=2&zoom=13&size=600x300&maptype=roadmap" +
-            `&key=${process.env.GOOGLE_MAPS_API_KEY}`;
-
-        const { headers, data, status } = await axios({
-            method: "get",
-            url,
-            responseType: "stream",
-        });
+        const {
+            status,
+            headers,
+            data,
+        } = await mapsController.getStaticMapImage(center);
 
         res.set(headers);
         res.status(status);

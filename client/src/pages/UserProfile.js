@@ -152,7 +152,7 @@ export default function UserProfile() {
                 </Grid>
             </Grid>
 
-            <UserProfileMap />
+            <UserProfileMap location={userData.location} />
         </Box>
     );
 }
