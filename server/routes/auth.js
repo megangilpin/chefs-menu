@@ -79,6 +79,7 @@ router.post(
         console.log({
             firstName,
             lastName,
+            address,
             street,
             city,
             region,
@@ -91,6 +92,7 @@ router.post(
         const createdUser = await userController.create({
             firstName,
             lastName,
+            address,
             street,
             city,
             region,

@@ -7,6 +7,8 @@ const initialState = {
         email: "",
         primaryAddress: {},
         favoriteCuisine: [],
+        allergies: [],
+        favoriteCuisine: [],
     },
     isLoading: true,
 };

@@ -11,6 +11,9 @@ const userSchema = new Schema({
         unique: true,
     },
     primaryAddress: {
+        formattedAddress: String,
+        lat: Number,
+        lng: Number,
         street: String,
         city: String,
         region: String,
