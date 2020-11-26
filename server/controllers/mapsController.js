@@ -1,7 +1,6 @@
 const axios = require("axios");
 
 const KEY = process.env.GOOGLE_MAPS_API_KEY;
-const urlHead = "https://maps.googleapis.com/maps/api"
 
 const getAutoCompletePredictions = async (input) => {
     const url =

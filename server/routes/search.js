@@ -17,7 +17,7 @@ router.get("/", errorHandelingWrapper(async (req, res) => {
     if (req.query.searchType === "chefs") {
         let { radiusKm } = req.query
         radiusKm = radiusKm && Number(radiusKm)
-        const query = req.query.cuisine 
+        const query = req.query.cuisine
             ? { cuisineSpecialty: { $in: req.query.cuisine.split(",") } } 
             : {};
         const chefs = (await chefsController.findAllChefs(query))
