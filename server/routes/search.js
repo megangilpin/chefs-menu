@@ -15,6 +15,8 @@ router.get("/", errorHandelingWrapper(async (req, res) => {
     const { primaryAddress } = await userController.findOneWithId(id);
     const { lat, lng } = primaryAddress || {}
     if (req.query.searchType === "chefs") {
+        let { radiusKm } = req.query
+        radiusKm = radiusKm && Number(radiusKm)
         const query = req.query.cuisine 
             ? { cuisineSpecialty: { $in: req.query.cuisine.split(",") } } 
             : {};
@@ -22,8 +24,14 @@ router.get("/", errorHandelingWrapper(async (req, res) => {
             .filter(chef => chef.userId && chef.userId.primaryAddress)
             .map(chef => {
                 const { userId: { primaryAddress } } = chef;
-                const distanceKm = coordinatesDistanceCalc(lat, lng, primaryAddress.lat, primaryAddress.lng)
+                const distanceKm = coordinatesDistanceCalc(
+                    lat, lng, primaryAddress.lat, primaryAddress.lng
+                )
                 return { ...chef._doc, distanceKm }
+            })
+            .filter(chef => {
+                if (!radiusKm) return true;
+                return chef.distanceKm < radiusKm;
             });
 
         if (!query) {
