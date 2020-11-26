@@ -8,10 +8,13 @@ import LoginSignUp from "./pages/LoginSignUp";
 import Home from "./pages/Home";
 import Meals from "./pages/Meals";
 import Page from "./components/Page";
+import { UserContext } from "../src/contexts/user/UserContextProvider";
 import UserProfile from "./pages/UserProfile";
 import EditProfile from "./pages/EditProfile";
 
 function App() {
+    const user = React.useContext(UserContext);
+
     const DefaultRoutes = () => {
         return (
             <div>
@@ -40,7 +43,11 @@ function App() {
             <CssBaseline />
             <BrowserRouter>
                 <Route path="/">
-                    <Redirect to="/home" />
+                    {user.isAuthenticated ? (
+                        <Redirect to="/home" />
+                    ) : (
+                        <Redirect to="/signup" />
+                    )}
                 </Route>
                 <Switch>
                     <Route path="/signup" component={LoginSignUp} />
