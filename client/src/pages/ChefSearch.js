@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ResponsiveSideBar from "../components/ResponsiveSideBar";
 import Main from "../components/Main";
 import { Typography, Input, Grid, Box, TextField } from "@material-ui/core";
 import { UserContext } from "../contexts/user/UserContextProvider";
+import { abortableFetch, consoleErrorNonAbortErrors } from "../utils";
 
 function ChefSearch(props) {
     const { profile } = React.useContext(UserContext);
@@ -12,14 +13,28 @@ function ChefSearch(props) {
     const userLocation = [city, region, country].join(", ");
     const [location, setLocation] = React.useState(userLocation);
     const [radiusKm, setRadiusKm] = React.useState(100);
+    const [results, setResults] = React.useState({
+        chefs: [],
+        chefMeals: {},
+    });
 
     const handleChangeLocation = (e) => {
-        // show suggestions using the auggestion API
+        // TODO: show suggestions using the auggestion API
     };
 
-    const handleChangeRadiusKm = (e) => {
-        // update redius
-    };
+    const handleChangeRadiusKm = ({ target }) =>
+        target.value > 0 && setRadiusKm(target.value);
+
+    useEffect(() => {
+        const { ready, abort } = abortableFetch(
+            `/search?searchType=chefs&radiusKm=${radiusKm}`
+        );
+        ready
+            .then((res) => res.json())
+            .then(setResults)
+            .catch(consoleErrorNonAbortErrors);
+        return abort;
+    }, [radiusKm]);
 
     return (
         <React.Fragment>
@@ -49,7 +64,11 @@ function ChefSearch(props) {
             </ResponsiveSideBar>
             <Main>
                 <Typography>Available Chefs:</Typography>
-                {"[Array of chefs]"}
+                <Typography>
+                    {results.chefs.map((chef) => (
+                        <span key={chef._id}>{JSON.stringify(chef, null, 4)}</span>
+                    ))}
+                </Typography>
             </Main>
         </React.Fragment>
     );
