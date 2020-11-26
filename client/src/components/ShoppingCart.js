@@ -19,11 +19,8 @@ import {
 
 import DeleteIcon from "@material-ui/icons/Delete";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
-import { UserContext } from "../contexts/user/UserContextProvider";
 import { CartContext } from "../contexts/cart/CartContextProvider";
-import { dollarFormatter, calcServiceFee } from "../lib/utils";
-
-const drawerWidth = 250;
+import { dollarFormatter, calcServiceFee, calcTotalWithFee } from "../lib/utils";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -53,7 +50,6 @@ const useStyles = makeStyles((theme) => ({
 
 function ShoppingCart(props) {
     const classes = useStyles();
-    const user = React.useContext(UserContext);
 
     const {
         chefName,
@@ -119,10 +115,7 @@ function ShoppingCart(props) {
                 <Grid item xs={12} className={classes.container}>
                     <Box mt={1}>
                         <Typography color="primary" variant="h5">
-                            {user.profile.firstName
-                                ? `${user.profile.firstName}'s `
-                                : "Your"}
-                            Cart
+                            Your Cart
                         </Typography>
                     </Box>
                     <Divider />
@@ -155,7 +148,7 @@ function ShoppingCart(props) {
                                                 )}`}
                                                 secondary={
                                                     meal.quanity ? null : (
-                                                        <div>
+                                                        <React.Fragment>
                                                             <Button
                                                                 className={
                                                                     classes.quantityBttnPlus
@@ -185,7 +178,7 @@ function ShoppingCart(props) {
                                                             >
                                                                 -
                                                             </Button>
-                                                        </div>
+                                                        </React.Fragment>
                                                     )
                                                 }
                                             />
@@ -213,12 +206,15 @@ function ShoppingCart(props) {
                     <Typography variant="subtitle2">
                         SubTotal: {dollarFormatter.format(totalPrice / 100)}
                     </Typography>
-                    <Typography variant="subtitle2">10% Service Fee</Typography>
+                    <Typography variant="subtitle2">
+                        10% Service Fee:{" "}
+                        {dollarFormatter.format(calcServiceFee(totalPrice))}
+                    </Typography>
                     <Divider />
                     <Box pt={2}>
                         <Typography variant="h6">
                             Total:{" "}
-                            {dollarFormatter.format(calcServiceFee(totalPrice))}
+                            {dollarFormatter.format(calcTotalWithFee(totalPrice))}
                         </Typography>
                     </Box>
                 </Grid>

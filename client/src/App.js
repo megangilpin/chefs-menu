@@ -6,20 +6,19 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 import { theme } from "./themes/theme";
 import LoginSignUp from "./pages/LoginSignUp";
 import Home from "./pages/Home";
+import Meals from "./pages/Meals";
 import Page from "./components/Page";
-import { UserContext } from "../src/contexts/user/UserContextProvider";
 import UserProfile from "./pages/UserProfile";
 import EditProfile from "./pages/EditProfile";
 
 function App() {
-    const user = React.useContext(UserContext);
-
     const DefaultRoutes = () => {
         return (
             <div>
                 <Page>
                     <Switch>
                         <ProtectedRoute exact path="/home" component={Home} />
+                        <ProtectedRoute exact path="/meals" component={Meals} />
                         <ProtectedRoute
                             exact
                             path="/profile"
@@ -41,9 +40,7 @@ function App() {
             <CssBaseline />
             <BrowserRouter>
                 <Route path="/">
-                    <Route path="/">
-                        <Redirect to="/home" />
-                    </Route>
+                    <Redirect to="/home" />
                 </Route>
                 <Switch>
                     <Route path="/signup" component={LoginSignUp} />

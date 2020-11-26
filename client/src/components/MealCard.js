@@ -1,3 +1,4 @@
+// WILL MOVE ADD TO CART BUTTON ONCE CHEF PROFILE PAGE IS CREATED
 import React, { useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
@@ -29,12 +30,9 @@ const useStyles = makeStyles({
         width: theme.spacing(4),
         height: theme.spacing(4),
     },
-    subtitle3: {
+    subtitle2: {
         fontSize: ".3rem",
         color: theme.palette.grey[600],
-    },
-    subtitle2: {
-        fontWeight: "bold",
     },
     subtitle1: {
         fontWeight: "bold",
@@ -54,8 +52,9 @@ function MealCard(props) {
         e.preventDefault();
         const id = parseFloat(e.currentTarget.value);
         if (chef && chefId !== chef) {
-            console.log(chef);
-            alert("cart can only have one chef");
+            alert(
+                `Your cart currently contains meals from another chef. You can only checkout with meals from one chef`
+            );
         } else {
             const meal = { id, mealPic, title, price, chefName, chefId };
             addToCart(meal, id);
@@ -99,13 +98,13 @@ function MealCard(props) {
                             <Grid item xs container direction="column" spacing={2}>
                                 <Grid item xs>
                                     <Typography
-                                        className={classes.subtitle2}
+                                        className={classes.subtitle}
                                         variant="subtitle1"
                                     >
                                         {chefName}
                                     </Typography>
                                     <Typography
-                                        className={classes.subtitle3}
+                                        className={classes.subtitle2}
                                         gutterBottom
                                     >
                                         {location}
