@@ -1,5 +1,4 @@
 import React from "react";
-import SideBar from "../components/SideBar";
 import ResponsiveSideBar from "../components/ResponsiveSideBar";
 import Main from "../components/Main";
 import { Typography } from "@material-ui/core";

@@ -10,31 +10,22 @@ import Page from "./components/Page";
 import { UserContext } from "../src/contexts/user/UserContextProvider";
 import UserProfile from "./pages/UserProfile";
 import EditProfile from "./pages/EditProfile";
+import ChefSearch from "./pages/ChefSearch";
 
 function App() {
     const user = React.useContext(UserContext);
 
-    const DefaultRoutes = () => {
-        return (
-            <div>
-                <Page>
-                    <Switch>
-                        <ProtectedRoute exact path="/home" component={Home} />
-                        <ProtectedRoute
-                            exact
-                            path="/profile"
-                            component={UserProfile}
-                        />
-                        <ProtectedRoute
-                            exact
-                            path="/editprofile"
-                            component={EditProfile}
-                        />
-                    </Switch>
-                </Page>
-            </div>
-        );
-    };
+    const DefaultRoutes = () => (
+        <Page>
+            <Switch>
+                <ProtectedRoute exact path="/home" component={Home} />
+                <ProtectedRoute exact path="/profile" component={UserProfile} />
+                <ProtectedRoute exact path="/editprofile" component={EditProfile} />
+                <ProtectedRoute exact path="/chefs" component={ChefSearch} />
+            </Switch>
+        </Page>
+    );
+
 
     return (
         <ThemeProvider theme={theme}>

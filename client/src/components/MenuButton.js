@@ -50,6 +50,7 @@ function MenuButton(props) {
                 onClose={handleClose}
             >
                 <MenuItem onClick={() => history.push("profile")}>Profile</MenuItem>
+                <MenuItem onClick={() => history.push("chefs")}>Chefs</MenuItem>
                 <MenuItem onClick={handleClose}>My account</MenuItem>
                 <MenuItem onClick={()=> user.logoutUser()}>Logout</MenuItem>
             </Menu>
