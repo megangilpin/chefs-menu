@@ -11,7 +11,7 @@ export const theme = createMuiTheme({
     },
     background: {
         default: "#F8F8FF",
-        secondary: "#FF510C",
+        secondary: "#FF743D",
     },
     overrides: {
         MuiButton: {

@@ -5,7 +5,7 @@ import Hidden from "@material-ui/core/Hidden";
 import SearchIcon from "@material-ui/icons/Search";
 import Fab from "@material-ui/core/Fab";
 
-const drawerWidth = 400;
+const drawerWidth = 350;
 
 const useStyles = makeStyles((theme) => ({
     drawer: {

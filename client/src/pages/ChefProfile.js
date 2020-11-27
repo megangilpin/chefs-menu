@@ -3,17 +3,40 @@ import { makeStyles } from "@material-ui/core/styles";
 import { UserContext } from "../contexts/user/UserContextProvider";
 import ResponsiveSideBar from "../components/ResponsiveSideBar";
 import Main from "../components/Main";
-import MealListItem from "../components/MealListItem";
+import MenuItem from "../components/MenuItem";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import { Avatar, Typography, Grid, Box, Divider, Button } from "@material-ui/core";
+import TextField from "@material-ui/core/TextField";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import { Formik, Form, Field } from "formik";
+import ProfilePicLoader from "../components/ProfilePicLoader";
+import {
+    Avatar,
+    Typography,
+    Grid,
+    Box,
+    Divider,
+    Button,
+    List,
+    ListItem,
+} from "@material-ui/core";
 import { sizing } from "@material-ui/system";
 import meal1 from "../images/meal1.png";
 import meal2 from "../images/meal2.png";
 import meal3 from "../images/meal3.png";
 import chef1 from "../images/profilePic.png";
+import meals from "../lib/mockedMeals";
+import AddMealButton from "../components/AddMealButton";
 
 const useStyles = makeStyles((theme) => ({
-    root: {
+    content: {
+        display: "flex",
+        justifyContent: "center",
+    },
+    sideBar: {
         display: "flex",
         flexDirection: "column",
         height: "100%",
@@ -26,13 +49,14 @@ const useStyles = makeStyles((theme) => ({
     headerImage: {
         width: "100%",
         height: "30%",
+        objectFit: "cover",
     },
     userImage: {
         width: theme.spacing(15),
         height: theme.spacing(15),
         border: "5px solid white",
         position: "absolute",
-        top: "200px",
+        top: "155px",
     },
     subtitle: {
         color: theme.palette.grey[600],
@@ -49,34 +73,41 @@ const useStyles = makeStyles((theme) => ({
         width: "100%",
         margin: 0,
     },
-    mealCard: {
-        minHeight: "300px",
-        minWidth: "500px",
-        maxWidth: "800px",
+    list: {
         boxShadow: "0px 0px 10px 5px rgba(7,7,7,0.07)",
-        overflow: "auto",
+        background: "#ffffff",
     },
-    mealImage: {
+    listItem: {
+        borderBottom: "1px solid #DCDCDC",
+    },
+    // listItem: {
+    //     ":last-child": {
+    //         borderBottom: "none",
+    //     },
+    // },
+    addImage: {
         width: "100%",
-        maxHeight: "300px",
-    },
-    box: {
-        color: "#ffff",
-        background: theme.background.secondary,
-    },
-    subtitle2: {
-        fontWeight: "bold",
+        objectFit: "cover",
     },
 }));
 
 function ChefProfile(props) {
     const user = React.useContext(UserContext);
     const classes = useStyles();
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
 
     return (
         <React.Fragment>
             <ResponsiveSideBar icon={<AccountCircleIcon fontSize="large" />}>
-                <div className={classes.root}>
+                <div className={classes.sideBar}>
                     <div>
                         <Grid
                             className={classes.header}
@@ -84,7 +115,6 @@ function ChefProfile(props) {
                             direction="column"
                             justify="center"
                             alignItems="center"
-                            xs={12}
                         >
                             <img className={classes.headerImage} src={meal1}></img>
                             <Box
@@ -114,7 +144,7 @@ function ChefProfile(props) {
                                 <Typography variant="h6">{`${user.profile.firstName}  ${user.profile.lastName}`}</Typography>
                                 <Typography
                                     className={classes.subtitle}
-                                    variant="caption text"
+                                    variant="caption"
                                 >{`${user.profile.primaryAddress.city}, ${user.profile.primaryAddress.country}`}</Typography>
                             </Grid>
                             <Grid item>
@@ -123,9 +153,11 @@ function ChefProfile(props) {
                                 </Box>
                             </Grid>
                             <Grid item>
-                                <Typography variant="body">
-                                    <Box mb={2}>{user.profile.bio}</Box>
-                                </Typography>
+                                <Box mb={2}>
+                                    <Typography variant="body1">
+                                        {user.profile.bio}
+                                    </Typography>
+                                </Box>
                             </Grid>
                         </Grid>
                     </div>
@@ -141,7 +173,34 @@ function ChefProfile(props) {
                 </div>
             </ResponsiveSideBar>
             <Main>
-                <MealListItem />
+                <Grid
+                    spacing={10}
+                    container
+                    direction="column"
+                    justify="center"
+                    alignItems="center"
+                    className={classes.color1}
+                >
+                    <Grid item>
+                        <Typography variant="h5">Chef's Menu:</Typography>
+                    </Grid>
+                    <Grid item className={classes.color2}>
+                        <Box mb={2}>
+                            <AddMealButton />
+                        </Box>
+                        <List className={classes.list}>
+                            {meals.map((meal) => {
+                                return (
+                                    <React.Fragment>
+                                        <ListItem className={classes.listItem}>
+                                            <MenuItem meal={meal} />
+                                        </ListItem>
+                                    </React.Fragment>
+                                );
+                            })}
+                        </List>
+                    </Grid>
+                </Grid>
             </Main>
         </React.Fragment>
     );
