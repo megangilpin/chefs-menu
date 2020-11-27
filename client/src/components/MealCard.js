@@ -9,6 +9,7 @@ import {
     CardContent,
     CardMedia,
     Button,
+    Box,
     Typography,
     Grid,
     Dialog,
@@ -51,16 +52,22 @@ const useStyles = makeStyles({
 function MealCard(props) {
     const classes = useStyles();
     const { chef, addToCart } = useContext(CartContext);
-    const { mealPic, title, price, chefName, chefPic, location, id, chefId } = props;
+    const {
+        mealPic,
+        title,
+        price,
+        chefName,
+        chefPic,
+        location,
+        id,
+        chefId,
+    } = props.meal;
     const [openDialog, setDialogOpen] = React.useState(false);
-
-    const handleClickOpen = () => {
-        setDialogOpen(true);
-    };
 
     const handleClose = () => {
         setDialogOpen(false);
     };
+
     const addMeal = (e) => {
         e.preventDefault();
         const id = parseFloat(e.currentTarget.value);
@@ -68,7 +75,7 @@ function MealCard(props) {
             setDialogOpen(true);
         } else {
             const meal = { id, mealPic, title, price, chefName, chefId };
-            addToCart(meal, id);
+            addToCart(meal);
         }
     };
 
@@ -77,10 +84,10 @@ function MealCard(props) {
             <Card className={classes.root}>
                 <CardMedia
                     component="img"
-                    alt="meal1"
+                    alt="Meal Picture"
                     height="150"
                     image={mealPic}
-                    title="meal1"
+                    title="Meal Picture"
                 />
                 <CardContent>
                     <Typography gutterBottom className={classes.subtitle}>
@@ -123,13 +130,13 @@ function MealCard(props) {
                                 </Grid>
                             </Grid>
                         </Grid>
-                        <Grid item>
-                            <Button value={id} color="primary" onClick={addMeal}>
-                                add to Cart
-                            </Button>
-                        </Grid>
                     </Grid>
                 </CardActions>
+                <Box ml={1}>
+                    <Button value={id} color="primary" onClick={addMeal}>
+                        add to Cart
+                    </Button>
+                </Box>
             </Card>
             <Dialog
                 open={openDialog}
