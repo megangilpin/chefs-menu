@@ -5,14 +5,6 @@ import ResponsiveSideBar from "../components/ResponsiveSideBar";
 import Main from "../components/Main";
 import MenuItem from "../components/MenuItem";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import TextField from "@material-ui/core/TextField";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import { Formik, Form, Field } from "formik";
-import ProfilePicLoader from "../components/ProfilePicLoader";
 import {
     Avatar,
     Typography,
@@ -23,11 +15,7 @@ import {
     List,
     ListItem,
 } from "@material-ui/core";
-import { sizing } from "@material-ui/system";
 import meal1 from "../images/meal1.png";
-import meal2 from "../images/meal2.png";
-import meal3 from "../images/meal3.png";
-import chef1 from "../images/profilePic.png";
 import meals from "../lib/mockedMeals";
 import AddMealButton from "../components/AddMealButton";
 

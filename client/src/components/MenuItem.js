@@ -88,6 +88,7 @@ function MenuItem(props) {
                             <ClearIcon />
                         </IconButton>
                         <IconButton
+                            value={id}
                             color="primary"
                             variant="contained"
                             onClick={addMeal}
