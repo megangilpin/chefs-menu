@@ -7,14 +7,18 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
         padding: theme.spacing(3),
     },
+    container: {
+        display: "flex",
+    },
 }));
 
 function Main(props) {
     const classes = useStyles();
+
     return (
         <div className={classes.content}>
             <Toolbar />
-            {props.children}
+            <div className={classes.container}>{props.children}</div>
         </div>
     );
 }

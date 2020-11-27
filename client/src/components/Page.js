@@ -2,7 +2,9 @@ import * as React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { AppBar, Typography, Toolbar } from "@material-ui/core";
 import MenuButton from "./MenuButton";
+import ShoppingCart from "./ShoppingCart";
 import logo from "../images/logo.svg";
+import { CartContextProvider } from "../contexts/cart/CartContextProvider";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -24,15 +26,18 @@ function Page(props) {
 
     return (
         <div className={classes.root}>
-            <AppBar position="fixed" className={classes.appBar}>
-                <Toolbar>
-                    <Typography className={classes.appBarTitle}>
-                        <img src={logo} alt="Chef's Menu Logo" />
-                    </Typography>
-                    <MenuButton />
-                </Toolbar>
-            </AppBar>
-            {props.children}
+            <CartContextProvider>
+                <AppBar position="fixed" className={classes.appBar}>
+                    <Toolbar>
+                        <Typography className={classes.appBarTitle}>
+                            <img src={logo} alt="Chef's Menu Logo" />
+                        </Typography>
+                        <MenuButton />
+                        <ShoppingCart />
+                    </Toolbar>
+                </AppBar>
+                {props.children}
+            </CartContextProvider>
         </div>
     );
 }

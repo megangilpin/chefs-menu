@@ -6,6 +6,7 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 import { theme } from "./themes/theme";
 import LoginSignUp from "./pages/LoginSignUp";
 import Home from "./pages/Home";
+import Meals from "./pages/Meals";
 import Page from "./components/Page";
 import { UserContext } from "../src/contexts/user/UserContextProvider";
 import UserProfile from "./pages/UserProfile";
@@ -20,6 +21,7 @@ function App() {
                 <Page>
                     <Switch>
                         <ProtectedRoute exact path="/home" component={Home} />
+                        <ProtectedRoute exact path="/meals" component={Meals} />
                         <ProtectedRoute
                             exact
                             path="/profile"
