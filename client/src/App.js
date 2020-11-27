@@ -11,6 +11,7 @@ import Page from "./components/Page";
 import { UserContext } from "../src/contexts/user/UserContextProvider";
 import UserProfile from "./pages/UserProfile";
 import EditProfile from "./pages/EditProfile";
+import ChefProfile from "./pages/ChefProfile";
 
 function App() {
     const user = React.useContext(UserContext);
@@ -20,8 +21,17 @@ function App() {
             <div>
                 <Page>
                     <Switch>
-                        <ProtectedRoute exact path="/home" component={Home} />
+                        <ProtectedRoute
+                            exact
+                            path="/chefProfile"
+                            component={ChefProfile}
+                        />
                         <ProtectedRoute exact path="/meals" component={Meals} />
+                        <ProtectedRoute
+                            exact
+                            path="/chefProfile"
+                            component={ChefProfile}
+                        />
                         <ProtectedRoute
                             exact
                             path="/profile"
@@ -44,7 +54,7 @@ function App() {
             <BrowserRouter>
                 <Route path="/">
                     {user.isAuthenticated ? (
-                        <Redirect to="/home" />
+                        <Redirect to="/chefprofile" />
                     ) : (
                         <Redirect to="/signup" />
                     )}

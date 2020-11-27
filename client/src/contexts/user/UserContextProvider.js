@@ -25,7 +25,7 @@ const UserReducer = (state, action) => {
                 ...state,
                 isLoading: false,
                 isAuthenticated: false,
-                profile: null,
+                profile: {},
             };
         case SET_IS_LOADING:
             return {
@@ -113,7 +113,7 @@ const UserContextProvider = ({ children }) => {
         if (data.user) {
             dispatch({ type: SET_USER, payload: data });
         } else {
-            dispatch({ type: LOGOUT, payload: null });
+            dispatch({ type: LOGOUT });
         }
     };
 

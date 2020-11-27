@@ -51,6 +51,9 @@ function MenuButton(props) {
             >
                 <MenuItem onClick={() => history.push("profile")}>Profile</MenuItem>
                 <MenuItem onClick={() => history.push("meals")}>Meals</MenuItem>
+                <MenuItem onClick={() => history.push("chefprofile")}>
+                    Chef Profile
+                </MenuItem>
                 <MenuItem onClick={handleClose}>My account</MenuItem>
                 <MenuItem onClick={() => user.logoutUser()}>Logout</MenuItem>
             </Menu>

@@ -95,8 +95,8 @@ function MealCard(props) {
                             />
                         </Grid>
                         <Grid item xs={12} sm container alignItems="center">
-                            <Grid item xs container direction="column" spacing={2}>
-                                <Grid item xs>
+                            <Grid item container direction="column" spacing={2}>
+                                <Grid item>
                                     <Typography
                                         className={classes.subtitle}
                                         variant="subtitle1"
