@@ -7,7 +7,19 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import { Formik, Form, Field } from "formik";
 import ProfilePicLoader from "../components/ProfilePicLoader";
-import { Typography, Grid, Box, Button, List, ListItem } from "@material-ui/core";
+import {
+    Typography,
+    Grid,
+    Box,
+    Button,
+    List,
+    ListItem,
+    MenuItem,
+} from "@material-ui/core";
+import InputLabel from "@material-ui/core/InputLabel";
+import FormControl from "@material-ui/core/FormControl";
+
+import { Select } from "formik-material-ui";
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -100,7 +112,7 @@ function AddMealButton(props) {
                                         <ProfilePicLoader />
                                     </Grid>
                                     <Grid item xs={12} container spacing={3}>
-                                        <Grid item xs={12}>
+                                        <Grid item xs={8}>
                                             <Typography variant="subtitle2">
                                                 <Box
                                                     fontWeight="fontWeightBold"
@@ -154,6 +166,34 @@ function AddMealButton(props) {
                                                 label="Serving Size"
                                             />
                                         </Grid>
+                                        <Grid item xs={4}>
+                                            <Typography variant="subtitle2">
+                                                <Box
+                                                    fontWeight="fontWeightBold"
+                                                    mb={1}
+                                                >
+                                                    Cuisine Type
+                                                </Box>
+                                            </Typography>
+                                            <Field
+                                                variant="outlined"
+                                                component={Select}
+                                                name="age"
+                                                inputProps={{
+                                                    id: "age-simple",
+                                                }}
+                                            >
+                                                <MenuItem value={"american"}>
+                                                    American
+                                                </MenuItem>
+                                                <MenuItem value={"spanish"}>
+                                                    Spanish
+                                                </MenuItem>
+                                                <MenuItem value={"japanese"}>
+                                                    Japanese
+                                                </MenuItem>
+                                            </Field>
+                                        </Grid>
                                         <Grid item xs={12}>
                                             <Typography variant="subtitle2">
                                                 <Box
@@ -184,6 +224,7 @@ function AddMealButton(props) {
                                             <Field
                                                 fullWidth
                                                 component={TextField}
+                                                rows={4}
                                                 variant="outlined"
                                                 name="requirements"
                                                 type="text"
