@@ -1,29 +1,79 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import ResponsiveSideBar from "../components/ResponsiveSideBar";
+import ChefCard from "../components/ChefCard";
 import Main from "../components/Main";
-import { Typography, Input, Grid, Box, TextField } from "@material-ui/core";
+import { Typography, Button, Grid, TextField } from "@material-ui/core";
 import { UserContext } from "../contexts/user/UserContextProvider";
 import { abortableFetch, consoleErrorNonAbortErrors } from "../utils";
 
+const ALL = "ALL";
+
+const AllCuisines = [
+    "AMERICAN",
+    "BRITISH",
+    "CARIBBEAN",
+    "CHINESE",
+    "FRENCH",
+    "GREEK",
+    "INDIAN",
+    "ITALIAN",
+    "MEDITERRANEAN",
+    "MEXICAN",
+    "MORROCAN",
+    "SPANISH",
+    "THAI",
+    "TURKISH",
+    "VIETNAMESE",
+];
+
 function ChefSearch(props) {
-    const { profile } = React.useContext(UserContext);
+    const { profile } = useContext(UserContext);
     const {
         primaryAddress: { city, region, country },
     } = profile;
-    const userLocation = [city, region, country].join(", ");
-    const [location, setLocation] = React.useState(userLocation);
-    const [radiusKm, setRadiusKm] = React.useState(100);
-    const [results, setResults] = React.useState({
+    const location = [city, region, country].join(", ");
+    const [radiusKm, setRadiusKm] = useState(100);
+    const [cuisines, setCuisines] = useState(new Set([ALL]));
+    const [availableCuisines, setAvailableCuisines] = useState(new Set(AllCuisines));
+    const [results, setResults] = useState({
         chefs: [],
         chefMeals: {},
     });
 
-    const handleChangeLocation = (e) => {
-        // TODO: show suggestions using the auggestion API
-    };
-
     const handleChangeRadiusKm = ({ target }) =>
         target.value > 0 && setRadiusKm(target.value);
+
+    const removeCuisine = (cuisine) => {
+        console.log("remove", cuisine);
+        const newCuisines = new Set(cuisines);
+        const newAvailableCuisines = new Set(availableCuisines);
+        newCuisines.delete(cuisine);
+        newAvailableCuisines.add(cuisine);
+        if (newCuisines.size === 0) {
+            newCuisines.add(ALL);
+        }
+        setCuisines(newCuisines);
+        setAvailableCuisines(newAvailableCuisines);
+    };
+
+    const addCuisine = (cuisine) => {
+        console.log("add", cuisine);
+        if (cuisine === ALL) {
+            setCuisines(new Set([ALL]));
+            setAvailableCuisines(new Set(AllCuisines));
+        } else {
+            const newCuisines = new Set(cuisines);
+            const newAvailableCuisines = new Set(availableCuisines);
+            newCuisines.add(cuisine);
+            newAvailableCuisines.delete(cuisine);
+            if (newCuisines.has(ALL)) {
+                newCuisines.delete(ALL);
+                newAvailableCuisines.add(ALL);
+            }
+            setCuisines(newCuisines);
+            setAvailableCuisines(newAvailableCuisines);
+        }
+    };
 
     useEffect(() => {
         const { ready, abort } = abortableFetch(
@@ -47,7 +97,7 @@ function ChefSearch(props) {
                             fullWidth
                             variant="outlined"
                             type="text"
-                            onChange={handleChangeLocation}
+                            disabled={true}
                         />
                     </Grid>
                     <Grid item xs={12}>
@@ -60,15 +110,39 @@ function ChefSearch(props) {
                             onChange={handleChangeRadiusKm}
                         />
                     </Grid>
+                    <Grid item xs={12}>
+                        <Typography>Cuisine:</Typography>
+                        {[...cuisines].map((cuisine) => (
+                            <Button
+                                key={cuisine}
+                                color="primary"
+                                variant="contained"
+                                onClick={() => removeCuisine(cuisine)}
+                            >
+                                <Typography variant="button">{cuisine}</Typography>
+                            </Button>
+                        ))}
+                    </Grid>
+                    <Grid item xs={12}>
+                        {[...availableCuisines].map((cuisine) => (
+                            <Button
+                                key={cuisine}
+                                variant="contained"
+                                onClick={() => addCuisine(cuisine)}
+                            >
+                                <Typography variant="button">{cuisine}</Typography>
+                            </Button>
+                        ))}
+                    </Grid>
                 </Grid>
             </ResponsiveSideBar>
             <Main>
                 <Typography>Available Chefs:</Typography>
-                <Typography>
+                <Grid item xs={12} container spacing={4} alignContent="flex-start">
                     {results.chefs.map((chef) => (
-                        <span key={chef._id}>{JSON.stringify(chef, null, 4)}</span>
+                        <ChefCard {...chef} key={chef._id} />
                     ))}
-                </Typography>
+                </Grid>
             </Main>
         </React.Fragment>
     );
