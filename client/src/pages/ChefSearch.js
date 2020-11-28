@@ -76,15 +76,17 @@ function ChefSearch(props) {
     };
 
     useEffect(() => {
-        const { ready, abort } = abortableFetch(
-            `/search?searchType=chefs&radiusKm=${radiusKm}`
-        );
+        let url = `/search?searchType=chefs&radiusKm=${radiusKm}`;
+        if (!cuisines.has(ALL)) {
+            url = `${url}&cuisine=` + [...cuisines].join(",");
+        }
+        const { ready, abort } = abortableFetch(url);
         ready
             .then((res) => res.json())
             .then(setResults)
             .catch(consoleErrorNonAbortErrors);
         return abort;
-    }, [radiusKm]);
+    }, [radiusKm, cuisines]);
 
     return (
         <React.Fragment>
