@@ -3,21 +3,10 @@ import { makeStyles } from "@material-ui/core/styles";
 import { UserContext } from "../contexts/user/UserContextProvider";
 import ResponsiveSideBar from "../components/ResponsiveSideBar";
 import Main from "../components/Main";
-import MenuItem from "../components/MenuItem";
+import ChefsMenu from "../components/ChefsMenu";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import {
-    Avatar,
-    Typography,
-    Grid,
-    Box,
-    Divider,
-    Button,
-    List,
-    ListItem,
-} from "@material-ui/core";
+import { Avatar, Typography, Grid, Box, Divider, Button } from "@material-ui/core";
 import meal1 from "../images/meal1.png";
-import meals from "../lib/mockedMeals";
-import AddMealButton from "../components/AddMealButton";
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -161,34 +150,7 @@ function ChefProfile(props) {
                 </div>
             </ResponsiveSideBar>
             <Main>
-                <Grid
-                    spacing={10}
-                    container
-                    direction="column"
-                    justify="center"
-                    alignItems="center"
-                    className={classes.color1}
-                >
-                    <Grid item>
-                        <Typography variant="h5">Chef's Menu:</Typography>
-                    </Grid>
-                    <Grid item className={classes.color2}>
-                        <Box mb={2}>
-                            <AddMealButton />
-                        </Box>
-                        <List className={classes.list}>
-                            {meals.map((meal) => {
-                                return (
-                                    <React.Fragment>
-                                        <ListItem className={classes.listItem}>
-                                            <MenuItem meal={meal} />
-                                        </ListItem>
-                                    </React.Fragment>
-                                );
-                            })}
-                        </List>
-                    </Grid>
-                </Grid>
+                <ChefsMenu chefName={user.profile.firstName} currentChef={false} />
             </Main>
         </React.Fragment>
     );

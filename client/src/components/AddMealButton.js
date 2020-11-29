@@ -1,25 +1,21 @@
-import React from "react";
+import * as React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { UserContext } from "../contexts/user/UserContextProvider";
-import TextField from "@material-ui/core/TextField";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import { Formik, Form, Field } from "formik";
-import ProfilePicLoader from "../components/ProfilePicLoader";
+import ProfilePicLoader from "./ProfilePicLoader";
 import {
-    Typography,
     Grid,
     Box,
     Button,
-    List,
-    ListItem,
     MenuItem,
+    InputLabel,
+    Dialog,
+    DialogActions,
+    DialogContent,
 } from "@material-ui/core";
-import InputLabel from "@material-ui/core/InputLabel";
-import FormControl from "@material-ui/core/FormControl";
 
-import { Select } from "formik-material-ui";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import { TextField, Select } from "formik-material-ui";
+import * as Yup from "yup";
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -42,6 +38,9 @@ const useStyles = makeStyles((theme) => ({
         width: "100%",
         objectFit: "cover",
     },
+    error: {
+        color: theme.palette.error.main,
+    },
 }));
 
 function AddMealButton(props) {
@@ -56,6 +55,20 @@ function AddMealButton(props) {
     const handleClose = () => {
         setOpen(false);
     };
+
+    const validationSchema = Yup.object().shape({
+        title: Yup.string().required("Required!"),
+        price: Yup.number()
+            .typeError("Price must be a number")
+            .required("Required!")
+            .test("is-decimal", "must be to the nearest cent", (value) =>
+                (value + "").match(/^\d+(?:\.\d{0,2})$/)
+            ),
+        servingSize: Yup.string().required("Required!"),
+        cuisineType: Yup.string().required("Required!"),
+        ingredients: Yup.string().required("Required!"),
+    });
+
     return (
         <React.Fragment>
             <Button color="primary" variant="contained" onClick={handleClickOpen}>
@@ -66,185 +79,203 @@ function AddMealButton(props) {
                 onClose={handleClose}
                 aria-labelledby="form-dialog-title"
             >
-                <DialogContent>
-                    <Formik
-                        initialValues={{
-                            firstName: "",
-                            lastName: "",
-                            about: "",
-                            city: "",
-                            region: "",
-                            country: "",
-                        }}
-                        onSubmit={(values, { setSubmitting }) => {
-                            setSubmitting(false);
-
-                            const editedVals = {
-                                firstName: values.firstName,
-                                lastName: values.lastName,
-                                bio: values.about,
-                                primaryAddress: {
-                                    city: values.city,
-                                    region: values.region,
-                                    country: values.country,
-                                },
-                            };
-
-                            // save meal into DB
-                        }}
-                    >
-                        {({ submitForm, isSubmitting, values }) => (
+                <Formik
+                    initialValues={{
+                        title: "",
+                        price: "",
+                        servingSize: "",
+                        cuisineType: "",
+                        ingredients: "",
+                        requirements: "",
+                    }}
+                    validationSchema={validationSchema}
+                    onSubmit={(values, { setSubmitting }) => {
+                        setSubmitting(false);
+                        console.log(values);
+                    }}
+                >
+                    {({ submitForm, isSubmitting }) => (
+                        <React.Fragment>
                             <Form>
-                                <Grid
-                                    container
-                                    spacing={2}
-                                    direction="column"
-                                    // justify="center"
-                                    // alignItems="center"
-                                >
-                                    {/* Meal Image */}
-                                    <Grid xs={12} item>
-                                        {/* <img
-                                            className={classes.addImage}
-                                            src={meal1}
-                                            alt="Chef's Menu Logo"
-                                        /> */}
-                                        <ProfilePicLoader />
+                                <DialogContent>
+                                    <Grid container spacing={2} direction="column">
+                                        {/* MEAL IMAGE INPUT */}
+                                        <Grid xs={12} item>
+                                            {/* <img
+                                        className={classes.addImage}
+                                        src={meal1}
+                                        alt="Chef's Menu Logo"
+                                    /> */}
+                                            <ProfilePicLoader />
+                                        </Grid>
+                                        <Grid item xs={12} container spacing={3}>
+                                            <Grid item xs={8}>
+                                                <InputLabel htmlFor="title">
+                                                    <Box
+                                                        fontWeight="fontWeightBold"
+                                                        mb={1.5}
+                                                    >
+                                                        Meal Title
+                                                    </Box>
+                                                </InputLabel>
+                                                <Field
+                                                    inputProps={{
+                                                        id: "title",
+                                                    }}
+                                                    fullWidth
+                                                    component={TextField}
+                                                    variant="outlined"
+                                                    name="title"
+                                                    type="text"
+                                                    label="Title"
+                                                />
+                                            </Grid>
+                                            <Grid item xs={4}>
+                                                <InputLabel htmlFor="price">
+                                                    <Box
+                                                        fontWeight="fontWeightBold"
+                                                        mb={1.5}
+                                                    >
+                                                        Price
+                                                    </Box>
+                                                </InputLabel>
+                                                <Field
+                                                    inputProps={{
+                                                        id: "price",
+                                                    }}
+                                                    fullWidth
+                                                    id="price"
+                                                    component={TextField}
+                                                    variant="outlined"
+                                                    name="price"
+                                                    type="text"
+                                                    label="$0.00"
+                                                />
+                                            </Grid>
+                                            <Grid item xs={8}>
+                                                <InputLabel htmlFor="serving-size">
+                                                    <Box
+                                                        fontWeight="fontWeightBold"
+                                                        mb={1.5}
+                                                    >
+                                                        Serving Size
+                                                    </Box>
+                                                </InputLabel>
+                                                <Field
+                                                    inputProps={{
+                                                        id: "serving-size",
+                                                    }}
+                                                    fullWidth
+                                                    component={TextField}
+                                                    variant="outlined"
+                                                    name="servingSize"
+                                                    type="text"
+                                                    label="ie: Meal for 2"
+                                                />
+                                            </Grid>
+                                            <Grid item xs={4}>
+                                                <InputLabel htmlFor="cuisine-type">
+                                                    <Box
+                                                        fontWeight="fontWeightBold"
+                                                        mb={1.5}
+                                                    >
+                                                        Cuisine Type
+                                                    </Box>
+                                                </InputLabel>
+                                                <Field
+                                                    inputProps={{
+                                                        id: "cuisine-type",
+                                                    }}
+                                                    variant="outlined"
+                                                    component={Select}
+                                                    name="cuisineType"
+                                                >
+                                                    <MenuItem value={"american"}>
+                                                        American
+                                                    </MenuItem>
+                                                    <MenuItem value={"spanish"}>
+                                                        Spanish
+                                                    </MenuItem>
+                                                    <MenuItem value={"japanese"}>
+                                                        Japanese
+                                                    </MenuItem>
+                                                </Field>
+                                                <Box ml={1} color="error">
+                                                    <ErrorMessage name="cuisineType">
+                                                        {(msg) => (
+                                                            <div
+                                                                className={
+                                                                    classes.error
+                                                                }
+                                                            >
+                                                                {msg}
+                                                            </div>
+                                                        )}
+                                                    </ErrorMessage>
+                                                </Box>
+                                            </Grid>
+                                            <Grid item xs={12}>
+                                                <InputLabel htmlFor="ingredients">
+                                                    <Box
+                                                        fontWeight="fontWeightBold"
+                                                        mb={1.5}
+                                                    >
+                                                        List of Ingredients
+                                                    </Box>
+                                                </InputLabel>
+                                                <Field
+                                                    inputProps={{
+                                                        id: "ingredients",
+                                                    }}
+                                                    fullWidth
+                                                    component={TextField}
+                                                    variant="outlined"
+                                                    name="ingredients"
+                                                    type="text"
+                                                    label="Ingredients"
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12}>
+                                                <InputLabel htmlFor="requirements">
+                                                    <Box
+                                                        fontWeight="fontWeightBold"
+                                                        mb={1.5}
+                                                    >
+                                                        Kitchen Requirements
+                                                    </Box>
+                                                </InputLabel>
+                                                <Field
+                                                    inputProps={{
+                                                        id: "requirements",
+                                                    }}
+                                                    fullWidth
+                                                    component={TextField}
+                                                    rows={4}
+                                                    variant="outlined"
+                                                    name="requirements"
+                                                    type="text"
+                                                    label="Requirements"
+                                                />
+                                            </Grid>
+                                        </Grid>
                                     </Grid>
-                                    <Grid item xs={12} container spacing={3}>
-                                        <Grid item xs={8}>
-                                            <Typography variant="subtitle2">
-                                                <Box
-                                                    fontWeight="fontWeightBold"
-                                                    mb={1}
-                                                >
-                                                    Title
-                                                </Box>
-                                            </Typography>
-                                            <Field
-                                                fullWidth
-                                                component={TextField}
-                                                variant="outlined"
-                                                name="title"
-                                                type="text"
-                                                label="Title"
-                                            />
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            <Typography variant="subtitle2">
-                                                <Box
-                                                    fontWeight="fontWeightBold"
-                                                    mb={1}
-                                                >
-                                                    Price
-                                                </Box>
-                                            </Typography>
-                                            <Field
-                                                fullWidth
-                                                component={TextField}
-                                                variant="outlined"
-                                                name="price"
-                                                type="text"
-                                                label="Price"
-                                            />
-                                        </Grid>
-                                        <Grid item xs={8}>
-                                            <Typography variant="subtitle2">
-                                                <Box
-                                                    fontWeight="fontWeightBold"
-                                                    mb={1}
-                                                >
-                                                    Serving Size ie: "Meal for 2"
-                                                </Box>
-                                            </Typography>
-                                            <Field
-                                                fullWidth
-                                                component={TextField}
-                                                variant="outlined"
-                                                name="serving size"
-                                                type="text"
-                                                label="Serving Size"
-                                            />
-                                        </Grid>
-                                        <Grid item xs={4}>
-                                            <Typography variant="subtitle2">
-                                                <Box
-                                                    fontWeight="fontWeightBold"
-                                                    mb={1}
-                                                >
-                                                    Cuisine Type
-                                                </Box>
-                                            </Typography>
-                                            <Field
-                                                variant="outlined"
-                                                component={Select}
-                                                name="age"
-                                                inputProps={{
-                                                    id: "age-simple",
-                                                }}
-                                            >
-                                                <MenuItem value={"american"}>
-                                                    American
-                                                </MenuItem>
-                                                <MenuItem value={"spanish"}>
-                                                    Spanish
-                                                </MenuItem>
-                                                <MenuItem value={"japanese"}>
-                                                    Japanese
-                                                </MenuItem>
-                                            </Field>
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <Typography variant="subtitle2">
-                                                <Box
-                                                    fontWeight="fontWeightBold"
-                                                    mb={1}
-                                                >
-                                                    List of Ingredients
-                                                </Box>
-                                            </Typography>
-                                            <Field
-                                                fullWidth
-                                                component={TextField}
-                                                variant="outlined"
-                                                name="ingredients"
-                                                type="text"
-                                                label="Ingredients"
-                                            />
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <Typography variant="subtitle2">
-                                                <Box
-                                                    fontWeight="fontWeightBold"
-                                                    mb={1}
-                                                >
-                                                    Kitchen Requirements
-                                                </Box>
-                                            </Typography>
-                                            <Field
-                                                fullWidth
-                                                component={TextField}
-                                                rows={4}
-                                                variant="outlined"
-                                                name="requirements"
-                                                type="text"
-                                                label="Requirements"
-                                            />
-                                        </Grid>
-                                    </Grid>
-                                </Grid>
+                                </DialogContent>
+                                <DialogActions>
+                                    <Button onClick={handleClose} color="primary">
+                                        Cancel
+                                    </Button>
+                                    <Button
+                                        disabled={isSubmitting}
+                                        onClick={submitForm}
+                                        color="primary"
+                                    >
+                                        Add
+                                    </Button>
+                                </DialogActions>
                             </Form>
-                        )}
-                    </Formik>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose} color="primary">
-                        Cancel
-                    </Button>
-                    <Button onClick={handleClose} color="primary">
-                        Add
-                    </Button>
-                </DialogActions>
+                        </React.Fragment>
+                    )}
+                </Formik>
             </Dialog>
         </React.Fragment>
     );

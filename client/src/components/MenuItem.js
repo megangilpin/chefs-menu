@@ -73,28 +73,33 @@ function MenuItem(props) {
                     alignItems="stretch"
                 >
                     <Grid className={classes.editRow} item xs={12}>
-                        <IconButton
-                            color="primary"
-                            variant="contained"
-                            className={classes.editButton}
-                        >
-                            <EditIcon />
-                        </IconButton>
-                        <IconButton
-                            color="primary"
-                            variant="contained"
-                            className={classes.editButton}
-                        >
-                            <ClearIcon />
-                        </IconButton>
-                        <IconButton
-                            value={id}
-                            color="primary"
-                            variant="contained"
-                            onClick={addMeal}
-                        >
-                            <AddShoppingCartIcon />
-                        </IconButton>
+                        {props.currentChef ? (
+                            <React.Fragment>
+                                <IconButton
+                                    color="primary"
+                                    variant="contained"
+                                    className={classes.editButton}
+                                >
+                                    <EditIcon />
+                                </IconButton>
+                                <IconButton
+                                    color="primary"
+                                    variant="contained"
+                                    className={classes.editButton}
+                                >
+                                    <ClearIcon />
+                                </IconButton>
+                            </React.Fragment>
+                        ) : (
+                            <IconButton
+                                value={id}
+                                color="primary"
+                                variant="contained"
+                                onClick={addMeal}
+                            >
+                                <AddShoppingCartIcon />
+                            </IconButton>
+                        )}
                     </Grid>
                     <Grid
                         xs={12}
@@ -146,7 +151,7 @@ function MenuItem(props) {
                         <img
                             className={classes.mealImage}
                             src={mealPic}
-                            alt="Chef's Menu Logo"
+                            alt="Meal Picture"
                         />
                     </Grid>
                 </Grid>

@@ -3,7 +3,7 @@ import { Menu, MenuItem, IconButton } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import { UserContext } from "../contexts/user/UserContextProvider";
 
-function MenuButton(props) {
+function NavMenuButton(props) {
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const user = React.useContext(UserContext);
@@ -61,4 +61,4 @@ function MenuButton(props) {
     );
 }
 
-export default MenuButton;
+export default NavMenuButton;
