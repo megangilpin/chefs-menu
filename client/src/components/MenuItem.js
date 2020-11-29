@@ -42,7 +42,6 @@ function MenuItem(props) {
         title,
         price,
         chefName,
-        chefPic,
         id,
         chefId,
         ingredients,

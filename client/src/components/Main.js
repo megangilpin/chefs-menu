@@ -7,6 +7,10 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
         padding: theme.spacing(5),
     },
+    container: {
+        display: "flex",
+        justifyContent: "center",
+    },
 }));
 
 function Main(props) {
@@ -15,7 +19,7 @@ function Main(props) {
     return (
         <div className={classes.content}>
             <Toolbar />
-            {props.children}
+            <div className={classes.container}>{props.children}</div>
         </div>
     );
 }

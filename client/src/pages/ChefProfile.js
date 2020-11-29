@@ -9,10 +9,6 @@ import { Avatar, Typography, Grid, Box, Divider, Button } from "@material-ui/cor
 import meal1 from "../images/meal1.png";
 
 const useStyles = makeStyles((theme) => ({
-    content: {
-        display: "flex",
-        justifyContent: "center",
-    },
     sideBar: {
         display: "flex",
         flexDirection: "column",
@@ -50,36 +46,11 @@ const useStyles = makeStyles((theme) => ({
         width: "100%",
         margin: 0,
     },
-    list: {
-        boxShadow: "0px 0px 10px 5px rgba(7,7,7,0.07)",
-        background: "#ffffff",
-    },
-    listItem: {
-        borderBottom: "1px solid #DCDCDC",
-    },
-    // listItem: {
-    //     ":last-child": {
-    //         borderBottom: "none",
-    //     },
-    // },
-    addImage: {
-        width: "100%",
-        objectFit: "cover",
-    },
 }));
 
 function ChefProfile(props) {
     const user = React.useContext(UserContext);
     const classes = useStyles();
-    const [open, setOpen] = React.useState(false);
-
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
 
     return (
         <React.Fragment>

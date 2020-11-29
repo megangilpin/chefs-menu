@@ -147,7 +147,6 @@ function MealCard(props) {
                                     href="#"
                                     component="button"
                                     variant="body2"
-                                    underLine="none"
                                     onClick={() => history.push("chefProfile")}
                                 >
                                     Learn More

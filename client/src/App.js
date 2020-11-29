@@ -21,11 +21,6 @@ function App() {
             <div>
                 <Page>
                     <Switch>
-                        <ProtectedRoute
-                            exact
-                            path="/chefProfile"
-                            component={ChefProfile}
-                        />
                         <ProtectedRoute exact path="/meals" component={Meals} />
                         <ProtectedRoute
                             exact
@@ -54,7 +49,7 @@ function App() {
             <BrowserRouter>
                 <Route path="/">
                     {user.isAuthenticated ? (
-                        <Redirect to="/chefprofile" />
+                        <Redirect to="/profile" />
                     ) : (
                         <Redirect to="/signup" />
                     )}

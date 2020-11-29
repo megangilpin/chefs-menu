@@ -2,16 +2,7 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { UserContext } from "../contexts/user/UserContextProvider";
 import MenuItem from "./MenuItem";
-import {
-    Typography,
-    Grid,
-    Box,
-    Divider,
-    Button,
-    List,
-    ListItem,
-} from "@material-ui/core";
-import meal1 from "../images/meal1.png";
+import { Typography, Grid, Box, List, ListItem } from "@material-ui/core";
 import meals from "../lib/mockedMeals";
 import AddMealButton from "../components/AddMealButton";
 
@@ -60,7 +51,7 @@ const ChefsMenu = (props) => {
                     </Typography>
                 </Grid>
                 <Grid item className={classes.color2}>
-                    {props.currentChef ? (
+                    {props.canEdit ? (
                         <Box mb={2}>
                             <AddMealButton />
                         </Box>
@@ -71,8 +62,8 @@ const ChefsMenu = (props) => {
                                 <React.Fragment>
                                     <ListItem className={classes.listItem}>
                                         <MenuItem
-                                            currentChef={props.canEdit}
                                             meal={meal}
+                                            canEdit={props.canEdit}
                                         />
                                     </ListItem>
                                 </React.Fragment>
