@@ -5,7 +5,7 @@ import Hidden from "@material-ui/core/Hidden";
 import SearchIcon from "@material-ui/icons/Search";
 import Fab from "@material-ui/core/Fab";
 
-const drawerWidth = 250;
+const drawerWidth = 350;
 
 const useStyles = makeStyles((theme) => ({
     drawer: {
@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     },
     drawerContainer: {
         overflow: "auto",
-        padding: theme.spacing(3),
+        height: "100vh",
     },
     menuButton: {
         margin: theme.spacing(3),
@@ -46,7 +46,7 @@ function ResponsiveSideBar(props) {
                     className={classes.menuButton}
                     size="medium"
                 >
-                    <SearchIcon />
+                    {!props.icon ? <SearchIcon /> : props.icon}
                 </Fab>
                 <Drawer
                     variant="temporary"
@@ -59,11 +59,11 @@ function ResponsiveSideBar(props) {
                         keepMounted: true, // Better open performance on mobile.
                     }}
                 >
-                    <Toolbar />
                     <div className={classes.drawerContainer}>{props.children}</div>
                 </Drawer>
             </Hidden>
             <Hidden xsDown implementation="css">
+                <Toolbar />
                 <Drawer
                     className={classes.drawer}
                     variant="permanent"
@@ -71,7 +71,6 @@ function ResponsiveSideBar(props) {
                         paper: classes.drawerPaper,
                     }}
                 >
-                    <Toolbar />
                     <div className={classes.drawerContainer}>{props.children}</div>
                 </Drawer>
             </Hidden>

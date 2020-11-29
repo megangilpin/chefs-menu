@@ -2,20 +2,14 @@ import React from "react";
 import ResponsiveSideBar from "../components/ResponsiveSideBar";
 import Main from "../components/Main";
 import { Typography } from "@material-ui/core";
-import { UserContext } from "../contexts/user/UserContextProvider";
 
 function Home(props) {
-    const user = React.useContext(UserContext);
-
     return (
         <React.Fragment>
             <ResponsiveSideBar>
-                <Typography>Side Bar</Typography>
-                <Typography>{user.profile.email}</Typography>
+                <Typography>Responsive Side Bar</Typography>
             </ResponsiveSideBar>
-            <Main>
-                <Typography>Main</Typography>
-            </Main>
+            <Main></Main>
         </React.Fragment>
     );
 }
