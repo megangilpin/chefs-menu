@@ -139,7 +139,15 @@ function ChefSearch(props) {
                 </Grid>
             </ResponsiveSideBar>
             <Main>
-                <Typography>Available Chefs:</Typography>
+                <Grid
+                    item
+                    xs={12}
+                    container
+                    spacing={4}
+                    style={{ paddingBottom: "15px" }}
+                >
+                    <Typography variant="h4">Available Chefs:</Typography>
+                </Grid>
                 <Grid item xs={12} container spacing={4} alignContent="flex-start">
                     {results.chefs.map((chef) => (
                         <ChefCard {...chef} key={chef._id} />
