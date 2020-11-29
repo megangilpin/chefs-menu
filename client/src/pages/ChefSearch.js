@@ -3,12 +3,13 @@ import ResponsiveSideBar from "../components/ResponsiveSideBar";
 import ChefCard from "../components/ChefCard";
 import Main from "../components/Main";
 import { Typography, Button, Grid, TextField } from "@material-ui/core";
+import makeStyles from "@material-ui/core/styles/makeStyles";
 import { UserContext } from "../contexts/user/UserContextProvider";
 import { abortableFetch, consoleErrorNonAbortErrors } from "../utils";
 
 const ALL = "ALL";
 
-const AllCuisines = [
+const allCuisines = [
     "AMERICAN",
     "BRITISH",
     "CARIBBEAN",
@@ -26,7 +27,12 @@ const AllCuisines = [
     "VIETNAMESE",
 ];
 
+const useStyles = makeStyles({
+    availableChefs: { paddingBottom: "15px", display: "inline", fontSize: "30px" },
+});
+
 function ChefSearch(props) {
+    const classes = useStyles();
     const { profile } = useContext(UserContext);
     const {
         primaryAddress: { city, region, country },
@@ -34,7 +40,7 @@ function ChefSearch(props) {
     const location = [city, region, country].join(", ");
     const [radiusKm, setRadiusKm] = useState(100);
     const [cuisines, setCuisines] = useState(new Set([ALL]));
-    const [availableCuisines, setAvailableCuisines] = useState(new Set(AllCuisines));
+    const [availableCuisines, setAvailableCuisines] = useState(new Set(allCuisines));
     const [results, setResults] = useState({
         chefs: [],
         chefMeals: {},
@@ -60,7 +66,7 @@ function ChefSearch(props) {
         console.log("add", cuisine);
         if (cuisine === ALL) {
             setCuisines(new Set([ALL]));
-            setAvailableCuisines(new Set(AllCuisines));
+            setAvailableCuisines(new Set(allCuisines));
         } else {
             const newCuisines = new Set(cuisines);
             const newAvailableCuisines = new Set(availableCuisines);
@@ -89,7 +95,7 @@ function ChefSearch(props) {
     }, [radiusKm, cuisines]);
 
     return (
-        <React.Fragment>
+        <Main>
             <ResponsiveSideBar>
                 <Grid item xs={12} container spacing={2} alignContent="flex-start">
                     <Grid item xs={12}>
@@ -138,23 +144,17 @@ function ChefSearch(props) {
                     </Grid>
                 </Grid>
             </ResponsiveSideBar>
-            <Main>
-                <Grid
-                    item
-                    xs={12}
-                    container
-                    spacing={4}
-                    style={{ paddingBottom: "15px" }}
-                >
-                    <Typography variant="h4">Available Chefs:</Typography>
+            <Grid container spacing={4} alignContent="flex-start">
+                <Grid item xs={12}>
+                    <Typography className={classes.availableChefs}>
+                        Available Chefs:
+                    </Typography>
                 </Grid>
-                <Grid item xs={12} container spacing={4} alignContent="flex-start">
-                    {results.chefs.map((chef) => (
-                        <ChefCard {...chef} key={chef._id} />
-                    ))}
-                </Grid>
-            </Main>
-        </React.Fragment>
+                {results.chefs.map((chef) => (
+                    <ChefCard {...chef} key={chef._id} />
+                ))}
+            </Grid>
+        </Main>
     );
 }
 

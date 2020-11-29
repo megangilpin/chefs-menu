@@ -57,18 +57,11 @@ const ChefsMenu = (props) => {
                         </Box>
                     ) : null}
                     <List className={classes.list}>
-                        {meals.map((meal) => {
-                            return (
-                                <React.Fragment>
-                                    <ListItem className={classes.listItem}>
-                                        <MenuItem
-                                            meal={meal}
-                                            canEdit={props.canEdit}
-                                        />
-                                    </ListItem>
-                                </React.Fragment>
-                            );
-                        })}
+                        {meals.map((meal, i) => (
+                            <ListItem className={classes.listItem} key={i}>
+                                <MenuItem meal={meal} canEdit={props.canEdit} />
+                            </ListItem>
+                        ))}
                     </List>
                 </Grid>
             </Grid>

@@ -18,6 +18,8 @@ const useStyles = makeStyles((theme) => ({
         width: drawerWidth,
     },
     drawerContainer: {
+        paddingLeft: "20px",
+        paddingTop: "100px",
         overflow: "auto",
         height: "100vh",
     },
