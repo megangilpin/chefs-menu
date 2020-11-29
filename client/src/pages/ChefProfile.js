@@ -150,7 +150,7 @@ function ChefProfile(props) {
                 </div>
             </ResponsiveSideBar>
             <Main>
-                <ChefsMenu chefName={user.profile.firstName} currentChef={false} />
+                <ChefsMenu chefName={user.profile.firstName} canEdit={false} />
             </Main>
         </React.Fragment>
     );

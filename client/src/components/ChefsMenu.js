@@ -71,7 +71,7 @@ const ChefsMenu = (props) => {
                                 <React.Fragment>
                                     <ListItem className={classes.listItem}>
                                         <MenuItem
-                                            currentChef={props.currentChef}
+                                            currentChef={props.canEdit}
                                             meal={meal}
                                         />
                                     </ListItem>

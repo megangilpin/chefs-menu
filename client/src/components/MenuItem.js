@@ -73,7 +73,7 @@ function MenuItem(props) {
                     alignItems="stretch"
                 >
                     <Grid className={classes.editRow} item xs={12}>
-                        {props.currentChef ? (
+                        {props.canEdit ? (
                             <React.Fragment>
                                 <IconButton
                                     color="primary"
