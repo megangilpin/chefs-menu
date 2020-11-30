@@ -20,7 +20,7 @@ router.get(
             let { radiusKm } = req.query;
             radiusKm = radiusKm && Number(radiusKm);
             const query = req.query.cuisine
-                ? { cuisineSpecialty: { $in: req.query.cuisine.split(",") } }
+                ? { cuisineSpecialty: { $in: req.query.cuisine.split(",").map(c => RegExp(c, 'i')) } }
                 : {};
             const chefs = (await chefsController.findAllChefs(query))
                 .filter((chef) => chef.userId && chef.userId.primaryAddress)
@@ -57,7 +57,7 @@ router.get(
 
         if (req.query.searchType === "meals") {
             const query = req.query.cuisine
-                ? { cuisineType: { $in: req.query.cuisine.split(",") } }
+                ? { cuisineType: { $in: req.query.cuisine.split(",").map(c => RegExp(c, 'i')) } }
                 : {};
             const meals = await mealsController.findAllMeals(query);
             if (!query) {
