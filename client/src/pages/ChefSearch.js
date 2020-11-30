@@ -6,26 +6,7 @@ import { Typography, Button, Grid, TextField } from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import { UserContext } from "../contexts/user/UserContextProvider";
 import { abortableFetch, consoleErrorNonAbortErrors } from "../utils";
-
-const ALL = "ALL";
-
-const allCuisines = [
-    "AMERICAN",
-    "BRITISH",
-    "CARIBBEAN",
-    "CHINESE",
-    "FRENCH",
-    "GREEK",
-    "INDIAN",
-    "ITALIAN",
-    "MEDITERRANEAN",
-    "MEXICAN",
-    "MORROCAN",
-    "SPANISH",
-    "THAI",
-    "TURKISH",
-    "VIETNAMESE",
-];
+import useCuisineSelector from "../lib/useCuisineSelector";
 
 const useStyles = makeStyles({
     availableChefs: { paddingBottom: "15px", display: "inline", fontSize: "30px" },
@@ -33,14 +14,19 @@ const useStyles = makeStyles({
 
 function ChefSearch(props) {
     const classes = useStyles();
+    const {
+        ALL,
+        cuisines,
+        availableCuisines,
+        addCuisine,
+        removeCuisine,
+    } = useCuisineSelector();
     const { profile } = useContext(UserContext);
     const {
         primaryAddress: { city, region, country },
     } = profile;
     const location = [city, region, country].join(", ");
     const [radiusKm, setRadiusKm] = useState(100);
-    const [cuisines, setCuisines] = useState(new Set([ALL]));
-    const [availableCuisines, setAvailableCuisines] = useState(new Set(allCuisines));
     const [results, setResults] = useState({
         chefs: [],
         chefMeals: {},
@@ -48,38 +34,6 @@ function ChefSearch(props) {
 
     const handleChangeRadiusKm = ({ target }) =>
         target.value > 0 && setRadiusKm(target.value);
-
-    const removeCuisine = (cuisine) => {
-        console.log("remove", cuisine);
-        const newCuisines = new Set(cuisines);
-        const newAvailableCuisines = new Set(availableCuisines);
-        newCuisines.delete(cuisine);
-        newAvailableCuisines.add(cuisine);
-        if (newCuisines.size === 0) {
-            newCuisines.add(ALL);
-        }
-        setCuisines(newCuisines);
-        setAvailableCuisines(newAvailableCuisines);
-    };
-
-    const addCuisine = (cuisine) => {
-        console.log("add", cuisine);
-        if (cuisine === ALL) {
-            setCuisines(new Set([ALL]));
-            setAvailableCuisines(new Set(allCuisines));
-        } else {
-            const newCuisines = new Set(cuisines);
-            const newAvailableCuisines = new Set(availableCuisines);
-            newCuisines.add(cuisine);
-            newAvailableCuisines.delete(cuisine);
-            if (newCuisines.has(ALL)) {
-                newCuisines.delete(ALL);
-                newAvailableCuisines.add(ALL);
-            }
-            setCuisines(newCuisines);
-            setAvailableCuisines(newAvailableCuisines);
-        }
-    };
 
     useEffect(() => {
         let url = `/search?searchType=chefs&radiusKm=${radiusKm}`;
@@ -97,7 +51,7 @@ function ChefSearch(props) {
     return (
         <Main>
             <ResponsiveSideBar>
-                <Grid item xs={12} container spacing={2} alignContent="flex-start">
+                <Grid container spacing={2} alignContent="flex-start">
                     <Grid item xs={12}>
                         <Typography>Location:</Typography>
                         <TextField
