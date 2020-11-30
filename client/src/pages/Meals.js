@@ -1,33 +1,81 @@
 // TEMPORARY PAGE WITH RECIPES WILL BE REMOVED WHEN CHEF PROFILE PAGE IS CREATED
-import React from "react";
+import React, { useState, useEffect } from "react";
 import ResponsiveSideBar from "../components/ResponsiveSideBar";
 import Main from "../components/Main";
-import { Typography } from "@material-ui/core";
+import { Typography, Grid, Button } from "@material-ui/core";
 import MealCard from "../components/MealCard";
-import meals from "../lib/mockedMeals";
+import useCuisineSelector from "../lib/useCuisineSelector";
+import { abortableFetch, consoleErrorNonAbortErrors } from "../utils";
 
 function Meals(props) {
+    const {
+        ALL,
+        cuisines,
+        availableCuisines,
+        addCuisine,
+        removeCuisine,
+    } = useCuisineSelector();
+
+    const [meals, setMeals] = useState([]);
+
+    useEffect(() => {
+        let url = "/search?searchType=meals";
+        if (!cuisines.has(ALL)) {
+            url = `${url}&cuisine=` + [...cuisines].join(",");
+        }
+        const { ready, abort } = abortableFetch(url);
+        ready
+            .then((res) => res.json())
+            .then((res) => res.meals)
+            .then(setMeals)
+            .catch(consoleErrorNonAbortErrors);
+        return abort;
+    }, [cuisines]);
+
     return (
         <React.Fragment>
             <ResponsiveSideBar>
-                <Typography>Responsive Side Bar</Typography>
+                <Grid container spacing={2} alignContent="flex-start">
+                    <Grid item xs={12}>
+                        <Typography>Cuisine:</Typography>
+                        {[...cuisines].map((cuisine) => (
+                            <Button
+                                key={cuisine}
+                                color="primary"
+                                variant="contained"
+                                onClick={() => removeCuisine(cuisine)}
+                            >
+                                <Typography variant="button">{cuisine}</Typography>
+                            </Button>
+                        ))}
+                    </Grid>
+                    <Grid item xs={12}>
+                        {[...availableCuisines].map((cuisine) => (
+                            <Button
+                                key={cuisine}
+                                variant="contained"
+                                onClick={() => addCuisine(cuisine)}
+                            >
+                                <Typography variant="button">{cuisine}</Typography>
+                            </Button>
+                        ))}
+                    </Grid>
+                </Grid>
             </ResponsiveSideBar>
             <Main>
-                {meals.map((meal) => {
-                    return (
-                        <MealCard
-                            key={meal.id}
-                            id={meal.id}
-                            mealPic={meal.mealPic}
-                            title={meal.title}
-                            price={meal.price}
-                            chefName={meal.chefName}
-                            chefId={meal.chefId}
-                            chefPic={meal.chefPic}
-                            location={meal.location}
-                        />
-                    );
-                })}
+                {meals.map((meal) => (
+                    <MealCard
+                        key={meal._id}
+                        id={meal._id}
+                        mealPic={meal.mealPic}
+                        title={meal.title}
+                        price={meal.price}
+                        chefName={meal.chefName}
+                        chefId={meal.chefId}
+                        chefPic={meal.chefPic}
+                        location={meal.location}
+                    />
+                ))}
             </Main>
         </React.Fragment>
     );
