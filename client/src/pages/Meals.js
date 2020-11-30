@@ -1,5 +1,6 @@
 // TEMPORARY PAGE WITH RECIPES WILL BE REMOVED WHEN CHEF PROFILE PAGE IS CREATED
 import React, { useState, useEffect } from "react";
+import makeStyles from "@material-ui/core/styles/makeStyles";
 import ResponsiveSideBar from "../components/ResponsiveSideBar";
 import Main from "../components/Main";
 import { Typography, Grid, Button } from "@material-ui/core";
@@ -7,7 +8,12 @@ import MealCard from "../components/MealCard";
 import useCuisineSelector from "../lib/useCuisineSelector";
 import { abortableFetch, consoleErrorNonAbortErrors } from "../utils";
 
+const useStyles = makeStyles({
+    availableMeals: { paddingBottom: "15px", display: "inline", fontSize: "30px" },
+});
+
 function Meals(props) {
+    const classes = useStyles();
     const {
         ALL,
         cuisines,
@@ -33,7 +39,7 @@ function Meals(props) {
     }, [cuisines]);
 
     return (
-        <React.Fragment>
+        <Main>
             <ResponsiveSideBar>
                 <Grid container spacing={2} alignContent="flex-start">
                     <Grid item xs={12}>
@@ -62,7 +68,12 @@ function Meals(props) {
                     </Grid>
                 </Grid>
             </ResponsiveSideBar>
-            <Main>
+            <Grid container spacing={4} alignContent="flex-start">
+                <Grid item xs={12}>
+                    <Typography className={classes.availableMeals}>
+                        Available Meals:
+                    </Typography>
+                </Grid>
                 {meals.map((meal) => (
                     <MealCard
                         key={meal._id}
@@ -76,8 +87,8 @@ function Meals(props) {
                         location={meal.location}
                     />
                 ))}
-            </Main>
-        </React.Fragment>
+            </Grid>
+        </Main>
     );
 }
 
