@@ -2,6 +2,8 @@ const bcrypt = require("bcrypt");
 
 const connection = require("../dbConnection");
 const userSchema = require("../models/user");
+const mapsController = require("../controllers/mapsController");
+const chefsController = require("../controllers/chefsController");
 
 const User = connection.model("User", userSchema);
 
@@ -18,6 +20,7 @@ const hashPassword = async (password) =>
 const create = async ({
     firstName,
     lastName,
+    address,
     street,
     city,
     region,
@@ -27,15 +30,25 @@ const create = async ({
     isChef,
 }) => {
     const hashedPassword = await hashPassword(password);
+    let lat, lng, formattedAddress;
+    if (address) {
+        const location = await mapsController.getLocationCoordinates(address);
+        lat = location.lat;
+        lng = location.lng;
+        formattedAddress = location.formattedAddress;
+    }
     const { _doc } = await User.create({
         firstName,
         lastName,
         primaryAddress: {
+            formattedAddress,
             street,
             city,
             region,
             postalCode: "",
             country,
+            lat,
+            lng,
         },
         bio: "",
         email,
@@ -44,6 +57,9 @@ const create = async ({
         favoriteCuisine: [],
         allergies: [],
     });
+    if (isChef) {
+        await chefsController.create({ userId: _doc._id });
+    }
     return _doc;
 };
 
@@ -75,6 +91,21 @@ const update = async (id, requestBody) => {
         if (region) user.primaryAddress.region = region;
         if (postalCode) user.primaryAddress.postalCode = postalCode;
         if (country) user.primaryAddress.country = country;
+        const {
+            lat,
+            lng,
+            formattedAddress,
+        } = await mapsController.getLocationCoordinates(
+            [street, city, region, country]
+                .filter((ele) => ele && typeof ele === "string" && ele.length > 0)
+                .join(", ")
+        );
+        user.primaryAddress = {
+            ...user.primaryAddress,
+            lat,
+            lng,
+            formattedAddress,
+        };
     }
     if (primaryPhone) user.primaryPhone = primaryPhone;
     if (profilePicURL) user.profilePicURL = profilePicURL;

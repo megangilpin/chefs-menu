@@ -9,7 +9,7 @@ const findOneWithId = async (id) => {
 };
 
 const findAllChefs = async (query) => {
-    const chefs = await Chef.find(query);
+    const chefs = await Chef.find(query).populate("userId").exec();
     return chefs;
 };
 
@@ -19,6 +19,8 @@ const findOneWithUserId = async (userId) => {
 };
 
 const create = async ({ cuisineSpecialty, userId }) => {
+    console.log(cuisineSpecialty);
+    console.log(userId);
     const pojsoChef = {};
     pojsoChef.userId = userId;
     if (cuisineSpecialty) pojsoChef.cuisineSpecialty = cuisineSpecialty;

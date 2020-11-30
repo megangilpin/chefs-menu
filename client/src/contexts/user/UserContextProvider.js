@@ -7,6 +7,8 @@ const initialState = {
         email: "",
         primaryAddress: {},
         favoriteCuisine: [],
+        allergies: [],
+        favoriteCuisine: [],
     },
     isLoading: true,
 };
@@ -14,11 +16,12 @@ const initialState = {
 const UserReducer = (state, action) => {
     switch (action.type) {
         case SET_USER:
+            console.log(state.profile);
             return {
                 ...state,
                 isLoading: false,
                 isAuthenticated: true,
-                profile: action.payload.user,
+                profile: { ...state.profile, ...action.payload.user },
             };
         case LOGOUT:
             return {

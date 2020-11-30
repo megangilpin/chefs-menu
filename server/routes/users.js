@@ -17,11 +17,14 @@ router.get(
             res.status(400).json({ errors: ["Please sign in"] });
             return;
         }
+
         if (user.isChef) {
-            user.chef = await chefsController.findOneWithUserId(id);
+            const chefData = await chefsController.findOneWithUserId(id);
+            user.cuisineSpecialty = chefData.cuisineSpecialty;
         }
         // create and return jwt with user obj
         const responseObj = await createAuthResponseObj(user);
+        console.log(responseObj);
         res.cookie("token", responseObj.token, { httpOnly: true });
         res.json(responseObj);
     })
@@ -50,6 +53,16 @@ router.put(
         const user = await usersController.sanatize(
             await usersController.update(id, req.body)
         );
+
+        if (req.body.isChef && !user.isChef) {
+            const data = {
+                cuisineSpecialty: [...req.body.cuisineSpecialty],
+                userId: id,
+            };
+            const chefData = await chefsController.create(data);
+            user.cuisineSpecialty = chefData.cuisineSpecialty;
+        }
+
         const responseObj = await createAuthResponseObj(user);
         res.json(responseObj);
     })
@@ -91,34 +104,5 @@ router.post(
         });
     })
 );
-
-// uploads image to AWS s3 and updates user scheme with url of image
-router.post("/profileImageUpload", async function (req, res, next) {
-    if (req.files === null) {
-        return res.status(400).json({ msg: "No file uploaded" });
-    }
-    profileImgUpload(req, res, (error) => {
-        if (error) {
-            return res.status(400).json({
-                errors: {
-                    title: "Image Upload Error",
-                    detail: error.message,
-                    error: error,
-                },
-            });
-        } else {
-            if (req.file === undefined) {
-                console.log("Error: No File Selected!");
-                res.json("Error: No File Selected");
-            }
-        }
-
-        const imageLocation = req.file.location;
-        const bucket = req.file.bucket;
-        console.log(bucket);
-        // RETURN IMAGE URL FROM AWS S3
-        return res.json(imageLocation);
-    });
-});
 
 module.exports = router;

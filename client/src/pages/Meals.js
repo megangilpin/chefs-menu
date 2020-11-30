@@ -14,19 +14,7 @@ function Meals(props) {
             </ResponsiveSideBar>
             <Main>
                 {meals.map((meal) => {
-                    return (
-                        <MealCard
-                            key={meal.id}
-                            id={meal.id}
-                            mealPic={meal.mealPic}
-                            title={meal.title}
-                            price={meal.price}
-                            chefName={meal.chefName}
-                            chefId={meal.chefId}
-                            chefPic={meal.chefPic}
-                            location={meal.location}
-                        />
-                    );
+                    return <MealCard key={meal.id} meal={meal} />;
                 })}
             </Main>
         </React.Fragment>

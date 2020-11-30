@@ -54,7 +54,7 @@ const CartContextProvider = ({ children }) => {
     const [state, dispatch] = React.useReducer(CartReducer, initialState);
 
     const updateLocalStorage = (key, value) => {
-        let stringValue = JSON.stringify(value);
+        const stringValue = JSON.stringify(value);
         localStorage.setItem(key, stringValue);
     };
 
@@ -69,7 +69,7 @@ const CartContextProvider = ({ children }) => {
         return { totalPrice, totalItems };
     };
 
-    const addToCart = (meal, id) => {
+    const addToCart = (meal) => {
         const cart = [...state.cart];
         const newMeal = { ...meal };
         let totalPrice = state.totalPrice;
@@ -82,7 +82,7 @@ const CartContextProvider = ({ children }) => {
             });
         }
 
-        const mealIndex = cart.findIndex((meal) => meal.id === id);
+        const mealIndex = cart.findIndex((meal) => meal.id === newMeal.id);
 
         if (mealIndex < 0) {
             cart.push({ ...newMeal, quantity: 1 });
@@ -158,14 +158,14 @@ const CartContextProvider = ({ children }) => {
     };
 
     React.useEffect(() => {
-        let localCart = localStorage.getItem("cart");
+        const localCart = localStorage.getItem("cart");
 
-        let cart = JSON.parse(localCart);
+        const cart = JSON.parse(localCart);
 
         if (cart) {
             const { totalPrice, totalItems } = calcTotal(cart);
-            let chef = cart[0].chefId;
-            let chefName = cart[0].chefName;
+            const chef = cart[0].chefId;
+            const chefName = cart[0].chefName;
             dispatch({
                 type: SET_CART,
                 payload: { cart, chef, chefName, totalPrice, totalItems },

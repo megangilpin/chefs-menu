@@ -92,6 +92,10 @@ function AddMealButton(props) {
                     onSubmit={(values, { setSubmitting }) => {
                         setSubmitting(false);
                         console.log(values);
+                        // const response = await fetch("/meals", {
+                        //     method: "get",
+                        //     credentials: "include",
+                        // });
                     }}
                 >
                     {({ submitForm, isSubmitting }) => (

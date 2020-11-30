@@ -9,12 +9,16 @@ import {
     CardContent,
     CardMedia,
     Button,
+    Box,
     Typography,
     Grid,
     Link,
-    Box,
     IconButton,
-    CardActionArea,
+    Dialog,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    DialogActions,
 } from "@material-ui/core";
 import { theme } from "../themes/theme";
 import { CartContext } from "../contexts/cart/CartContextProvider";
@@ -52,18 +56,30 @@ function MealCard(props) {
     const classes = useStyles();
     const history = useHistory();
     const { chef, addToCart } = useContext(CartContext);
-    const { mealPic, title, price, chefName, chefPic, location, id, chefId } = props;
+    const {
+        mealPic,
+        title,
+        price,
+        chefName,
+        chefPic,
+        location,
+        id,
+        chefId,
+    } = props.meal;
+    const [openDialog, setDialogOpen] = React.useState(false);
+
+    const handleClose = () => {
+        setDialogOpen(false);
+    };
 
     const addMeal = (e) => {
         e.preventDefault();
         const id = parseFloat(e.currentTarget.value);
         if (chef && chefId !== chef) {
-            alert(
-                `Your cart currently contains meals from another chef. You can only checkout with meals from one chef`
-            );
+            setDialogOpen(true);
         } else {
             const meal = { id, mealPic, title, price, chefName, chefId };
-            addToCart(meal, id);
+            addToCart(meal);
         }
     };
 
@@ -72,10 +88,10 @@ function MealCard(props) {
             <Card className={classes.root}>
                 <CardMedia
                     component="img"
-                    alt="meal1"
+                    alt="Meal Picture"
                     height="150"
                     image={mealPic}
-                    title="meal1"
+                    title="Meal Picture"
                 />
                 <CardContent>
                     <Grid item xs={12} container direction="row" spacing={2}>
@@ -155,7 +171,34 @@ function MealCard(props) {
                         </Grid>
                     </Box>
                 </CardActions>
+                <Box ml={1}>
+                    <Button value={id} color="primary" onClick={addMeal}>
+                        add to Cart
+                    </Button>
+                </Box>
             </Card>
+            <Dialog
+                open={openDialog}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    {"Your cart already contains meals from another chef!"}
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        A meal order can only contain meals from the same chef. If
+                        you would like to select this meal please empty your current
+                        cart or complete your purchase and start another order.
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} color="primary">
+                        Got it!
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 }

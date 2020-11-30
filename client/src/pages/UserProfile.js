@@ -115,6 +115,7 @@ export default function UserProfile() {
                                 </Typography>
                             </Grid>
                             <Grid item xs={12}>
+                                {/* <ChefSignUp /> */}
                                 {!user.profile.isChef ? <ChefSignUp /> : null}
                             </Grid>
                         </Grid>

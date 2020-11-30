@@ -93,14 +93,15 @@ export default function EditProfile() {
         <>
             <Formik
                 initialValues={{
-                    firstName: userData.firstName,
-                    lastName: userData.lastName,
+                    firstName: userData.firstName || "",
+                    lastName: userData.lastName || "",
                     cuisine: "",
-                    about: userData.bio,
+                    about: userData.bio || "",
                     allergy: "",
-                    city: userData.primaryAddress["city"],
-                    region: userData.primaryAddress["region"],
-                    country: userData.primaryAddress["country"],
+                    street: userData.primaryAddress["street"] || "",
+                    city: userData.primaryAddress["city"] || "",
+                    region: userData.primaryAddress["region"] || "",
+                    country: userData.primaryAddress["country"] || "",
                 }}
                 onSubmit={(values, { setSubmitting }) => {
                     console.log(values);
@@ -111,6 +112,7 @@ export default function EditProfile() {
                         lastName: values.lastName,
                         bio: values.about,
                         primaryAddress: {
+                            street: values.street,
                             city: values.city,
                             region: values.region,
                             country: values.country,
@@ -187,6 +189,16 @@ export default function EditProfile() {
                                         name="lastName"
                                         type="text"
                                         label="Last Name"
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Field
+                                        fullWidth
+                                        component={TextField}
+                                        variant="outlined"
+                                        name="street"
+                                        type="text"
+                                        label="Street"
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
