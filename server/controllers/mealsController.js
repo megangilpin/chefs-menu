@@ -7,6 +7,10 @@ const findOneWithId = async (id) => {
     const { _doc } = await Meal.findById(id);
     return _doc;
 };
+const findAllWithChefId = async (chefId) => {
+    const meals = await Meal.find(chefId);
+    return meals;
+};
 
 // create
 const create = async ({
@@ -85,6 +89,7 @@ const deleteAll = async () => await Meal.deleteMany({});
 
 module.exports = {
     findOneWithId,
+    findAllWithChefId,
     findAllMeals,
     create,
     update,

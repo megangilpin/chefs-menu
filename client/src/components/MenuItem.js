@@ -6,6 +6,8 @@ import EditIcon from "@material-ui/icons/Edit";
 import ClearIcon from "@material-ui/icons/Clear";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import { dollarFormatter } from "../lib/utils";
+import { useParams } from "react-router-dom";
+import MealForm from "../components/MealForm";
 
 const useStyles = makeStyles((theme) => ({
     mealCard: {
@@ -37,18 +39,22 @@ const useStyles = makeStyles((theme) => ({
 function MenuItem(props) {
     const classes = useStyles();
     const { chef, addToCart } = useContext(CartContext);
+    const [mealFormOpen, setMealFormOpen] = React.useState(false);
+    const params = useParams();
+
     const {
         mealPic,
         title,
         price,
         chefName,
-        id,
         chefId,
         ingredients,
         requirements,
     } = props.meal;
+    const id = props.meal._id;
+    console.log(props.meal);
 
-    const addMeal = (e) => {
+    const purchaseMeal = (e) => {
         e.preventDefault();
         const id = parseFloat(e.currentTarget.value);
         if (chef && chefId !== chef) {
@@ -59,6 +65,36 @@ function MenuItem(props) {
             const meal = { id, mealPic, title, price, chefName, chefId };
             addToCart(meal, id);
         }
+    };
+
+    const deleteMeal = async (e) => {
+        e.preventDefault();
+        const response = await fetch(`/meals/${id}`, {
+            method: "delete",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        // console.log(await response.json());
+        const data = await response.json();
+        if (data.errors) {
+            return {
+                result: false,
+                message: data.errors,
+            };
+        } else {
+            console.log(data);
+            props.update();
+        }
+    };
+
+    const handleMealFormOpen = () => {
+        setMealFormOpen(true);
+    };
+
+    const handleMealFormClose = () => {
+        setMealFormOpen(false);
     };
 
     return (
@@ -72,19 +108,29 @@ function MenuItem(props) {
                     alignItems="stretch"
                 >
                     <Grid className={classes.editRow} item xs={12}>
-                        {props.canEdit ? (
+                        {params.chefId === chefId ? (
                             <React.Fragment>
                                 <IconButton
+                                    onClick={handleMealFormOpen}
                                     color="primary"
                                     variant="contained"
                                     className={classes.editButton}
                                 >
                                     <EditIcon />
                                 </IconButton>
+                                {/* Dialog Box with Form for adding / updating meal */}
+                                <MealForm
+                                    update={props.update}
+                                    isOpen={mealFormOpen}
+                                    open={handleMealFormOpen}
+                                    close={handleMealFormClose}
+                                    meal={props.meal}
+                                />
                                 <IconButton
                                     color="primary"
                                     variant="contained"
                                     className={classes.editButton}
+                                    onClick={deleteMeal}
                                 >
                                     <ClearIcon />
                                 </IconButton>
@@ -94,7 +140,7 @@ function MenuItem(props) {
                                 value={id}
                                 color="primary"
                                 variant="contained"
-                                onClick={addMeal}
+                                onClick={purchaseMeal}
                             >
                                 <AddShoppingCartIcon />
                             </IconButton>

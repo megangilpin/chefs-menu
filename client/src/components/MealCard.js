@@ -72,7 +72,7 @@ function MealCard(props) {
         setDialogOpen(false);
     };
 
-    const addMeal = (e) => {
+    const purchaseMeal = (e) => {
         e.preventDefault();
         const id = parseFloat(e.currentTarget.value);
         if (chef && chefId !== chef) {
@@ -120,7 +120,7 @@ function MealCard(props) {
                                 color="primary"
                                 variant="contained"
                                 size="small"
-                                onClick={addMeal}
+                                onClick={purchaseMeal}
                             >
                                 <AddShoppingCartIcon />
                             </IconButton>
@@ -171,11 +171,6 @@ function MealCard(props) {
                         </Grid>
                     </Box>
                 </CardActions>
-                <Box ml={1}>
-                    <Button value={id} color="primary" onClick={addMeal}>
-                        add to Cart
-                    </Button>
-                </Box>
             </Card>
             <Dialog
                 open={openDialog}

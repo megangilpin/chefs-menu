@@ -16,7 +16,6 @@ const initialState = {
 const UserReducer = (state, action) => {
     switch (action.type) {
         case SET_USER:
-            console.log(state.profile);
             return {
                 ...state,
                 isLoading: false,

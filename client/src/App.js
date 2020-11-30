@@ -24,7 +24,7 @@ function App() {
                         <ProtectedRoute exact path="/meals" component={Meals} />
                         <ProtectedRoute
                             exact
-                            path="/chefProfile"
+                            path="/chefs/:chefId"
                             component={ChefProfile}
                         />
                         <ProtectedRoute

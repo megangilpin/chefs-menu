@@ -1,6 +1,10 @@
 const express = require("express");
 
-const { errorHandelingWrapper, createAuthResponseObj } = require("../util");
+const {
+    errorHandelingWrapper,
+    createAuthResponseObj,
+    createChefProfile,
+} = require("../util");
 const usersController = require("../controllers/usersController");
 const chefsController = require("../controllers/chefsController");
 const upload = require("../services/s3");
@@ -19,12 +23,10 @@ router.get(
         }
 
         if (user.isChef) {
-            const chefData = await chefsController.findOneWithUserId(id);
-            user.cuisineSpecialty = chefData.cuisineSpecialty;
+            user.chefProfile = await createChefProfile(id);
         }
         // create and return jwt with user obj
         const responseObj = await createAuthResponseObj(user);
-        console.log(responseObj);
         res.cookie("token", responseObj.token, { httpOnly: true });
         res.json(responseObj);
     })
@@ -60,7 +62,8 @@ router.put(
                 userId: id,
             };
             const chefData = await chefsController.create(data);
-            user.cuisineSpecialty = chefData.cuisineSpecialty;
+            delete chefData.userId;
+            user.chefProfile = chefData;
         }
 
         const responseObj = await createAuthResponseObj(user);

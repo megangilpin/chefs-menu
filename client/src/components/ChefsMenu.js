@@ -4,7 +4,7 @@ import { UserContext } from "../contexts/user/UserContextProvider";
 import MenuItem from "./MenuItem";
 import { Typography, Grid, Box, List, ListItem } from "@material-ui/core";
 import meals from "../lib/mockedMeals";
-import AddMealButton from "../components/AddMealButton";
+import AddMealButton from "./MealForm";
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -46,30 +46,33 @@ const ChefsMenu = (props) => {
                 <Grid item>
                     <Typography variant="h5">
                         <Box mt={5} fontWeight="fontWeightBold">
-                            {props.chefName}'s Menu:
+                            {props.chefName} Menu:
                         </Box>
                     </Typography>
                 </Grid>
                 <Grid item className={classes.color2}>
                     {props.canEdit ? (
-                        <Box mb={2}>
-                            <AddMealButton />
-                        </Box>
+                        <Box mb={2}>{/* <AddMealButton /> */}</Box>
                     ) : null}
-                    <List className={classes.list}>
-                        {meals.map((meal) => {
-                            return (
-                                <React.Fragment>
-                                    <ListItem className={classes.listItem}>
-                                        <MenuItem
-                                            meal={meal}
-                                            canEdit={props.canEdit}
-                                        />
-                                    </ListItem>
-                                </React.Fragment>
-                            );
-                        })}
-                    </List>
+                    {props.menu ? (
+                        <List className={classes.list}>
+                            {props.menu.map((meal) => {
+                                return (
+                                    <React.Fragment key={meal.id}>
+                                        <ListItem
+                                            key={meal.id}
+                                            className={classes.listItem}
+                                        >
+                                            <MenuItem
+                                                meal={meal}
+                                                canEdit={props.canEdit}
+                                            />
+                                        </ListItem>
+                                    </React.Fragment>
+                                );
+                            })}
+                        </List>
+                    ) : null}
                 </Grid>
             </Grid>
         </React.Fragment>

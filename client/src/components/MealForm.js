@@ -43,18 +43,11 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function AddMealButton(props) {
+function MealForm(props) {
     const user = React.useContext(UserContext);
     const classes = useStyles();
-    const [open, setOpen] = React.useState(false);
-
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
+    const meal = props.meal;
+    // const price = meal.price !== "" ? meal.price / 100 : meal.price;
 
     const validationSchema = Yup.object().shape({
         title: Yup.string().required("Required!"),
@@ -71,31 +64,29 @@ function AddMealButton(props) {
 
     return (
         <React.Fragment>
-            <Button color="primary" variant="contained" onClick={handleClickOpen}>
-                Add Meal
-            </Button>
             <Dialog
-                open={open}
-                onClose={handleClose}
+                open={props.isOpen}
+                onClose={props.close}
                 aria-labelledby="form-dialog-title"
             >
                 <Formik
                     initialValues={{
-                        title: "",
-                        price: "",
-                        servingSize: "",
-                        cuisineType: "",
-                        ingredients: "",
-                        requirements: "",
+                        title: meal.title,
+                        price: meal.price,
+                        servingSize: meal.servingSize,
+                        cuisineType: meal.cuisineType,
+                        ingredients: meal.ingredients,
+                        requirements: meal.requirements,
                     }}
                     validationSchema={validationSchema}
-                    onSubmit={(values, { setSubmitting }) => {
-                        setSubmitting(false);
-                        console.log(values);
-                        // const response = await fetch("/meals", {
-                        //     method: "get",
-                        //     credentials: "include",
-                        // });
+                    onSubmit={(values, actions) => {
+                        actions.setSubmitting(false);
+                        values.price = parseFloat(values.price) * 100;
+                        values.cuisineType = [values.cuisineType];
+                        props.onSubmit(values);
+
+                        props.update();
+                        props.close();
                     }}
                 >
                     {({ submitForm, isSubmitting }) => (
@@ -265,7 +256,7 @@ function AddMealButton(props) {
                                     </Grid>
                                 </DialogContent>
                                 <DialogActions>
-                                    <Button onClick={handleClose} color="primary">
+                                    <Button onClick={props.close} color="primary">
                                         Cancel
                                     </Button>
                                     <Button
@@ -273,7 +264,7 @@ function AddMealButton(props) {
                                         onClick={submitForm}
                                         color="primary"
                                     >
-                                        Add
+                                        Submit
                                     </Button>
                                 </DialogActions>
                             </Form>
@@ -285,4 +276,4 @@ function AddMealButton(props) {
     );
 }
 
-export default AddMealButton;
+export default MealForm;

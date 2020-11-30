@@ -14,6 +14,33 @@ router.get(
     })
 );
 
+router.delete(
+    "/:id",
+    errorHandelingWrapper(async (req, res) => {
+        const { id } = req.params;
+
+        const meal = await mealController.remove(id);
+        if (meal._id) {
+            res.json({ message: "Meal successfully deleted" });
+            return;
+        } else if (!meal) {
+            res.status(400).json({ errors: ["Meal no longer exists"] });
+            return;
+        }
+    })
+);
+
+router.get(
+    "/chef/:chefId",
+    errorHandelingWrapper(async (req, res) => {
+        const { chefId } = req.params;
+        const meals = await mealController.findAllWithChefId({
+            chefId: chefId,
+        });
+        res.json(meals);
+    })
+);
+
 router.post(
     "/",
     errorHandelingWrapper(validationMiddleware),
@@ -92,6 +119,7 @@ router.put(
 );
 
 async function validationMiddleware(req, res, next) {
+    console.log(req.body);
     const {
         title,
         picURL,
@@ -107,15 +135,15 @@ async function validationMiddleware(req, res, next) {
     if (title && typeof title !== "string") errors.push("Invalid title type");
     if (picURL && typeof picURL !== "string")
         errors.push("Invalid picURL type");
-    if (price && Number.isFinite(price)) errors.push("Invalid price type");
+    if (price && !Number.isFinite(price)) errors.push("Invalid price type");
     if (servingSize && typeof servingSize !== "string")
         errors.push("Invalid servingSize type");
     if (servingType && typeof servingType !== "string")
         errors.push("Invalid servingType type");
     if (cuisineType) {
-        cuisineType = JSON.parse(cuisineType);
+        // cuisineType = JSON.parse(cuisineType);
         if (!isArrayOfStrings(cuisineType))
-            errors.push("Invlalid cuisineType type");
+            errors.push("Invalid cuisineType type");
     }
     if (ingredients && typeof ingredients !== "string")
         errors.push("Invalid ingredients type");
