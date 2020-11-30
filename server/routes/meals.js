@@ -4,6 +4,8 @@ const router = require("express").Router();
 const mealController = require("../controllers/mealsController");
 const chefsController = require("../controllers/chefsController");
 const { errorHandelingWrapper, isArrayOfStrings } = require("../util");
+const upload = require("../services/s3");
+const profileImgUpload = upload.single("image");
 
 router.get(
     "/:id",
@@ -173,7 +175,6 @@ router.post(
         if (req.files === null) {
             return res.status(400).json({ msg: "No file uploaded" });
         }
-        const { id } = req.user;
 
         // upload image to s3 with the help of multer-s3
         profileImgUpload(req, res, (error) => {
@@ -188,10 +189,9 @@ router.post(
             if (errors.length > 0) {
                 return res.status(400).json({ errors });
             }
-            const body = {};
-            body.profilePicURL = req.file.location;
+            mealPicURL = req.file.location;
 
-            // save the url to the user and return url
+            res.json(mealPicURL);
         });
     })
 );

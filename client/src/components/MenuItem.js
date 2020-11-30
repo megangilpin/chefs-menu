@@ -52,7 +52,6 @@ function MenuItem(props) {
         requirements,
     } = props.meal;
     const id = props.meal._id;
-    console.log(props.meal);
 
     const purchaseMeal = (e) => {
         e.preventDefault();
@@ -77,6 +76,27 @@ function MenuItem(props) {
         });
 
         // console.log(await response.json());
+        const data = await response.json();
+        if (data.errors) {
+            return {
+                result: false,
+                message: data.errors,
+            };
+        } else {
+            props.update();
+        }
+    };
+
+    const editMeal = async (formValues) => {
+        console.log(formValues);
+        const response = await fetch(`/meals/${id}`, {
+            method: "put",
+            body: JSON.stringify(formValues),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
         const data = await response.json();
         if (data.errors) {
             return {
@@ -125,6 +145,7 @@ function MenuItem(props) {
                                     open={handleMealFormOpen}
                                     close={handleMealFormClose}
                                     meal={props.meal}
+                                    onSubmit={editMeal}
                                 />
                                 <IconButton
                                     color="primary"

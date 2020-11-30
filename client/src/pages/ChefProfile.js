@@ -60,11 +60,6 @@ const useStyles = makeStyles((theme) => ({
     listItem: {
         borderBottom: "1px solid #DCDCDC",
     },
-    // listItem: {
-    //     ":last-child": {
-    //         borderBottom: "none",
-    //     },
-    // },
     addImage: {
         width: "100%",
         objectFit: "cover",
@@ -184,7 +179,9 @@ function ChefProfile(props) {
                                 justify="center"
                                 alignItems="center"
                             >
-                                <Typography variant="h6">{`${user.profile.firstName}  ${user.profile.lastName}`}</Typography>
+                                <Typography variant="h6">
+                                    {`${user.profile.firstName}  ${user.profile.lastName}`}
+                                </Typography>
                                 <Typography
                                     className={classes.subtitle}
                                     variant="caption"

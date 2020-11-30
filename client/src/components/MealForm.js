@@ -1,7 +1,6 @@
 import * as React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { UserContext } from "../contexts/user/UserContextProvider";
-import ProfilePicLoader from "./ProfilePicLoader";
+import MealPicLoader from "./MealPicLoader";
 import {
     Grid,
     Box,
@@ -35,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
     //     },
     // },
     addImage: {
-        width: "100%",
+        maxWidth: "50%",
         objectFit: "cover",
     },
     error: {
@@ -44,11 +43,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function MealForm(props) {
-    const user = React.useContext(UserContext);
     const classes = useStyles();
+    const [mealPicUrl, setMealPicUrl] = React.useState("");
+    const url =
+        "https://teamcornpops-images.s3.us-east-2.amazonaws.com/5fb3030d70632969a8f0684f-1606778786489";
     const meal = props.meal;
-    // const price = meal.price !== "" ? meal.price / 100 : meal.price;
-
+    const price = meal.price !== "" ? meal.price / 100 : meal.price;
+    const cuisineType = meal.cuisineType[0] ? meal.cuisineType[0] : "";
     const validationSchema = Yup.object().shape({
         title: Yup.string().required("Required!"),
         price: Yup.number()
@@ -62,6 +63,10 @@ function MealForm(props) {
         ingredients: Yup.string().required("Required!"),
     });
 
+    const handleUrlUpdate = (url) => {
+        setMealPicUrl(url);
+    };
+
     return (
         <React.Fragment>
             <Dialog
@@ -72,9 +77,9 @@ function MealForm(props) {
                 <Formik
                     initialValues={{
                         title: meal.title,
-                        price: meal.price,
+                        price: price,
                         servingSize: meal.servingSize,
-                        cuisineType: meal.cuisineType,
+                        cuisineType: cuisineType,
                         ingredients: meal.ingredients,
                         requirements: meal.requirements,
                     }}
@@ -96,18 +101,23 @@ function MealForm(props) {
                                     <Grid container spacing={2} direction="column">
                                         {/* MEAL IMAGE INPUT */}
                                         <Grid xs={12} item>
-                                            {/* <img
-                                        className={classes.addImage}
-                                        src={meal1}
-                                        alt="Chef's Menu Logo"
-                                    /> */}
-                                            <ProfilePicLoader />
+                                            {mealPicUrl === "" ? null : (
+                                                <img
+                                                    className={classes.addImage}
+                                                    src={mealPicUrl}
+                                                    alt="Meal Picture"
+                                                />
+                                            )}
+                                            <MealPicLoader
+                                                upload={handleUrlUpdate}
+                                            />
                                         </Grid>
                                         <Grid item xs={12} container spacing={3}>
                                             <Grid item xs={8}>
                                                 <InputLabel htmlFor="title">
                                                     <Box
                                                         fontWeight="fontWeightBold"
+                                                        // mt={1.5}
                                                         mb={1.5}
                                                     >
                                                         Meal Title
