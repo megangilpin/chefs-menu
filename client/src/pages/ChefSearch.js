@@ -27,10 +27,7 @@ function ChefSearch(props) {
     } = profile;
     const location = [city, region, country].join(", ");
     const [radiusKm, setRadiusKm] = useState(100);
-    const [results, setResults] = useState({
-        chefs: [],
-        chefMeals: {},
-    });
+    const [chefs, setChefs] = useState([]);
 
     const handleChangeRadiusKm = ({ target }) =>
         target.value > 0 && setRadiusKm(target.value);
@@ -43,7 +40,8 @@ function ChefSearch(props) {
         const { ready, abort } = abortableFetch(url);
         ready
             .then((res) => res.json())
-            .then(setResults)
+            .then((res) => res.chefs)
+            .then(setChefs)
             .catch(consoleErrorNonAbortErrors);
         return abort;
     }, [radiusKm, cuisines]);
@@ -104,7 +102,7 @@ function ChefSearch(props) {
                         Available Chefs:
                     </Typography>
                 </Grid>
-                {results.chefs.map((chef) => (
+                {chefs.map((chef) => (
                     <ChefCard {...chef} key={chef._id} />
                 ))}
             </Grid>
