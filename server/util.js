@@ -1,8 +1,8 @@
 const jwt = require("jsonwebtoken");
-const userController = require("./controllers/usersController");
+const usersController = require("./controllers/usersController");
+const chefsController = require("./controllers/chefsController");
 
-const isArrayOfStrings = (arr) =>
-    Array.isArray(arr) && arr.every((ele) => typeof ele === "string");
+const isArrayOfStrings = (arr) => Array.isArray(arr) && arr.every((ele) => typeof ele === "string");
 
 // function that takes in a request handeler and returns request handeler with exception handeling
 // buld in
@@ -16,13 +16,10 @@ const errorHandelingWrapper = (routeFunction) => async (req, res, next) => {
 };
 
 const createAuthResponseObj = async (user) => {
-    const token = await jwt.sign(
-        { email: user.email, id: user._id },
-        process.env.SECRET,
-        { expiresIn: process.env.TOKEN_TTL }
-    );
+    const token = await jwt.sign({ email: user.email, id: user._id }, process.env.SECRET, { expiresIn: process.env.TOKEN_TTL });
     return {
-        user: await userController.sanatize(user),
+        user: await usersController.sanatize(user),
+        chef: await chefsController.findOneWithUserId(user._id),
         token,
     };
 };
@@ -37,9 +34,7 @@ const coordinatesDistanceCalc = (lat1, lng1, lat2, lng2, unit = "K") => {
     const radlat2 = (Math.PI * lat2) / 180;
     const theta = lng1 - lng2;
     const radtheta = (Math.PI * theta) / 180;
-    let dist =
-        Math.sin(radlat1) * Math.sin(radlat2) +
-        Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+    let dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
     if (dist > 1) {
         dist = 1;
     }

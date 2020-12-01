@@ -2,6 +2,7 @@ const express = require("express");
 
 const { errorHandelingWrapper, createAuthResponseObj } = require("../util");
 const userController = require("../controllers/usersController");
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 const router = express.Router();
 
@@ -89,10 +90,24 @@ router.post(
             isChef,
         });
 
+        // STRIPE CONNECTED ACCOUNT ONBOARDING FOR CHEFS
+        var stripeId = "";
+        if (isChef) {
+            const account = await stripe.accounts.create({
+                type: "express",
+                email: email,
+                capabilities: {
+                    card_payments: { requested: true },
+                    transfers: { requested: true },
+                },
+            });
+
+            stripeId = account.id;
+        }
+
         const createdUser = await userController.create({
             firstName,
             lastName,
-            address,
             street,
             city,
             region,
@@ -100,10 +115,13 @@ router.post(
             email,
             password,
             isChef,
+            stripeId,
         });
+
         const responseObj = await createAuthResponseObj(createdUser);
         res.cookie("token", responseObj.token, { httpOnly: true });
         res.status(201).json(responseObj);
+        // res.redirect("../chefs/stripe");
     })
 );
 
@@ -114,14 +132,11 @@ function validationMiddleware(req, res, next) {
     if (!email) errors.push("Missing email");
     if (!password) errors.push("Missing password");
 
-    if (email && typeof email !== "string")
-        errors.push("Invalid type for email");
+    if (email && typeof email !== "string") errors.push("Invalid type for email");
 
-    if (password && typeof password !== "string")
-        errors.push("Invalid type for password");
+    if (password && typeof password !== "string") errors.push("Invalid type for password");
 
-    if (email && !userController.isValidEmailFormat(email))
-        errors.push("Invalid format for email");
+    if (email && !userController.isValidEmailFormat(email)) errors.push("Invalid format for email");
 
     if (errors.length > 0) {
         res.status(400).json({ errors });

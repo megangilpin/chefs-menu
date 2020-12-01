@@ -38,6 +38,20 @@ router.get(
         res.json(chef);
     })
 );
+router.get(
+    "/",
+    errorHandelingWrapper(async (req, res) => {
+        const { id } = req.user;
+        const chef = await chefsController.findOneWithUserId(id);
+        if (!chef) {
+            res.status(400).json({
+                errors: ["Chef profile not found for loggedin user"],
+            });
+            return;
+        }
+        res.json(chef);
+    })
+);
 
 // update the chef profile for signedin user
 router.put(
@@ -58,6 +72,7 @@ router.put(
             userId: id,
         });
         res.json(newChef);
+        return;
     })
 );
 
@@ -84,15 +99,13 @@ router.post(
     })
 );
 
-
 function validationMiddleware(req, res, next) {
     let { cuisineSpecialty } = req.body;
     // input validation
     const errors = [];
     if (cuisineSpecialty) {
         cuisineSpecialty = JSON.parse(cuisineSpecialty);
-        if (!isArrayOfStrings(cuisineSpecialty))
-            errors.push("Invalid cuisineSpecialty type");
+        if (!isArrayOfStrings(cuisineSpecialty)) errors.push("Invalid cuisineSpecialty type");
     }
 
     if (errors.length > 0) {

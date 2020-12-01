@@ -9,7 +9,7 @@ const findOneWithId = async (id) => {
 };
 
 const findAllChefs = async (query) => {
-    const chefs = await Chef.find(query).populate('userId').exec();
+    const chefs = await Chef.find(query).populate("userId").exec();
     return chefs;
 };
 
@@ -18,10 +18,11 @@ const findOneWithUserId = async (userId) => {
     return _doc;
 };
 
-const create = async ({ cuisineSpecialty, userId }) => {
+const create = async ({ cuisineSpecialty, userId, stripeId }) => {
     const pojsoChef = {};
     pojsoChef.userId = userId;
     if (cuisineSpecialty) pojsoChef.cuisineSpecialty = cuisineSpecialty;
+    if (stripeId) pojsoChef.stripeId = stripeId;
     const { _doc } = (await Chef.create(pojsoChef)) || {};
     return _doc;
 };

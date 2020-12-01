@@ -8,7 +8,6 @@ const initialState = {
         primaryAddress: {},
         favoriteCuisine: [],
         allergies: [],
-        favoriteCuisine: [],
     },
     isLoading: true,
 };
@@ -21,6 +20,7 @@ const UserReducer = (state, action) => {
                 isLoading: false,
                 isAuthenticated: true,
                 profile: action.payload.user,
+                chefProfile: action.payload.chef,
             };
         case LOGOUT:
             return {
@@ -166,6 +166,57 @@ const UserContextProvider = ({ children }) => {
         }
     };
 
+    const getStripeOnboardingLink = async () => {
+        const response = await fetch("/stripe/onboardinglink");
+        const data = response.json();
+
+        if (!data) {
+            return {
+                result: false,
+            };
+        } else {
+            return data;
+        }
+    };
+
+    const getStripeAccount = async () => {
+        const response = await fetch("/stripe/account");
+        const data = response.json();
+
+        if (!data) {
+            return {
+                result: false,
+            };
+        } else {
+            return data;
+        }
+    };
+    const getStripeLoginLink = async () => {
+        const response = await fetch("/stripe/login");
+        const data = response.json();
+
+        if (!data.url) {
+            return {
+                result: false,
+            };
+        } else {
+            return data;
+        }
+    };
+
+    const getStripeSecret = async () => {
+        const response = await fetch("/stripe/secret");
+        const data = response.json();
+
+        if (!data.clientSecret) {
+            return {
+                result: false,
+            };
+        } else {
+            // call stripe.confirmard payment
+        }
+    };
+
     React.useEffect(() => {
         const checkCookie = async () => await checkLogin();
         checkCookie().catch((error) => {
@@ -182,6 +233,9 @@ const UserContextProvider = ({ children }) => {
                 logoutUser,
                 updateUser,
                 uploadProfileImage,
+                getStripeOnboardingLink,
+                getStripeAccount,
+                getStripeLoginLink,
             }}
         >
             {children}
