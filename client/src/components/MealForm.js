@@ -1,7 +1,6 @@
 import * as React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { UserContext } from "../contexts/user/UserContextProvider";
-import ProfilePicLoader from "./ProfilePicLoader";
+import MealPicLoader from "./MealPicLoader";
 import {
     Grid,
     Box,
@@ -12,30 +11,15 @@ import {
     DialogActions,
     DialogContent,
 } from "@material-ui/core";
+import allCuisines from "../lib/allCuisines";
 
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { TextField, Select } from "formik-material-ui";
 import * as Yup from "yup";
 
 const useStyles = makeStyles((theme) => ({
-    content: {
-        display: "flex",
-        justifyContent: "center",
-    },
-    list: {
-        boxShadow: "0px 0px 10px 5px rgba(7,7,7,0.07)",
-        background: "#ffffff",
-    },
-    listItem: {
-        borderBottom: "1px solid #DCDCDC",
-    },
-    // listItem: {
-    //     ":last-child": {
-    //         borderBottom: "none",
-    //     },
-    // },
     addImage: {
-        width: "100%",
+        maxWidth: "50%",
         objectFit: "cover",
     },
     error: {
@@ -43,18 +27,14 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function AddMealButton(props) {
-    const user = React.useContext(UserContext);
+function MealForm(props) {
     const classes = useStyles();
-    const [open, setOpen] = React.useState(false);
+    const [picURL, setMealPicUrl] = React.useState("");
 
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
+    const meal = props.meal;
+    const price = meal.price !== "" ? meal.price / 100 : meal.price;
+    const cuisineType = meal.cuisineType[0] ? meal.cuisineType[0] : "";
+    const pic = meal.picURL !== undefined ? meal.picURL : "";
 
     const validationSchema = Yup.object().shape({
         title: Yup.string().required("Required!"),
@@ -69,29 +49,38 @@ function AddMealButton(props) {
         ingredients: Yup.string().required("Required!"),
     });
 
+    const handleUrlUpdate = (url) => {
+        setMealPicUrl(url);
+    };
+
     return (
         <React.Fragment>
-            <Button color="primary" variant="contained" onClick={handleClickOpen}>
-                Add Meal
-            </Button>
             <Dialog
-                open={open}
-                onClose={handleClose}
+                open={props.isOpen}
+                onClose={props.close}
                 aria-labelledby="form-dialog-title"
             >
                 <Formik
                     initialValues={{
-                        title: "",
-                        price: "",
-                        servingSize: "",
-                        cuisineType: "",
-                        ingredients: "",
-                        requirements: "",
+                        title: meal.title,
+                        price: price,
+                        servingSize: meal.servingSize,
+                        cuisineType: cuisineType,
+                        ingredients: meal.ingredients,
+                        requirements: meal.requirements,
+                        picURL: pic,
                     }}
                     validationSchema={validationSchema}
-                    onSubmit={(values, { setSubmitting }) => {
-                        setSubmitting(false);
-                        console.log(values);
+                    onSubmit={(values, actions) => {
+                        actions.setSubmitting(false);
+                        values.picURL = picURL;
+                        values.price = parseFloat(values.price) * 100;
+                        values.cuisineType = [values.cuisineType];
+                        props.onSubmit(values);
+
+                        props.update();
+                        setMealPicUrl("");
+                        props.close();
                     }}
                 >
                     {({ submitForm, isSubmitting }) => (
@@ -101,12 +90,16 @@ function AddMealButton(props) {
                                     <Grid container spacing={2} direction="column">
                                         {/* MEAL IMAGE INPUT */}
                                         <Grid xs={12} item>
-                                            {/* <img
-                                        className={classes.addImage}
-                                        src={meal1}
-                                        alt="Chef's Menu Logo"
-                                    /> */}
-                                            <ProfilePicLoader />
+                                            {pic === "" ? null : (
+                                                <img
+                                                    className={classes.addImage}
+                                                    src={pic}
+                                                    alt="Meal"
+                                                />
+                                            )}
+                                            <MealPicLoader
+                                                upload={handleUrlUpdate}
+                                            />
                                         </Grid>
                                         <Grid item xs={12} container spacing={3}>
                                             <Grid item xs={8}>
@@ -190,15 +183,18 @@ function AddMealButton(props) {
                                                     component={Select}
                                                     name="cuisineType"
                                                 >
-                                                    <MenuItem value={"american"}>
-                                                        American
-                                                    </MenuItem>
-                                                    <MenuItem value={"spanish"}>
-                                                        Spanish
-                                                    </MenuItem>
-                                                    <MenuItem value={"japanese"}>
-                                                        Japanese
-                                                    </MenuItem>
+                                                    {allCuisines.map(
+                                                        (cuisine, index) => {
+                                                            return (
+                                                                <MenuItem
+                                                                    key={index}
+                                                                    value={cuisine}
+                                                                >
+                                                                    {cuisine}
+                                                                </MenuItem>
+                                                            );
+                                                        }
+                                                    )}
                                                 </Field>
                                                 <Box ml={1} color="error">
                                                     <ErrorMessage name="cuisineType">
@@ -261,7 +257,7 @@ function AddMealButton(props) {
                                     </Grid>
                                 </DialogContent>
                                 <DialogActions>
-                                    <Button onClick={handleClose} color="primary">
+                                    <Button onClick={props.close} color="primary">
                                         Cancel
                                     </Button>
                                     <Button
@@ -269,7 +265,7 @@ function AddMealButton(props) {
                                         onClick={submitForm}
                                         color="primary"
                                     >
-                                        Add
+                                        Submit
                                     </Button>
                                 </DialogActions>
                             </Form>
@@ -281,4 +277,4 @@ function AddMealButton(props) {
     );
 }
 
-export default AddMealButton;
+export default MealForm;

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import { UserContext } from "../contexts/user/UserContextProvider";
 import {
     Box,
@@ -18,6 +18,7 @@ import {
     MenuItem,
     Select,
 } from "@material-ui/core";
+import allCuisines from "../lib/allCuisines";
 
 const useStyles = makeStyles((theme) => ({
     chefButton: {
@@ -46,14 +47,11 @@ const MenuProps = {
     },
 };
 
-const types = ["American", "Japanese", "Spanish"];
-
 const ChefSignUp = (props) => {
     const user = React.useContext(UserContext);
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const [specialty, setSpecialty] = React.useState([]);
-    const theme = useTheme();
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -66,15 +64,12 @@ const ChefSignUp = (props) => {
         setSpecialty(event.target.value);
     };
 
-    const handleChangeMultiple = (event) => {
-        const { options } = event.target;
-        const value = [];
-        for (let i = 0, l = options.length; i < l; i += 1) {
-            if (options[i].selected) {
-                value.push(options[i].value);
-            }
-        }
-        setSpecialty(value);
+    const updateUser = () => {
+        const formValues = {
+            isChef: true,
+            cuisineSpecialty: [...specialty],
+        };
+        user.updateUser(formValues);
     };
 
     return (
@@ -128,7 +123,7 @@ const ChefSignUp = (props) => {
                                     )}
                                     MenuProps={MenuProps}
                                 >
-                                    {types.map((type) => (
+                                    {allCuisines.map((type) => (
                                         <MenuItem key={type} value={type}>
                                             <Checkbox
                                                 checked={
@@ -147,7 +142,7 @@ const ChefSignUp = (props) => {
                     <Button onClick={handleClose} color="primary">
                         Cancel
                     </Button>
-                    <Button onClick={handleClose} color="primary">
+                    <Button onClick={updateUser} color="primary">
                         Sign Up
                     </Button>
                 </DialogActions>

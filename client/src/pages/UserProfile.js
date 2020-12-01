@@ -5,6 +5,7 @@ import { Typography, Grid, Button } from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Avatar from "@material-ui/core/Avatar";
 import Box from "@material-ui/core/Box";
+import Link from "@material-ui/core/Link";
 import EditIcon from "@material-ui/icons/Edit";
 import IconButton from "@material-ui/core/IconButton";
 
@@ -12,7 +13,6 @@ import UserProfileMap from "../components/UserProfileMap";
 import { UserContext } from "../contexts/user/UserContextProvider";
 import ChefSignUp from "../components/ChefSignUp";
 import Main from "../components/Main";
-import ChefsMenu from "../components/ChefsMenu";
 
 const useStyles = makeStyles({
     profile: {
@@ -61,6 +61,8 @@ export default function UserProfile() {
     const classes = useStyles();
     const history = useHistory();
     const user = React.useContext(UserContext);
+    const { profile } = user;
+    profile.chefProfile = { ...profile.chefProfile };
 
     // populate user data using profile from context
     const userData = {
@@ -115,7 +117,23 @@ export default function UserProfile() {
                                 </Typography>
                             </Grid>
                             <Grid item xs={12}>
-                                {!user.profile.isChef ? <ChefSignUp /> : null}
+                                {!user.profile.isChef ? (
+                                    <ChefSignUp />
+                                ) : (
+                                    <Box mb={2}>
+                                        <Link
+                                            component="button"
+                                            variant="body2"
+                                            onClick={() =>
+                                                history.push(
+                                                    `chefs/${profile.chefProfile._id}`
+                                                )
+                                            }
+                                        >
+                                            Edit Your Menu
+                                        </Link>
+                                    </Box>
+                                )}
                             </Grid>
                         </Grid>
 
@@ -164,9 +182,6 @@ export default function UserProfile() {
                         </Grid>
                         <UserProfileMap location={userData.location} />
                     </Box>
-                </Grid>
-                <Grid item xs={12}>
-                    <ChefsMenu chefName={user.profile.firstName} canEdit={true} />
                 </Grid>
             </Grid>
         </Main>

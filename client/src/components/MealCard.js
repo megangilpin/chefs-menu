@@ -71,7 +71,7 @@ function MealCard({
         setDialogOpen(false);
     };
 
-    const addMeal = (e) => {
+    const purchaseMeal = (e) => {
         e.preventDefault();
         const id = parseFloat(e.currentTarget.value);
         if (chef && chefId !== chef) {
@@ -110,7 +110,7 @@ function MealCard({
                                 color="primary"
                                 variant="contained"
                                 size="small"
-                                onClick={addMeal}
+                                onClick={purchaseMeal}
                             >
                                 <AddShoppingCartIcon />
                             </IconButton>
@@ -147,13 +147,13 @@ function MealCard({
                                 </Grid>
                             </Grid>
                             <Grid item xs={12}>
+                                {/* will need to connect with ChefProfile once cards have chef info */}
                                 <Link
-                                    href="#"
                                     component="button"
                                     variant="body2"
-                                    onClick={() => history.push("chefProfile")}
+                                    onClick={() => history.push(`chefs/${chefId}`)}
                                 >
-                                    Learn More
+                                    Edit Your Menu
                                 </Link>
                             </Grid>
                         </Grid>

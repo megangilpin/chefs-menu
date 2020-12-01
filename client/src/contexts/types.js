@@ -5,6 +5,7 @@ export const LOGOUT = "LOGOUT";
 export const SET_CART = "SET_CART";
 export const SET_CART_CHEF = "SET_CART_CHEF";
 export const SET_IS_LOADING = "SET_IS_LOADING";
+export const SET_MEAL = "SET_MEAL";
 export const SET_USER = "SET_USER";
 export const SET_PROFILE_IMAGE = "SET_PROFILE_IMAGE";
 export const UPDATE_CART_ITEM = "UPDATE_CART_ITEM";

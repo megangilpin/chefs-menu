@@ -9,7 +9,7 @@ const drawerWidth = 350;
 
 const useStyles = makeStyles((theme) => ({
     drawer: {
-        [theme.breakpoints.up("sm")]: {
+        [theme.breakpoints.up("md")]: {
             width: drawerWidth,
             flexShrink: 0,
         },
@@ -38,7 +38,7 @@ function ResponsiveSideBar(props) {
 
     return (
         <div className={classes.root}>
-            <Hidden smUp implementation="css">
+            <Hidden mdUp implementation="css">
                 <Toolbar />
                 <Fab
                     color="primary"
@@ -64,7 +64,7 @@ function ResponsiveSideBar(props) {
                     <div className={classes.drawerContainer}>{props.children}</div>
                 </Drawer>
             </Hidden>
-            <Hidden xsDown implementation="css">
+            <Hidden smDown implementation="css">
                 <Toolbar />
                 <Drawer
                     className={classes.drawer}

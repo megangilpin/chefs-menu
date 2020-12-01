@@ -1,7 +1,12 @@
 const express = require("express");
 
-const { errorHandelingWrapper, createAuthResponseObj } = require("../util");
+const {
+    errorHandelingWrapper,
+    createAuthResponseObj,
+    findChefProfile,
+} = require("../util");
 const userController = require("../controllers/usersController");
+const chefsController = require("../controllers/chefsController");
 
 const router = express.Router();
 
@@ -15,6 +20,9 @@ router.post(
         if (!user) {
             res.status(400).json({ errors: ["Email or password invalid"] });
             return;
+        }
+        if (user.isChef) {
+            user.chefProfile = await findChefProfile(user.id);
         }
         // verify that the passwords match
         const passwordsMatch = await userController.checkPassword({
@@ -76,19 +84,6 @@ router.post(
             [street, city, region, country] = addressArr;
         }
 
-        console.log({
-            firstName,
-            lastName,
-            address,
-            street,
-            city,
-            region,
-            country,
-            email,
-            password,
-            isChef,
-        });
-
         const createdUser = await userController.create({
             firstName,
             lastName,
@@ -101,6 +96,7 @@ router.post(
             password,
             isChef,
         });
+
         const responseObj = await createAuthResponseObj(createdUser);
         res.cookie("token", responseObj.token, { httpOnly: true });
         res.status(201).json(responseObj);

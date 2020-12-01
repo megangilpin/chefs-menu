@@ -7,7 +7,7 @@ const initialState = {
         email: "",
         primaryAddress: {},
         allergies: [],
-        favoriteCuisine: [],
+        chefProfile: {},
     },
     isLoading: true,
 };
@@ -19,7 +19,7 @@ const UserReducer = (state, action) => {
                 ...state,
                 isLoading: false,
                 isAuthenticated: true,
-                profile: action.payload.user,
+                profile: { ...state.profile, ...action.payload.user },
             };
         case LOGOUT:
             return {

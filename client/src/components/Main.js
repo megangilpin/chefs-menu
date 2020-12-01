@@ -1,15 +1,11 @@
 import * as React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Toolbar } from "@material-ui/core";
+import { Toolbar, Grid } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
     content: {
         flexGrow: 1,
         padding: theme.spacing(5),
-    },
-    container: {
-        display: "flex",
-        justifyContent: "center",
     },
 }));
 
@@ -19,7 +15,9 @@ function Main(props) {
     return (
         <div className={classes.content}>
             <Toolbar />
-            <div className={classes.container}>{props.children}</div>
+            <Grid container direction="row" justify="center" alignContent="center">
+                {props.children}
+            </Grid>
         </div>
     );
 }

@@ -1,6 +1,10 @@
 const express = require("express");
 
-const { errorHandelingWrapper, createAuthResponseObj } = require("../util");
+const {
+    errorHandelingWrapper,
+    createAuthResponseObj,
+    findChefProfile,
+} = require("../util");
 const usersController = require("../controllers/usersController");
 const chefsController = require("../controllers/chefsController");
 const upload = require("../services/s3");
@@ -17,9 +21,11 @@ router.get(
             res.status(400).json({ errors: ["Please sign in"] });
             return;
         }
+
         if (user.isChef) {
-            user.chef = await chefsController.findOneWithUserId(id);
+            user.chefProfile = await findChefProfile(id);
         }
+
         // create and return jwt with user obj
         const responseObj = await createAuthResponseObj(user);
         res.cookie("token", responseObj.token, { httpOnly: true });
@@ -50,6 +56,17 @@ router.put(
         const user = await usersController.sanatize(
             await usersController.update(id, req.body)
         );
+
+        if (req.body.isChef && !user.isChef) {
+            const data = {
+                cuisineSpecialty: [...req.body.cuisineSpecialty],
+                userId: id,
+            };
+            const chefData = await chefsController.create(data);
+            delete chefData.userId;
+            user.chefProfile = chefData;
+        }
+
         const responseObj = await createAuthResponseObj(user);
         res.json(responseObj);
     })
