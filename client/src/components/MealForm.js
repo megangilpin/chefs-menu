@@ -94,6 +94,7 @@ function MealForm(props) {
                         props.onSubmit(values);
 
                         props.update();
+                        setMealPicUrl("");
                         props.close();
                     }}
                 >
