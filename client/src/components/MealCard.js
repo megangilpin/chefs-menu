@@ -52,20 +52,19 @@ const useStyles = makeStyles({
     },
 });
 
-function MealCard(props) {
+function MealCard({
+    mealPic,
+    title,
+    price,
+    chefName,
+    chefPic,
+    location,
+    id,
+    chefId,
+}) {
     const classes = useStyles();
     const history = useHistory();
     const { chef, addToCart } = useContext(CartContext);
-    const {
-        mealPic,
-        title,
-        price,
-        chefName,
-        chefPic,
-        location,
-        id,
-        chefId,
-    } = props.meal;
     const [openDialog, setDialogOpen] = React.useState(false);
 
     const handleClose = () => {
@@ -84,18 +83,18 @@ function MealCard(props) {
     };
 
     return (
-        <div>
+        <>
             <Card className={classes.root}>
                 <CardMedia
                     component="img"
-                    alt="Meal Picture"
+                    alt="meal1"
                     height="150"
                     image={mealPic}
-                    title="Meal Picture"
+                    title="meal1"
                 />
                 <CardContent>
-                    <Grid item xs={12} container direction="row" spacing={2}>
-                        <Grid item xs={8}>
+                    <Grid container direction="row" spacing={2}>
+                        <Grid item xs={12}>
                             <Typography gutterBottom className={classes.subtitle}>
                                 {title}
                             </Typography>
@@ -104,17 +103,8 @@ function MealCard(props) {
                                 className={classes.subtitle1}
                                 color="secondary"
                             >
-                                {/* assuming we save price in cents on DB */}
                                 {dollarFormatter.format(price / 100)}
                             </Typography>
-                        </Grid>
-                        <Grid
-                            item
-                            xs={4}
-                            container
-                            justify="flex-end"
-                            alignContent="center"
-                        >
                             <IconButton
                                 value={id}
                                 color="primary"
@@ -131,15 +121,13 @@ function MealCard(props) {
                 <CardActions>
                     <Box ml={1} mr={1}>
                         <Grid container spacing={1}>
-                            <Grid item container spacing={2}>
-                                <Grid item>
-                                    <Avatar
-                                        className={classes.small}
-                                        alt={chefName}
-                                        src={chefPic}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm container alignItems="center">
+                            <Grid item xs={12}>
+                                <Avatar
+                                    className={classes.small}
+                                    alt={chefName}
+                                    src={chefPic}
+                                />
+                                <Grid item xs={12} container alignItems="center">
                                     <Grid item container direction="column">
                                         <Grid item>
                                             <Typography
@@ -172,6 +160,7 @@ function MealCard(props) {
                     </Box>
                 </CardActions>
             </Card>
+
             <Dialog
                 open={openDialog}
                 onClose={handleClose}
@@ -194,7 +183,7 @@ function MealCard(props) {
                     </Button>
                 </DialogActions>
             </Dialog>
-        </div>
+        </>
     );
 }
 
