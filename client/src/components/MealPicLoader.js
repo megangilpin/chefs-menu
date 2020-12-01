@@ -1,6 +1,5 @@
 import * as React from "react";
 import { DropzoneDialog } from "material-ui-dropzone";
-import { UserContext } from "../contexts/user/UserContextProvider";
 import { makeStyles } from "@material-ui/core/styles";
 import { IconButton, LinearProgress, Snackbar } from "@material-ui/core";
 import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";

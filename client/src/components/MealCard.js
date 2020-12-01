@@ -159,13 +159,13 @@ function MealCard(props) {
                                 </Grid>
                             </Grid>
                             <Grid item xs={12}>
+                                {/* will need to connect with ChefProfile once cards have chef info */}
                                 <Link
-                                    href="#"
                                     component="button"
                                     variant="body2"
-                                    onClick={() => history.push("chefProfile")}
+                                    onClick={() => history.push(`chefs/${chefId}`)}
                                 >
-                                    Learn More
+                                    Edit Your Menu
                                 </Link>
                             </Grid>
                         </Grid>

@@ -17,22 +17,6 @@ import { TextField, Select } from "formik-material-ui";
 import * as Yup from "yup";
 
 const useStyles = makeStyles((theme) => ({
-    content: {
-        display: "flex",
-        justifyContent: "center",
-    },
-    list: {
-        boxShadow: "0px 0px 10px 5px rgba(7,7,7,0.07)",
-        background: "#ffffff",
-    },
-    listItem: {
-        borderBottom: "1px solid #DCDCDC",
-    },
-    // listItem: {
-    //     ":last-child": {
-    //         borderBottom: "none",
-    //     },
-    // },
     addImage: {
         maxWidth: "50%",
         objectFit: "cover",
@@ -44,12 +28,29 @@ const useStyles = makeStyles((theme) => ({
 
 function MealForm(props) {
     const classes = useStyles();
-    const [mealPicUrl, setMealPicUrl] = React.useState("");
-    const url =
-        "https://teamcornpops-images.s3.us-east-2.amazonaws.com/5fb3030d70632969a8f0684f-1606778786489";
+    const [picURL, setMealPicUrl] = React.useState("");
+
     const meal = props.meal;
     const price = meal.price !== "" ? meal.price / 100 : meal.price;
     const cuisineType = meal.cuisineType[0] ? meal.cuisineType[0] : "";
+    const allCuisines = [
+        "AMERICAN",
+        "BRITISH",
+        "CARIBBEAN",
+        "CHINESE",
+        "FRENCH",
+        "GREEK",
+        "INDIAN",
+        "ITALIAN",
+        "MEDITERRANEAN",
+        "MEXICAN",
+        "MORROCAN",
+        "SPANISH",
+        "THAI",
+        "TURKISH",
+        "VIETNAMESE",
+    ];
+
     const validationSchema = Yup.object().shape({
         title: Yup.string().required("Required!"),
         price: Yup.number()
@@ -82,10 +83,12 @@ function MealForm(props) {
                         cuisineType: cuisineType,
                         ingredients: meal.ingredients,
                         requirements: meal.requirements,
+                        picURL: picURL,
                     }}
                     validationSchema={validationSchema}
                     onSubmit={(values, actions) => {
                         actions.setSubmitting(false);
+                        values.picURL = picURL;
                         values.price = parseFloat(values.price) * 100;
                         values.cuisineType = [values.cuisineType];
                         props.onSubmit(values);
@@ -101,11 +104,11 @@ function MealForm(props) {
                                     <Grid container spacing={2} direction="column">
                                         {/* MEAL IMAGE INPUT */}
                                         <Grid xs={12} item>
-                                            {mealPicUrl === "" ? null : (
+                                            {picURL === "" ? null : (
                                                 <img
                                                     className={classes.addImage}
-                                                    src={mealPicUrl}
-                                                    alt="Meal Picture"
+                                                    src={picURL}
+                                                    alt="Meal"
                                                 />
                                             )}
                                             <MealPicLoader
@@ -117,7 +120,6 @@ function MealForm(props) {
                                                 <InputLabel htmlFor="title">
                                                     <Box
                                                         fontWeight="fontWeightBold"
-                                                        // mt={1.5}
                                                         mb={1.5}
                                                     >
                                                         Meal Title
@@ -195,15 +197,18 @@ function MealForm(props) {
                                                     component={Select}
                                                     name="cuisineType"
                                                 >
-                                                    <MenuItem value={"american"}>
-                                                        American
-                                                    </MenuItem>
-                                                    <MenuItem value={"spanish"}>
-                                                        Spanish
-                                                    </MenuItem>
-                                                    <MenuItem value={"japanese"}>
-                                                        Japanese
-                                                    </MenuItem>
+                                                    {allCuisines.map(
+                                                        (cuisine, index) => {
+                                                            return (
+                                                                <MenuItem
+                                                                    key={index}
+                                                                    value={cuisine}
+                                                                >
+                                                                    {cuisine}
+                                                                </MenuItem>
+                                                            );
+                                                        }
+                                                    )}
                                                 </Field>
                                                 <Box ml={1} color="error">
                                                     <ErrorMessage name="cuisineType">

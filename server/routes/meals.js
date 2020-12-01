@@ -39,6 +39,7 @@ router.get(
         const meals = await mealController.findAllWithChefId({
             chefId: chefId,
         });
+
         res.json(meals);
     })
 );
@@ -167,7 +168,7 @@ async function validationMiddleware(req, res, next) {
     next();
 }
 
-// uploads image to AWS s3 and updates user schema with url of profile image
+// uploads image to AWS s3
 router.post(
     "/mealImageUpload",
     errorHandelingWrapper(async (req, res, next) => {

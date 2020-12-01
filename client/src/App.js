@@ -6,7 +6,6 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 import { theme } from "./themes/theme";
 import LoginSignUp from "./pages/LoginSignUp";
 import Home from "./pages/Home";
-import Meals from "./pages/Meals";
 import Page from "./components/Page";
 import { UserContext } from "../src/contexts/user/UserContextProvider";
 import UserProfile from "./pages/UserProfile";
@@ -21,7 +20,7 @@ function App() {
             <div>
                 <Page>
                     <Switch>
-                        <ProtectedRoute exact path="/meals" component={Meals} />
+                        <ProtectedRoute exact path="/home" component={Home} />
                         <ProtectedRoute
                             exact
                             path="/chefs/:chefId"
@@ -49,7 +48,7 @@ function App() {
             <BrowserRouter>
                 <Route path="/">
                     {user.isAuthenticated ? (
-                        <Redirect to="/profile" />
+                        <Redirect to="/Home" />
                     ) : (
                         <Redirect to="/signup" />
                     )}

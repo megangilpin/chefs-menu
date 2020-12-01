@@ -1,7 +1,18 @@
 import React, { useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { CartContext } from "../contexts/cart/CartContextProvider";
-import { Typography, Grid, Box, IconButton, Paper } from "@material-ui/core";
+import {
+    Button,
+    Box,
+    Typography,
+    Grid,
+    IconButton,
+    Dialog,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    DialogActions,
+} from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import ClearIcon from "@material-ui/icons/Clear";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
@@ -13,11 +24,10 @@ const useStyles = makeStyles((theme) => ({
     mealCard: {
         minHeight: "300px",
         maxWidth: "800px",
-        // boxShadow: "0px 0px 10px 5px rgba(7,7,7,0.07)",
         overflow: "auto",
     },
     mealImage: {
-        width: "100%",
+        maxWidth: "100%",
         maxHeight: "300px",
         objectFit: "cover",
     },
@@ -40,6 +50,8 @@ function MenuItem(props) {
     const classes = useStyles();
     const { chef, addToCart } = useContext(CartContext);
     const [mealFormOpen, setMealFormOpen] = React.useState(false);
+    const [openDialog, setDialogOpen] = React.useState(false);
+
     const params = useParams();
 
     const {
@@ -50,6 +62,7 @@ function MenuItem(props) {
         chefId,
         ingredients,
         requirements,
+        picURL,
     } = props.meal;
     const id = props.meal._id;
 
@@ -57,9 +70,7 @@ function MenuItem(props) {
         e.preventDefault();
         const id = parseFloat(e.currentTarget.value);
         if (chef && chefId !== chef) {
-            alert(
-                `Your cart currently contains meals from another chef. You can only checkout with meals from one chef`
-            );
+            setDialogOpen(true);
         } else {
             const meal = { id, mealPic, title, price, chefName, chefId };
             addToCart(meal, id);
@@ -75,8 +86,8 @@ function MenuItem(props) {
             },
         });
 
-        // console.log(await response.json());
         const data = await response.json();
+
         if (data.errors) {
             return {
                 result: false,
@@ -115,6 +126,10 @@ function MenuItem(props) {
 
     const handleMealFormClose = () => {
         setMealFormOpen(false);
+    };
+
+    const handleClose = () => {
+        setDialogOpen(false);
     };
 
     return (
@@ -180,7 +195,7 @@ function MenuItem(props) {
                                 className={classes.box}
                                 mb={1}
                                 p={1}
-                                fontWeight="fontWeightBold"
+                                fontWeight={"fontWeightBold"}
                             >
                                 <Typography>Meal for 1</Typography>
                             </Box>
@@ -194,6 +209,7 @@ function MenuItem(props) {
                         </Grid>
                         <Grid item>
                             <Typography variant="subtitle2">INGREDIENTS</Typography>
+
                             <Typography
                                 className={classes.subtitle}
                                 variant="subtitle2"
@@ -209,19 +225,58 @@ function MenuItem(props) {
                                 className={classes.subtitle}
                                 variant="subtitle2"
                             >
-                                {requirements}
+                                {!requirements
+                                    ? "No Meal Requirements"
+                                    : { requirements }}
                             </Typography>
                         </Grid>
                     </Grid>
-                    <Grid xs={12} sm={6} item container alignItems="center">
-                        <img
-                            className={classes.mealImage}
-                            src={mealPic}
-                            alt="Meal Picture"
-                        />
+                    <Grid
+                        xs={12}
+                        sm={6}
+                        item
+                        container
+                        // justify="center"
+                        alignItems="center"
+                    >
+                        {!picURL ? (
+                            <Box className={classes.mealImage}>
+                                <Typography color="primary" variant="subtitle2">
+                                    The chef is still cooking up an image
+                                </Typography>
+                            </Box>
+                        ) : (
+                            <img
+                                className={classes.mealImage}
+                                src={picURL}
+                                alt="Meal"
+                            />
+                        )}
                     </Grid>
                 </Grid>
             </Box>
+            <Dialog
+                open={openDialog}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    {"Your cart already contains meals from another chef!"}
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        A meal order can only contain meals from the same chef. If
+                        you would like to select this meal please empty your current
+                        cart or complete your purchase and start another order.
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} color="primary">
+                        Got it!
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 }

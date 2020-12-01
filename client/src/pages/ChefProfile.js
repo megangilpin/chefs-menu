@@ -6,9 +6,7 @@ import ResponsiveSideBar from "../components/ResponsiveSideBar";
 import Main from "../components/Main";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import { Avatar, Typography, Grid, Box, Divider, Button } from "@material-ui/core";
-import meal1 from "../images/meal1.png";
 import MenuItem from "../components/MenuItem";
-import { List, ListItem } from "@material-ui/core";
 import MealForm from "../components/MealForm";
 
 const useStyles = makeStyles((theme) => ({
@@ -24,8 +22,13 @@ const useStyles = makeStyles((theme) => ({
     },
     headerImage: {
         width: "100%",
-        height: "30%",
+        height: "225px",
         objectFit: "cover",
+    },
+    headerPlaceHolder: {
+        width: "100%",
+        height: "225px",
+        background: theme.background.secondary,
     },
     userImage: {
         width: theme.spacing(15),
@@ -49,20 +52,13 @@ const useStyles = makeStyles((theme) => ({
         width: "100%",
         margin: 0,
     },
-    content: {
-        display: "flex",
-        justifyContent: "center",
-    },
     list: {
         boxShadow: "0px 0px 10px 5px rgba(7,7,7,0.07)",
         background: "#ffffff",
     },
     listItem: {
         borderBottom: "1px solid #DCDCDC",
-    },
-    addImage: {
-        width: "100%",
-        objectFit: "cover",
+        background: "#ffffff",
     },
 }));
 
@@ -70,6 +66,7 @@ function ChefProfile(props) {
     const user = React.useContext(UserContext);
     const classes = useStyles();
     const { chefId } = useParams();
+    const chef = { ...user.profile.chefProfile };
     const [meals, setMeals] = React.useState([]);
     const [mealFormOpen, setMealFormOpen] = React.useState(false);
     const initialMeal = {
@@ -80,6 +77,7 @@ function ChefProfile(props) {
         ingredients: "",
         requirements: "",
     };
+    const headerImage = { ...meals[0] };
 
     const handleMealFormOpen = () => {
         setMealFormOpen(true);
@@ -97,7 +95,6 @@ function ChefProfile(props) {
             },
         });
 
-        // console.log(await response.json());
         const data = await response.json();
         if (data.errors) {
             return {
@@ -120,7 +117,6 @@ function ChefProfile(props) {
             },
         });
 
-        // console.log(await response.json());
         const data = await response.json();
         if (data.errors) {
             return {
@@ -154,7 +150,15 @@ function ChefProfile(props) {
                             justify="center"
                             alignItems="center"
                         >
-                            <img className={classes.headerImage} src={meal1}></img>
+                            {meals.length > 0 ||
+                            !headerImage.picURL === undefined ? (
+                                <img
+                                    className={classes.headerImage}
+                                    src={headerImage.picURL}
+                                ></img>
+                            ) : (
+                                <div className={classes.headerPlaceHolder}></div>
+                            )}
                             <Box
                                 boxShadow={2}
                                 component={Avatar}
@@ -225,47 +229,55 @@ function ChefProfile(props) {
                         <Grid item>
                             <Typography variant="h5">
                                 <Box mt={5} fontWeight="fontWeightBold">
-                                    {props.chefName} Menu:
+                                    {`${user.profile.firstName}'s`} Menu:
                                 </Box>
                             </Typography>
                         </Grid>
                         <Grid item className={classes.color2}>
-                            <Box mb={2}>
-                                {/* Dialog Box with Form for adding / updating meal */}
-                                <MealForm
-                                    update={getMeals}
-                                    isOpen={mealFormOpen}
-                                    open={handleMealFormOpen}
-                                    close={handleMealFormClose}
-                                    meal={initialMeal}
-                                    onSubmit={createMeal}
-                                />
-                                <Button
-                                    color="primary"
-                                    variant="contained"
-                                    onClick={handleMealFormOpen}
-                                >
-                                    Add Meal
-                                </Button>
-                            </Box>
-                            <List className={classes.list}>
-                                {meals.map((meal) => {
-                                    return (
-                                        <React.Fragment>
-                                            <ListItem className={classes.listItem}>
-                                                <MenuItem
-                                                    update={getMeals}
-                                                    isOpen={mealFormOpen}
-                                                    open={handleMealFormOpen}
-                                                    close={handleMealFormClose}
-                                                    meal={meal}
-                                                    canEdit={true}
-                                                />
-                                            </ListItem>
-                                        </React.Fragment>
-                                    );
-                                })}
-                            </List>
+                            {chefId !== chef._id ? null : (
+                                <Box mb={2}>
+                                    {/* Dialog Box with Form for adding / updating meal */}
+                                    <MealForm
+                                        update={getMeals}
+                                        isOpen={mealFormOpen}
+                                        open={handleMealFormOpen}
+                                        close={handleMealFormClose}
+                                        meal={initialMeal}
+                                        onSubmit={createMeal}
+                                    />
+                                    <Button
+                                        color="primary"
+                                        variant="contained"
+                                        onClick={handleMealFormOpen}
+                                    >
+                                        Add Meal
+                                    </Button>
+                                </Box>
+                            )}
+                            {!meals.length > 0 ? (
+                                <Typography color="primary">
+                                    No Meals Available
+                                </Typography>
+                            ) : (
+                                <Box className={classes.list}>
+                                    {meals.map((meal) => {
+                                        return (
+                                            <React.Fragment>
+                                                <Box className={classes.listItemer}>
+                                                    <MenuItem
+                                                        update={getMeals}
+                                                        isOpen={mealFormOpen}
+                                                        open={handleMealFormOpen}
+                                                        close={handleMealFormClose}
+                                                        meal={meal}
+                                                        canEdit={true}
+                                                    />
+                                                </Box>
+                                            </React.Fragment>
+                                        );
+                                    })}
+                                </Box>
+                            )}
                         </Grid>
                     </Grid>
                 </React.Fragment>

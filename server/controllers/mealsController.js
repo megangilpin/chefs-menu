@@ -7,6 +7,7 @@ const findOneWithId = async (id) => {
     const { _doc } = await Meal.findById(id);
     return _doc;
 };
+
 const findAllWithChefId = async (chefId) => {
     const meals = await Meal.find(chefId);
     return meals;

@@ -13,8 +13,6 @@ import UserProfileMap from "../components/UserProfileMap";
 import { UserContext } from "../contexts/user/UserContextProvider";
 import ChefSignUp from "../components/ChefSignUp";
 import Main from "../components/Main";
-import ChefsMenu from "../components/ChefsMenu";
-import meals from "../lib/mockedMeals";
 
 const useStyles = makeStyles({
     profile: {
@@ -119,22 +117,22 @@ export default function UserProfile() {
                                 </Typography>
                             </Grid>
                             <Grid item xs={12}>
-                                {/* <ChefSignUp /> */}
                                 {!user.profile.isChef ? (
                                     <ChefSignUp />
                                 ) : (
-                                    <Link
-                                        href="#"
-                                        component="button"
-                                        variant="body2"
-                                        onClick={() =>
-                                            history.push(
-                                                `chefs/${profile.chefProfile._id}`
-                                            )
-                                        }
-                                    >
-                                        Edit Chef Profile Page
-                                    </Link>
+                                    <Box mb={2}>
+                                        <Link
+                                            component="button"
+                                            variant="body2"
+                                            onClick={() =>
+                                                history.push(
+                                                    `chefs/${profile.chefProfile._id}`
+                                                )
+                                            }
+                                        >
+                                            Edit Your Menu
+                                        </Link>
+                                    </Box>
                                 )}
                             </Grid>
                         </Grid>
