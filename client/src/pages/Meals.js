@@ -40,7 +40,7 @@ function Meals() {
     }, [cuisines]);
 
     return (
-        <Main>
+        <>
             <ResponsiveSideBar>
                 <Grid container spacing={2} alignContent="flex-start">
                     <Grid item xs={12}>
@@ -69,21 +69,19 @@ function Meals() {
                     </Grid>
                 </Grid>
             </ResponsiveSideBar>
-            <Grid container spacing={4} alignContent="flex-start">
-                <Grid item xs={12}>
-                    <Typography className={classes.availableMeals}>
-                        Available Meals:
-                    </Typography>
+            <Main>
+                <Grid container spacing={4} alignContent="flex-start">
+                    <Grid item xs={12}>
+                        <Typography className={classes.availableMeals}>
+                            Available Meals:
+                        </Typography>
+                    </Grid>
+                    {meals.map((meal) => (
+                        <MealCard key={meal._id} id={meal._id} {...meal} />
+                    ))}
                 </Grid>
-                {meals.map((meal) => (
-                    <MealCard
-                        key={meal._id}
-                        id={meal._id}
-                        {...meal}
-                    />
-                ))}
-            </Grid>
-        </Main>
+            </Main>
+        </>
     );
 }
 

@@ -12,6 +12,7 @@ import UserProfile from "./pages/UserProfile";
 import EditProfile from "./pages/EditProfile";
 import ChefSearch from "./pages/ChefSearch";
 import ChefProfile from "./pages/ChefProfile";
+import Meals from './pages/Meals';
 
 function App() {
     const user = React.useContext(UserContext);

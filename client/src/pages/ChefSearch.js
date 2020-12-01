@@ -5,14 +5,14 @@ import Main from "../components/Main";
 import { Typography, Button, Grid, TextField } from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import { UserContext } from "../contexts/user/UserContextProvider";
-import { abortableFetch, consoleErrorNonAbortErrors } from "../utils";
+import { abortableFetch } from "../utils";
 import useCuisineSelector from "../lib/useCuisineSelector";
 
 const useStyles = makeStyles({
     availableChefs: { paddingBottom: "15px", display: "inline", fontSize: "30px" },
 });
 
-function ChefSearch(props) {
+function ChefSearch() {
     const classes = useStyles();
     const {
         ALL,
@@ -48,7 +48,7 @@ function ChefSearch(props) {
     }, [radiusKm, cuisines]);
 
     return (
-        <Main>
+        <>
             <ResponsiveSideBar>
                 <Grid container spacing={2} alignContent="flex-start">
                     <Grid item xs={12}>
@@ -97,17 +97,19 @@ function ChefSearch(props) {
                     </Grid>
                 </Grid>
             </ResponsiveSideBar>
-            <Grid container spacing={4} alignContent="flex-start">
-                <Grid item xs={12}>
-                    <Typography className={classes.availableChefs}>
-                        Available Chefs:
-                    </Typography>
+            <Main>
+                <Grid container spacing={4} alignContent="flex-start">
+                    <Grid item xs={12}>
+                        <Typography className={classes.availableChefs}>
+                            Available Chefs:
+                        </Typography>
+                    </Grid>
+                    {chefs.map((chef) => (
+                        <ChefCard {...chef} key={chef._id} />
+                    ))}
                 </Grid>
-                {chefs.map((chef) => (
-                    <ChefCard {...chef} key={chef._id} />
-                ))}
-            </Grid>
-        </Main>
+            </Main>
+        </>
     );
 }
 
