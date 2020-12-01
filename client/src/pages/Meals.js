@@ -6,13 +6,13 @@ import Main from "../components/Main";
 import { Typography, Grid, Button } from "@material-ui/core";
 import MealCard from "../components/MealCard";
 import useCuisineSelector from "../lib/useCuisineSelector";
-import { abortableFetch, consoleErrorNonAbortErrors } from "../utils";
+import { abortableFetch } from "../utils";
 
 const useStyles = makeStyles({
     availableMeals: { paddingBottom: "15px", display: "inline", fontSize: "30px" },
 });
 
-function Meals(props) {
+function Meals() {
     const classes = useStyles();
     const {
         ALL,
