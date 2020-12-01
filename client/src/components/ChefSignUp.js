@@ -66,7 +66,8 @@ const ChefSignUp = (props) => {
 
     const updateUser = () => {
         const formValues = {
-            isChef: true,
+            isChef: user.profile.isChef,
+            newChef: true,
             cuisineSpecialty: [...specialty],
         };
         user.updateUser(formValues);

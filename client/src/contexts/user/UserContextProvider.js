@@ -8,6 +8,7 @@ const initialState = {
         primaryAddress: {},
         allergies: [],
         chefProfile: {},
+        favoriteCuisine: [],
     },
     isLoading: true,
 };
