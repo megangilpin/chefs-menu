@@ -48,11 +48,10 @@ const useStyles = makeStyles({
     },
 });
 
-function MealCard(props) {
+function MealCard({ mealPic, title, price, chefName, chefPic, location, id, chefId }) {
     const classes = useStyles();
     const history = useHistory();
     const { chef, addToCart } = useContext(CartContext);
-    const { mealPic, title, price, chefName, chefPic, location, id, chefId } = props;
 
     const addMeal = (e) => {
         e.preventDefault();
