@@ -78,13 +78,7 @@ function Meals(props) {
                     <MealCard
                         key={meal._id}
                         id={meal._id}
-                        mealPic={meal.mealPic}
-                        title={meal.title}
-                        price={meal.price}
-                        chefName={meal.chefName}
-                        chefId={meal.chefId}
-                        chefPic={meal.chefPic}
-                        location={meal.location}
+                        {...meal}
                     />
                 ))}
             </Grid>
