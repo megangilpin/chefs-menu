@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const userController = require("./controllers/usersController");
+const chefController = require("./controllers/chefsController");
 
 const isArrayOfStrings = (arr) =>
     Array.isArray(arr) && arr.every((ele) => typeof ele === "string");
@@ -25,6 +26,12 @@ const createAuthResponseObj = async (user) => {
         user: await userController.sanatize(user),
         token,
     };
+};
+
+const findChefProfile = async (id) => {
+    const chefData = await chefController.findOneWithUserId(id);
+    delete chefData.userId;
+    return chefData;
 };
 
 // src: https://www.geodatasource.com/developers/javascript
@@ -154,6 +161,7 @@ module.exports = {
     isArrayOfStrings,
     errorHandelingWrapper,
     createAuthResponseObj,
+    findChefProfile,
     coordinatesDistanceCalc,
     drawCirclePath,
 };

@@ -9,12 +9,12 @@ const findOneWithId = async (id) => {
 };
 
 const findAllChefs = async (query) => {
-    const chefs = await Chef.find(query).populate('userId').exec();
+    const chefs = await Chef.find(query).populate("userId").exec();
     return chefs;
 };
 
 const findOneWithUserId = async (userId) => {
-    const { _doc } = (await Chef.findOne({ userId })) || {};
+    const { _doc } = await Chef.findOne({ userId });
     return _doc;
 };
 

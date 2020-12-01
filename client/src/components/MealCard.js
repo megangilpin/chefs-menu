@@ -12,6 +12,8 @@ import {
     Box,
     Typography,
     Grid,
+    Link,
+    IconButton,
     Dialog,
     DialogContent,
     DialogContentText,
@@ -21,6 +23,8 @@ import {
 import { theme } from "../themes/theme";
 import { CartContext } from "../contexts/cart/CartContextProvider";
 import { dollarFormatter } from "../lib/utils";
+import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles({
     root: {
@@ -32,7 +36,6 @@ const useStyles = makeStyles({
     small: {
         marginTop: theme.spacing(0.5),
         marginBottom: theme.spacing(0.5),
-        marginLeft: theme.spacing(1),
         width: theme.spacing(4),
         height: theme.spacing(4),
     },
@@ -49,26 +52,26 @@ const useStyles = makeStyles({
     },
 });
 
-function MealCard(props) {
+function MealCard({
+    mealPic,
+    title,
+    price,
+    chefName,
+    chefPic,
+    location,
+    id,
+    chefId,
+}) {
     const classes = useStyles();
+    const history = useHistory();
     const { chef, addToCart } = useContext(CartContext);
-    const {
-        mealPic,
-        title,
-        price,
-        chefName,
-        chefPic,
-        location,
-        id,
-        chefId,
-    } = props.meal;
     const [openDialog, setDialogOpen] = React.useState(false);
 
     const handleClose = () => {
         setDialogOpen(false);
     };
 
-    const addMeal = (e) => {
+    const purchaseMeal = (e) => {
         e.preventDefault();
         const id = parseFloat(e.currentTarget.value);
         if (chef && chefId !== chef) {
@@ -80,64 +83,84 @@ function MealCard(props) {
     };
 
     return (
-        <div>
+        <>
             <Card className={classes.root}>
                 <CardMedia
                     component="img"
-                    alt="Meal Picture"
+                    alt="meal1"
                     height="150"
                     image={mealPic}
-                    title="Meal Picture"
+                    title="meal1"
                 />
                 <CardContent>
-                    <Typography gutterBottom className={classes.subtitle}>
-                        {title}
-                    </Typography>
-                    <Typography
-                        gutterBottom
-                        className={classes.subtitle1}
-                        color="secondary"
-                    >
-                        {/* assuming we save price in cents on DB */}
-                        {dollarFormatter.format(price / 100)}
-                    </Typography>
+                    <Grid container direction="row" spacing={2}>
+                        <Grid item xs={12}>
+                            <Typography gutterBottom className={classes.subtitle}>
+                                {title}
+                            </Typography>
+                            <Typography
+                                gutterBottom
+                                className={classes.subtitle1}
+                                color="secondary"
+                            >
+                                {dollarFormatter.format(price / 100)}
+                            </Typography>
+                            <IconButton
+                                value={id}
+                                color="primary"
+                                variant="contained"
+                                size="small"
+                                onClick={purchaseMeal}
+                            >
+                                <AddShoppingCartIcon />
+                            </IconButton>
+                        </Grid>
+                    </Grid>
                 </CardContent>
                 <Divider />
                 <CardActions>
-                    <Grid container spacing={1}>
-                        <Grid item>
-                            <Avatar
-                                className={classes.small}
-                                alt={chefName}
-                                src={chefPic}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm container alignItems="center">
-                            <Grid item xs container direction="column" spacing={2}>
-                                <Grid item xs>
-                                    <Typography
-                                        className={classes.subtitle}
-                                        variant="subtitle1"
-                                    >
-                                        {chefName}
-                                    </Typography>
-                                    <Typography
-                                        className={classes.subtitle2}
-                                        gutterBottom
-                                    >
-                                        {location}
-                                    </Typography>
+                    <Box ml={1} mr={1}>
+                        <Grid container spacing={1}>
+                            <Grid item xs={12}>
+                                <Avatar
+                                    className={classes.small}
+                                    alt={chefName}
+                                    src={chefPic}
+                                />
+                                <Grid item xs={12} container alignItems="center">
+                                    <Grid item container direction="column">
+                                        <Grid item>
+                                            <Typography
+                                                className={classes.subtitle}
+                                                variant="subtitle1"
+                                            >
+                                                {chefName}
+                                            </Typography>
+                                            <Typography
+                                                className={classes.subtitle2}
+                                                gutterBottom
+                                            >
+                                                {location}
+                                            </Typography>
+                                        </Grid>
+                                    </Grid>
                                 </Grid>
                             </Grid>
+                            <Grid item xs={12}>
+                                {/* will need to connect with ChefProfile once cards have chef info */}
+                                <Link
+                                    component="button"
+                                    variant="body2"
+                                    onClick={() => history.push(`chefs/${chefId}`)}
+                                >
+                                    Edit Your Menu
+                                </Link>
+                            </Grid>
                         </Grid>
-                    </Grid>
+                    </Box>
                 </CardActions>
-                <Box ml={1}>
-                    <Button value={id} color="primary" onClick={addMeal}>
-                        add to Cart
-                    </Button>
-                </Box>
             </Card>
+
             <Dialog
                 open={openDialog}
                 onClose={handleClose}
@@ -160,7 +183,7 @@ function MealCard(props) {
                     </Button>
                 </DialogActions>
             </Dialog>
-        </div>
+        </>
     );
 }
 
