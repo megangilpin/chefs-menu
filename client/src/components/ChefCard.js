@@ -38,7 +38,6 @@ function ChefCard(props) {
     const location = [city, region, country]
         .filter((ele) => ele && typeof ele === "string" && ele.length > 0)
         .join(", ");
-    console.log(cuisineSpecialty, distanceKm, location, bio);
 
     return (
         <Grid item xs={12} md={6} lg={4}>
