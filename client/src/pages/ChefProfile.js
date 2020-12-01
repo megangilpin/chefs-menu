@@ -151,13 +151,13 @@ function ChefProfile(props) {
                             justify="center"
                             alignItems="center"
                         >
-                            {!headerImage.picURL === undefined ? (
+                            {headerImage.picURL === undefined ? (
+                                <div className={classes.headerPlaceHolder}></div>
+                            ) : (
                                 <img
                                     className={classes.headerImage}
                                     src={headerImage.picURL}
                                 ></img>
-                            ) : (
-                                <div className={classes.headerPlaceHolder}></div>
                             )}
                             <Box
                                 boxShadow={2}
@@ -262,7 +262,7 @@ function ChefProfile(props) {
                                 <Box className={classes.list}>
                                     {meals.map((meal) => {
                                         return (
-                                            <React.Fragment>
+                                            <React.Fragment key={meal._id}>
                                                 <Box className={classes.listItem}>
                                                     <MenuItem
                                                         update={getMeals}

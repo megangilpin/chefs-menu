@@ -18,6 +18,7 @@ import {
     MenuItem,
     Select,
 } from "@material-ui/core";
+import allCuisines from "../lib/allCuisines";
 
 const useStyles = makeStyles((theme) => ({
     chefButton: {
@@ -45,8 +46,6 @@ const MenuProps = {
         },
     },
 };
-
-const types = ["American", "Japanese", "Spanish"];
 
 const ChefSignUp = (props) => {
     const user = React.useContext(UserContext);
@@ -124,7 +123,7 @@ const ChefSignUp = (props) => {
                                     )}
                                     MenuProps={MenuProps}
                                 >
-                                    {types.map((type) => (
+                                    {allCuisines.map((type) => (
                                         <MenuItem key={type} value={type}>
                                             <Checkbox
                                                 checked={

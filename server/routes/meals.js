@@ -122,7 +122,6 @@ router.put(
 );
 
 async function validationMiddleware(req, res, next) {
-    console.log(req.body);
     const {
         title,
         picURL,
@@ -144,7 +143,6 @@ async function validationMiddleware(req, res, next) {
     if (servingType && typeof servingType !== "string")
         errors.push("Invalid servingType type");
     if (cuisineType) {
-        // cuisineType = JSON.parse(cuisineType);
         if (!isArrayOfStrings(cuisineType))
             errors.push("Invalid cuisineType type");
     }

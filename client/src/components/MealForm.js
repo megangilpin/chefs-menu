@@ -11,6 +11,7 @@ import {
     DialogActions,
     DialogContent,
 } from "@material-ui/core";
+import allCuisines from "../lib/allCuisines";
 
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { TextField, Select } from "formik-material-ui";
@@ -33,23 +34,7 @@ function MealForm(props) {
     const meal = props.meal;
     const price = meal.price !== "" ? meal.price / 100 : meal.price;
     const cuisineType = meal.cuisineType[0] ? meal.cuisineType[0] : "";
-    const allCuisines = [
-        "AMERICAN",
-        "BRITISH",
-        "CARIBBEAN",
-        "CHINESE",
-        "FRENCH",
-        "GREEK",
-        "INDIAN",
-        "ITALIAN",
-        "MEDITERRANEAN",
-        "MEXICAN",
-        "MORROCAN",
-        "SPANISH",
-        "THAI",
-        "TURKISH",
-        "VIETNAMESE",
-    ];
+    const pic = meal.picURL !== undefined ? meal.picURL : "";
 
     const validationSchema = Yup.object().shape({
         title: Yup.string().required("Required!"),
@@ -83,7 +68,7 @@ function MealForm(props) {
                         cuisineType: cuisineType,
                         ingredients: meal.ingredients,
                         requirements: meal.requirements,
-                        picURL: picURL,
+                        picURL: pic,
                     }}
                     validationSchema={validationSchema}
                     onSubmit={(values, actions) => {
@@ -105,10 +90,10 @@ function MealForm(props) {
                                     <Grid container spacing={2} direction="column">
                                         {/* MEAL IMAGE INPUT */}
                                         <Grid xs={12} item>
-                                            {picURL === "" ? null : (
+                                            {pic === "" ? null : (
                                                 <img
                                                     className={classes.addImage}
-                                                    src={picURL}
+                                                    src={pic}
                                                     alt="Meal"
                                                 />
                                             )}

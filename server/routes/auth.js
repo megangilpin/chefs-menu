@@ -3,7 +3,7 @@ const express = require("express");
 const {
     errorHandelingWrapper,
     createAuthResponseObj,
-    createChefProfile,
+    findChefProfile,
 } = require("../util");
 const userController = require("../controllers/usersController");
 const chefsController = require("../controllers/chefsController");
@@ -22,7 +22,7 @@ router.post(
             return;
         }
         if (user.isChef) {
-            user.chefProfile = await createChefProfile(user.id);
+            user.chefProfile = await findChefProfile(user.id);
         }
         // verify that the passwords match
         const passwordsMatch = await userController.checkPassword({

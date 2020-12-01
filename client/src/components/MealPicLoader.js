@@ -44,13 +44,11 @@ function MealPicLoader(props) {
         setLoading(true);
         const formData = new FormData();
         formData.append("image", file[0]);
-        console.log(formData);
         saveMealPic(formData)
             .then((res) => {
                 setLoading(false);
                 setDropzoneOpen(false);
                 if (res.result) {
-                    console.log(res.url);
                     props.upload(res.url);
                     setSeverity("success");
                     setMessage("Profile Picture updated");

@@ -28,7 +28,7 @@ const createAuthResponseObj = async (user) => {
     };
 };
 
-const createChefProfile = async (id) => {
+const findChefProfile = async (id) => {
     const chefData = await chefController.findOneWithUserId(id);
     delete chefData.userId;
     return chefData;
@@ -66,6 +66,6 @@ module.exports = {
     isArrayOfStrings,
     errorHandelingWrapper,
     createAuthResponseObj,
-    createChefProfile,
+    findChefProfile,
     coordinatesDistanceCalc,
 };

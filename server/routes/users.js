@@ -3,7 +3,7 @@ const express = require("express");
 const {
     errorHandelingWrapper,
     createAuthResponseObj,
-    createChefProfile,
+    findChefProfile,
 } = require("../util");
 const usersController = require("../controllers/usersController");
 const chefsController = require("../controllers/chefsController");
@@ -23,7 +23,7 @@ router.get(
         }
 
         if (user.isChef) {
-            user.chefProfile = await createChefProfile(id);
+            user.chefProfile = await findChefProfile(id);
         }
 
         // create and return jwt with user obj
