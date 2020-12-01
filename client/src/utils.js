@@ -10,8 +10,4 @@ const abortableFetch = (request, opts) => {
     };
 };
 
-// If we know it's been canceled! do nothing
-const consoleErrorNonAbortErrors = (e) =>
-    e.name !== "AbortError" && console.error(e);
-
-export { abortableFetch, consoleErrorNonAbortErrors };
+export { abortableFetch };

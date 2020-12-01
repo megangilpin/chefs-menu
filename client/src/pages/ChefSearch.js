@@ -42,7 +42,8 @@ function ChefSearch(props) {
             .then((res) => res.json())
             .then((res) => res.chefs)
             .then(setChefs)
-            .catch(consoleErrorNonAbortErrors);
+            // ignore any errors
+            .catch(() => {});
         return abort;
     }, [radiusKm, cuisines]);
 

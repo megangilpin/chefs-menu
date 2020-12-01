@@ -34,7 +34,8 @@ function Meals(props) {
             .then((res) => res.json())
             .then((res) => res.meals)
             .then(setMeals)
-            .catch(consoleErrorNonAbortErrors);
+            // ignore any errors
+            .catch(() => {});
         return abort;
     }, [cuisines]);
 
