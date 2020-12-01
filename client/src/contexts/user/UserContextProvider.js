@@ -6,7 +6,6 @@ const initialState = {
     profile: {
         email: "",
         primaryAddress: {},
-        favoriteCuisine: [],
         allergies: [],
         chefProfile: {},
     },

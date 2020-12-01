@@ -50,6 +50,13 @@ function NavMenuButton(props) {
                 onClose={handleClose}
             >
                 <MenuItem onClick={() => history.push("profile")}>Profile</MenuItem>
+                <MenuItem onClick={handleClose}>My account</MenuItem>
+                <MenuItem onClick={() => history.push("chefs")}>
+                    Find A Chefs
+                </MenuItem>
+                <MenuItem onClick={() => history.push("meals")}>
+                    Find A Meal
+                </MenuItem>
                 <MenuItem onClick={() => user.logoutUser()}>Logout</MenuItem>
             </Menu>
         </div>
