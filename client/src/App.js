@@ -12,7 +12,7 @@ import UserProfile from "./pages/UserProfile";
 import EditProfile from "./pages/EditProfile";
 import ChefSearch from "./pages/ChefSearch";
 import ChefProfile from "./pages/ChefProfile";
-import Meals from './pages/Meals';
+import Meals from "./pages/Meals";
 
 function App() {
     const user = React.useContext(UserContext);
@@ -25,7 +25,11 @@ function App() {
                 <ProtectedRoute exact path="/profile" component={UserProfile} />
                 <ProtectedRoute exact path="/editprofile" component={EditProfile} />
                 <ProtectedRoute exact path="/chefs" component={ChefSearch} />
-                <ProtectedRoute exact path="/chefs/:chefId" component={ChefProfile} />
+                <ProtectedRoute
+                    exact
+                    path="/chefs/:chefId"
+                    component={ChefProfile}
+                />
             </Switch>
         </Page>
     );
@@ -35,7 +39,11 @@ function App() {
             <CssBaseline />
             <BrowserRouter>
                 <Route path="/">
-                    {user.isAuthenticated ? <Redirect to="/Home" /> : <Redirect to="/signup" />}
+                    {user.isAuthenticated ? (
+                        <Redirect to="/meals" />
+                    ) : (
+                        <Redirect to="/signup" />
+                    )}
                 </Route>
                 <Switch>
                     <Route path="/signup" component={LoginSignUp} />
