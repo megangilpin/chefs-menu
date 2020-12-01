@@ -58,8 +58,11 @@ const create = async ({
         allergies: [],
     });
     if (isChef) {
-        await chefsController.create({ userId: _doc._id });
+        const chefData = await chefsController.create({ userId: _doc._id });
+        delete chefData.userId;
+        _doc.chefProfile = chefData;
     }
+
     return _doc;
 };
 
@@ -97,7 +100,9 @@ const update = async (id, requestBody) => {
             formattedAddress,
         } = await mapsController.getLocationCoordinates(
             [street, city, region, country]
-                .filter((ele) => ele && typeof ele === "string" && ele.length > 0)
+                .filter(
+                    (ele) => ele && typeof ele === "string" && ele.length > 0
+                )
                 .join(", ")
         );
         user.primaryAddress = {

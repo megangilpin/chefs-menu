@@ -8,7 +8,7 @@ const initialState = {
         primaryAddress: {},
         favoriteCuisine: [],
         allergies: [],
-        favoriteCuisine: [],
+        chefProfile: {},
     },
     isLoading: true,
 };
@@ -20,14 +20,14 @@ const UserReducer = (state, action) => {
                 ...state,
                 isLoading: false,
                 isAuthenticated: true,
-                profile: action.payload.user,
+                profile: { ...state.profile, ...action.payload.user },
             };
         case LOGOUT:
             return {
                 ...state,
                 isLoading: false,
                 isAuthenticated: false,
-                profile: null,
+                profile: {},
             };
         case SET_IS_LOADING:
             return {
@@ -115,7 +115,7 @@ const UserContextProvider = ({ children }) => {
         if (data.user) {
             dispatch({ type: SET_USER, payload: data });
         } else {
-            dispatch({ type: LOGOUT, payload: null });
+            dispatch({ type: LOGOUT });
         }
     };
 

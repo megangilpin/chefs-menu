@@ -3,7 +3,7 @@ import { Menu, MenuItem, IconButton } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import { UserContext } from "../contexts/user/UserContextProvider";
 
-function MenuButton(props) {
+function NavMenuButton(props) {
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const user = React.useContext(UserContext);
@@ -50,12 +50,10 @@ function MenuButton(props) {
                 onClose={handleClose}
             >
                 <MenuItem onClick={() => history.push("profile")}>Profile</MenuItem>
-                <MenuItem onClick={() => history.push("meals")}>Meals</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
                 <MenuItem onClick={() => user.logoutUser()}>Logout</MenuItem>
             </Menu>
         </div>
     );
 }
 
-export default MenuButton;
+export default NavMenuButton;

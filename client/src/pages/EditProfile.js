@@ -104,6 +104,7 @@ export default function EditProfile() {
                     country: userData.primaryAddress["country"] || "",
                 }}
                 onSubmit={(values, { setSubmitting }) => {
+                    console.log(values);
                     setSubmitting(false);
 
                     const editedVals = {

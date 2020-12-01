@@ -4,6 +4,8 @@ const router = require("express").Router();
 const mealController = require("../controllers/mealsController");
 const chefsController = require("../controllers/chefsController");
 const { errorHandelingWrapper, isArrayOfStrings } = require("../util");
+const upload = require("../services/s3");
+const profileImgUpload = upload.single("image");
 
 router.get(
     "/:id",
@@ -11,6 +13,34 @@ router.get(
         const { id } = req.params;
         const meal = await mealController.find(id);
         res.json(meal);
+    })
+);
+
+router.delete(
+    "/:id",
+    errorHandelingWrapper(async (req, res) => {
+        const { id } = req.params;
+
+        const meal = await mealController.remove(id);
+        if (meal._id) {
+            res.json({ message: "Meal successfully deleted" });
+            return;
+        } else if (!meal) {
+            res.status(400).json({ errors: ["Meal no longer exists"] });
+            return;
+        }
+    })
+);
+
+router.get(
+    "/chef/:chefId",
+    errorHandelingWrapper(async (req, res) => {
+        const { chefId } = req.params;
+        const meals = await mealController.findAllWithChefId({
+            chefId: chefId,
+        });
+
+        res.json(meals);
     })
 );
 
@@ -107,15 +137,14 @@ async function validationMiddleware(req, res, next) {
     if (title && typeof title !== "string") errors.push("Invalid title type");
     if (picURL && typeof picURL !== "string")
         errors.push("Invalid picURL type");
-    if (price && Number.isFinite(price)) errors.push("Invalid price type");
+    if (price && !Number.isFinite(price)) errors.push("Invalid price type");
     if (servingSize && typeof servingSize !== "string")
         errors.push("Invalid servingSize type");
     if (servingType && typeof servingType !== "string")
         errors.push("Invalid servingType type");
     if (cuisineType) {
-        cuisineType = JSON.parse(cuisineType);
         if (!isArrayOfStrings(cuisineType))
-            errors.push("Invlalid cuisineType type");
+            errors.push("Invalid cuisineType type");
     }
     if (ingredients && typeof ingredients !== "string")
         errors.push("Invalid ingredients type");
@@ -136,5 +165,34 @@ async function validationMiddleware(req, res, next) {
 
     next();
 }
+
+// uploads image to AWS s3
+router.post(
+    "/mealImageUpload",
+    errorHandelingWrapper(async (req, res, next) => {
+        const errors = [];
+        if (req.files === null) {
+            return res.status(400).json({ msg: "No file uploaded" });
+        }
+
+        // upload image to s3 with the help of multer-s3
+        profileImgUpload(req, res, (error) => {
+            if (error) {
+                errors.push(error);
+            } else {
+                if (req.file === undefined) {
+                    errors.push("No File Selected");
+                }
+            }
+
+            if (errors.length > 0) {
+                return res.status(400).json({ errors });
+            }
+            mealPicURL = req.file.location;
+
+            res.json(mealPicURL);
+        });
+    })
+);
 
 module.exports = router;

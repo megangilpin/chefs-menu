@@ -5,11 +5,14 @@ import { Typography, Grid, Button } from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Avatar from "@material-ui/core/Avatar";
 import Box from "@material-ui/core/Box";
+import Link from "@material-ui/core/Link";
 import EditIcon from "@material-ui/icons/Edit";
 import IconButton from "@material-ui/core/IconButton";
 
 import UserProfileMap from "../components/UserProfileMap";
 import { UserContext } from "../contexts/user/UserContextProvider";
+import ChefSignUp from "../components/ChefSignUp";
+import Main from "../components/Main";
 
 const useStyles = makeStyles({
     profile: {
@@ -58,6 +61,8 @@ export default function UserProfile() {
     const classes = useStyles();
     const history = useHistory();
     const user = React.useContext(UserContext);
+    const { profile } = user;
+    profile.chefProfile = { ...profile.chefProfile };
 
     // populate user data using profile from context
     const userData = {
@@ -73,86 +78,112 @@ export default function UserProfile() {
     };
 
     return (
-        <Box component={Grid} boxShadow={3} container className={classes.profile}>
-            <Grid
-                item
-                xs={4}
-                container
-                spacing={2}
-                alignContent="flex-start"
-                className={classes.profileTopLeft}
-            >
+        <Main>
+            <Grid container direction="column">
                 <Grid item xs={12}>
                     <Box
-                        boxShadow={2}
-                        component={Avatar}
-                        src={user.profile.profilePicURL}
-                        alt={user.profile.profilePicURL ? "Profile Image" : ""}
-                        className={classes.userImage}
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <Typography variant="h6" component="h2">
-                        {userData.name}
-                    </Typography>
-                    <Typography variant="body1" component="h3">
-                        {userData.location}
-                    </Typography>
-                </Grid>
-                <Grid item xs={12}>
-                    <Button
-                        className={classes.sendMessageBtn}
-                        color="primary"
-                        variant="outlined"
+                        component={Grid}
+                        boxShadow={3}
+                        container
+                        className={classes.profile}
                     >
-                        Send Message
-                    </Button>
-                </Grid>
-            </Grid>
-
-            <Grid
-                item
-                xs={8}
-                container
-                spacing={2}
-                alignContent="flex-start"
-                className={classes.profileTopRight}
-            >
-                <Grid className={classes.editRow} item xs={12}>
-                    <IconButton
-                        className={classes.editButton}
-                        onClick={() => history.push("/editprofile")}
-                    >
-                        <EditIcon />
-                    </IconButton>
-                </Grid>
-                <Grid item xs={12}>
-                    <Typography variant="h6" component="h4">
-                        ABOUT ME:
-                    </Typography>
-                    <Typography variant="body1" component="h5">
-                        {userData.about}
-                    </Typography>
-                </Grid>
-
-                <Grid item xs={12}>
-                    <Typography variant="h6" component="h4">
-                        FAVOURITE CUISINE:
-                    </Typography>
-                    {userData.cuisine.map((cuisine) => (
-                        <Button
-                            key={cuisine}
-                            className={classes.cuisineButton}
-                            color="primary"
-                            variant="contained"
+                        <Grid
+                            item
+                            xs={4}
+                            container
+                            spacing={2}
+                            alignContent="flex-start"
+                            className={classes.profileTopLeft}
                         >
-                            <Typography variant="button">{cuisine}</Typography>
-                        </Button>
-                    ))}
+                            <Grid item xs={12}>
+                                <Box
+                                    boxShadow={2}
+                                    component={Avatar}
+                                    src={user.profile.profilePicURL}
+                                    alt={
+                                        user.profile.profilePicURL
+                                            ? "Profile Image"
+                                            : ""
+                                    }
+                                    className={classes.userImage}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Typography variant="h6" component="h2">
+                                    {userData.name}
+                                </Typography>
+                                <Typography variant="body1" component="h3">
+                                    {userData.location}
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                                {!user.profile.isChef ? (
+                                    <ChefSignUp />
+                                ) : (
+                                    <Box mb={2}>
+                                        <Link
+                                            component="button"
+                                            variant="body2"
+                                            onClick={() =>
+                                                history.push(
+                                                    `chefs/${profile.chefProfile._id}`
+                                                )
+                                            }
+                                        >
+                                            Edit Your Menu
+                                        </Link>
+                                    </Box>
+                                )}
+                            </Grid>
+                        </Grid>
+
+                        <Grid
+                            item
+                            xs={8}
+                            container
+                            spacing={2}
+                            alignContent="flex-start"
+                            className={classes.profileTopRight}
+                        >
+                            <Grid className={classes.editRow} item xs={12}>
+                                <IconButton
+                                    className={classes.editButton}
+                                    onClick={() => history.push("/editprofile")}
+                                >
+                                    <EditIcon />
+                                </IconButton>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Typography variant="h6" component="h4">
+                                    ABOUT ME:
+                                </Typography>
+                                <Typography variant="body1" component="h5">
+                                    {userData.about}
+                                </Typography>
+                            </Grid>
+
+                            <Grid item xs={12}>
+                                <Typography variant="h6" component="h4">
+                                    FAVOURITE CUISINE:
+                                </Typography>
+                                {userData.cuisine.map((cuisine) => (
+                                    <Button
+                                        key={cuisine}
+                                        className={classes.cuisineButton}
+                                        color="primary"
+                                        variant="contained"
+                                    >
+                                        <Typography variant="button">
+                                            {cuisine}
+                                        </Typography>
+                                    </Button>
+                                ))}
+                            </Grid>
+                        </Grid>
+                        <UserProfileMap location={userData.location} />
+                    </Box>
                 </Grid>
             </Grid>
-
-            <UserProfileMap location={userData.location} />
-        </Box>
+        </Main>
     );
 }
