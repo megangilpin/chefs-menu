@@ -9,12 +9,16 @@ import {
     CardContent,
     CardMedia,
     Button,
+    Box,
     Typography,
     Grid,
     Link,
-    Box,
     IconButton,
-    CardActionArea,
+    Dialog,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    DialogActions,
 } from "@material-ui/core";
 import { theme } from "../themes/theme";
 import { CartContext } from "../contexts/cart/CartContextProvider";
@@ -48,110 +52,138 @@ const useStyles = makeStyles({
     },
 });
 
-function MealCard({ mealPic, title, price, chefName, chefPic, location, id, chefId }) {
+function MealCard({
+    mealPic,
+    title,
+    price,
+    chefName,
+    chefPic,
+    location,
+    id,
+    chefId,
+}) {
     const classes = useStyles();
     const history = useHistory();
     const { chef, addToCart } = useContext(CartContext);
+    const [openDialog, setDialogOpen] = React.useState(false);
+
+    const handleClose = () => {
+        setDialogOpen(false);
+    };
 
     const addMeal = (e) => {
         e.preventDefault();
         const id = parseFloat(e.currentTarget.value);
         if (chef && chefId !== chef) {
-            alert(
-                `Your cart currently contains meals from another chef. You can only checkout with meals from one chef`
-            );
+            setDialogOpen(true);
         } else {
             const meal = { id, mealPic, title, price, chefName, chefId };
-            addToCart(meal, id);
+            addToCart(meal);
         }
     };
 
     return (
-        <Card className={classes.root}>
-            <CardMedia
-                component="img"
-                alt="meal1"
-                height="150"
-                image={mealPic}
-                title="meal1"
-            />
-            <CardContent>
-                <Grid container direction="row" spacing={2}>
-                    <Grid item xs={12} >
-                        <Typography gutterBottom className={classes.subtitle}>
-                            {title}
-                        </Typography>
-                        <Typography
-                            gutterBottom
-                            className={classes.subtitle1}
-                            color="secondary"
-                        >
-                            {/* assuming we save price in cents on DB */}
-                            {dollarFormatter.format(price / 100)}
-                        </Typography>
-                    </Grid>
-                    <Grid
-                        item
-                        xs={4}
-                        container
-                        justify="flex-end"
-                        alignContent="center"
-                    >
-                        <IconButton
-                            value={id}
-                            color="primary"
-                            variant="contained"
-                            size="small"
-                            onClick={addMeal}
-                        >
-                            <AddShoppingCartIcon />
-                        </IconButton>
-                    </Grid>
-                </Grid>
-            </CardContent>
-            <Divider />
-            <CardActions>
-                <Box ml={1} mr={1}>
-                    <Grid container spacing={1}>
+        <>
+            <Card className={classes.root}>
+                <CardMedia
+                    component="img"
+                    alt="meal1"
+                    height="150"
+                    image={mealPic}
+                    title="meal1"
+                />
+                <CardContent>
+                    <Grid container direction="row" spacing={2}>
                         <Grid item xs={12}>
-                            <Avatar
-                                className={classes.small}
-                                alt={chefName}
-                                src={chefPic}
-                            />
-                            <Grid item xs={12} container alignItems="center">
-                                <Grid item container direction="column">
-                                    <Grid item>
-                                        <Typography
-                                            className={classes.subtitle}
-                                            variant="subtitle1"
-                                        >
-                                            {chefName}
-                                        </Typography>
-                                        <Typography
-                                            className={classes.subtitle2}
-                                            gutterBottom
-                                        >
-                                            {location}
-                                        </Typography>
+                            <Typography gutterBottom className={classes.subtitle}>
+                                {title}
+                            </Typography>
+                            <Typography
+                                gutterBottom
+                                className={classes.subtitle1}
+                                color="secondary"
+                            >
+                                {dollarFormatter.format(price / 100)}
+                            </Typography>
+                            <IconButton
+                                value={id}
+                                color="primary"
+                                variant="contained"
+                                size="small"
+                                onClick={addMeal}
+                            >
+                                <AddShoppingCartIcon />
+                            </IconButton>
+                        </Grid>
+                    </Grid>
+                </CardContent>
+                <Divider />
+                <CardActions>
+                    <Box ml={1} mr={1}>
+                        <Grid container spacing={1}>
+                            <Grid item xs={12}>
+                                <Avatar
+                                    className={classes.small}
+                                    alt={chefName}
+                                    src={chefPic}
+                                />
+                                <Grid item xs={12} container alignItems="center">
+                                    <Grid item container direction="column">
+                                        <Grid item>
+                                            <Typography
+                                                className={classes.subtitle}
+                                                variant="subtitle1"
+                                            >
+                                                {chefName}
+                                            </Typography>
+                                            <Typography
+                                                className={classes.subtitle2}
+                                                gutterBottom
+                                            >
+                                                {location}
+                                            </Typography>
+                                        </Grid>
                                     </Grid>
                                 </Grid>
                             </Grid>
+                            <Grid item xs={12}>
+                                <Link
+                                    href="#"
+                                    component="button"
+                                    variant="body2"
+                                    onClick={() => history.push("chefProfile")}
+                                >
+                                    Learn More
+                                </Link>
+                            </Grid>
                         </Grid>
-                        <Grid item xs={12}>
-                            <Link
-                                href="#"
-                                component="button"
-                                variant="body2"
-                                onClick={() => history.push("chefProfile")}
-                            >
-                                Learn More
-                            </Link>
-                        </Grid>
-                    </Grid>
-                </Box>
-            </CardActions>
-        </Card>
+                    </Box>
+                </CardActions>
+            </Card>
+
+            <Dialog
+                open={openDialog}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    {"Your cart already contains meals from another chef!"}
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        A meal order can only contain meals from the same chef. If
+                        you would like to select this meal please empty your current
+                        cart or complete your purchase and start another order.
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} color="primary">
+                        Got it!
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        </>
     );
 }
 

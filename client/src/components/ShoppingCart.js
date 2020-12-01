@@ -83,8 +83,8 @@ function ShoppingCart(props) {
         setAnchorEl(null);
     };
 
-    const open = Boolean(anchorEl);
-    const id = open ? "simple-popover" : undefined;
+    const cartOpen = Boolean(anchorEl);
+    const id = cartOpen ? "simple-popover" : undefined;
 
     return (
         <div>
@@ -100,7 +100,7 @@ function ShoppingCart(props) {
             </IconButton>
             <Popover
                 id={id}
-                open={open}
+                open={cartOpen}
                 anchorEl={anchorEl}
                 onClose={handleClose}
                 anchorOrigin={{
