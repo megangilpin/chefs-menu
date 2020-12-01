@@ -263,7 +263,7 @@ function ChefProfile(props) {
                                     {meals.map((meal) => {
                                         return (
                                             <React.Fragment>
-                                                <Box className={classes.listItemer}>
+                                                <Box className={classes.listItem}>
                                                     <MenuItem
                                                         update={getMeals}
                                                         isOpen={mealFormOpen}

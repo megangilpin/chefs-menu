@@ -22,13 +22,14 @@ import MealForm from "../components/MealForm";
 
 const useStyles = makeStyles((theme) => ({
     mealCard: {
-        minHeight: "300px",
-        width: "800px",
+        minHeight: "40vh",
+        width: "auto",
+        maxWidth: "800px",
         overflow: "auto",
     },
     mealImage: {
         maxWidth: "100%",
-        maxHeight: "300px",
+        maxHeight: "auto",
         objectFit: "cover",
     },
     box: {
