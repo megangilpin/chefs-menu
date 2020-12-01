@@ -81,8 +81,16 @@ const remove = async (id) => {
     return await Meal.findByIdAndDelete(id);
 };
 
+// const findAllMeals = async (query) => {
+//     const meals = await Meal.find(query);
+//     return meals;
+// };
+
 const findAllMeals = async (query) => {
-    const meals = await Meal.find(query);
+    const meals = await Meal.find(query).populate({
+        path: "chefId",
+        populate: { path: "userId" },
+    });
     return meals;
 };
 

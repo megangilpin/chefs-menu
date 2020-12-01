@@ -53,21 +53,26 @@ router.put(
             return;
         }
 
+        let chefProfile = {};
+
+        if (req.body.newChef && !req.body.isChef) {
+            const user = await usersController.findOneWithId(id);
+            console.log(user);
+            const data = {
+                cuisineSpecialty: [...req.body.cuisineSpecialty],
+                userId: user._id,
+            };
+            chefProfile = await chefsController.create(data);
+            delete chefProfile.userId;
+            req.body.isChef = !req.body.isChef;
+        }
+
         const user = await usersController.sanatize(
             await usersController.update(id, req.body)
         );
-
-        if (req.body.isChef && !user.isChef) {
-            const data = {
-                cuisineSpecialty: [...req.body.cuisineSpecialty],
-                userId: id,
-            };
-            const chefData = await chefsController.create(data);
-            delete chefData.userId;
-            user.chefProfile = chefData;
-        }
-
+        user.chefProfile = chefProfile;
         const responseObj = await createAuthResponseObj(user);
+        console.log(responseObj);
         res.json(responseObj);
     })
 );

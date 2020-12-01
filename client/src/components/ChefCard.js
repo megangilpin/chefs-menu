@@ -2,14 +2,12 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
+import { Avatar, Typography, Grid, Box, Divider, Button } from "@material-ui/core";
 import CardMedia from "@material-ui/core/CardMedia";
-import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
 
 import chef1 from "../images/chef1.png";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     root: {
         maxWidth: 345,
     },
@@ -23,7 +21,12 @@ const useStyles = makeStyles({
     location: {
         textAlign: "center",
     },
-});
+    userImage: {
+        width: theme.spacing(15),
+        height: theme.spacing(15),
+        border: "5px solid white",
+    },
+}));
 
 function ChefCard(props) {
     const classes = useStyles();
@@ -34,6 +37,7 @@ function ChefCard(props) {
         lastName,
         bio,
         primaryAddress: { city, region, country },
+        profilePicURL,
     } = userId;
     const location = [city, region, country]
         .filter((ele) => ele && typeof ele === "string" && ele.length > 0)
@@ -42,7 +46,17 @@ function ChefCard(props) {
     return (
         <Grid item xs={12} md={6} lg={4}>
             <Card>
-                <CardMedia className={classes.media} image={chef1} />
+                <Grid container justify="center" alignContent="center">
+                    <Box
+                        mt={2}
+                        boxShadow={2}
+                        component={Avatar}
+                        src={profilePicURL}
+                        alt={profilePicURL ? "profile image" : ""}
+                        className={classes.userImage}
+                    />
+                </Grid>
+                {/* <CardMedia className={classes.media} image={profilePicURL} /> */}
                 <CardContent>
                     <Typography className={classes.name} gutterBottom>
                         {firstName + " " + lastName}

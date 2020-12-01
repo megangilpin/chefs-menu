@@ -22,7 +22,7 @@ router.post(
             return;
         }
         if (user.isChef) {
-            user.chefProfile = await findChefProfile(user.id);
+            user.chefProfile = await findChefProfile(user._id);
         }
         // verify that the passwords match
         const passwordsMatch = await userController.checkPassword({
@@ -36,6 +36,7 @@ router.post(
         }
         // create and return jwt with user obj
         const responseObj = await createAuthResponseObj(user);
+        console.log(responseObj);
         res.cookie("token", responseObj.token, { httpOnly: true });
         res.json(responseObj);
     })
