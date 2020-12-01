@@ -50,6 +50,9 @@ function ChefCard(props) {
                     <Typography className={classes.location} gutterBottom>
                         {location}
                     </Typography>
+                    <Typography className={classes.location} gutterBottom>
+                        {`${Math.round(distanceKm)} Km away`}
+                    </Typography>
                     {cuisineSpecialty &&
                         cuisineSpecialty.map((cuisine) => (
                             <Button
