@@ -25,9 +25,9 @@ router.get(
         let { center } = req.query;
         const { id } = req.user;
 
+        const user = await userController.findOneWithId(id);
         // if no center is provided use the users address
         if (!center) {
-            const user = await userController.findOneWithId(id);
             const {
                 primaryAddress: { city, region, country },
             } = user;
@@ -35,11 +35,13 @@ router.get(
             if (country) center = center + "," + country;
         }
 
+        const { primaryAddress: { lat, lng } } = user;
+
         const {
             status,
             headers,
             data,
-        } = await mapsController.getStaticMapImage(center);
+        } = await mapsController.getStaticMapImage(center, lat, lng);
 
         res.set(headers);
         res.status(status);

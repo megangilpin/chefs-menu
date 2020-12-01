@@ -4,7 +4,9 @@ const router = require("express").Router();
 const chefsController = require("../controllers/chefsController");
 const mealsController = require("../controllers/mealsController");
 const userController = require("../controllers/usersController");
-const { errorHandelingWrapper, coordinatesDistanceCalc } = require("../util");
+const { errorHandelingWrapper, coordinatesDistanceCalc, drawCirclePath } = require("../util");
+
+console.log('drawCirclePath(lat, lng, 100)', drawCirclePath(43.4698605, -80.5695588, 100))
 
 router.get("/", errorHandelingWrapper(async (req, res) => {
     if (!["chefs", "meals"].includes(req.query.searchType)) {
