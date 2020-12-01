@@ -25,6 +25,7 @@ router.get(
         if (user.isChef) {
             user.chefProfile = await createChefProfile(id);
         }
+
         // create and return jwt with user obj
         const responseObj = await createAuthResponseObj(user);
         res.cookie("token", responseObj.token, { httpOnly: true });

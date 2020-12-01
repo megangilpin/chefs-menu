@@ -66,6 +66,7 @@ function ChefProfile(props) {
     const user = React.useContext(UserContext);
     const classes = useStyles();
     const { chefId } = useParams();
+
     const chef = { ...user.profile.chefProfile };
     const [meals, setMeals] = React.useState([]);
     const [mealFormOpen, setMealFormOpen] = React.useState(false);
@@ -150,8 +151,7 @@ function ChefProfile(props) {
                             justify="center"
                             alignItems="center"
                         >
-                            {meals.length > 0 ||
-                            !headerImage.picURL === undefined ? (
+                            {!headerImage.picURL === undefined ? (
                                 <img
                                     className={classes.headerImage}
                                     src={headerImage.picURL}

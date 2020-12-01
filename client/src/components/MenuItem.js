@@ -23,7 +23,7 @@ import MealForm from "../components/MealForm";
 const useStyles = makeStyles((theme) => ({
     mealCard: {
         minHeight: "300px",
-        maxWidth: "800px",
+        width: "800px",
         overflow: "auto",
     },
     mealImage: {
