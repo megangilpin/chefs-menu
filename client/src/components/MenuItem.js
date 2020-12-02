@@ -18,7 +18,6 @@ import EditIcon from "@material-ui/icons/Edit";
 import ClearIcon from "@material-ui/icons/Clear";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import { dollarFormatter } from "../lib/utils";
-import { useParams } from "react-router-dom";
 import MealForm from "../components/MealForm";
 
 const useStyles = makeStyles((theme) => ({
@@ -71,12 +70,13 @@ function MenuItem(props) {
     const purchaseMeal = (e) => {
         e.preventDefault();
         const id = e.currentTarget.value;
-        const meal = { id, picURL, title, price, chefName, chefId };
+        const chefID = chefId;
+        const meal = { id, picURL, title, price, chefName, chefID };
         console.log(meal);
         if (chef && chefId !== chef) {
             setDialogOpen(true);
         } else {
-            // addToCart(meal, id);
+            addToCart(meal, id);
         }
     };
 

@@ -2,7 +2,6 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useLocation } from "react-router-dom";
 import { UserContext } from "../contexts/user/UserContextProvider";
-import { useParams } from "react-router-dom";
 import ResponsiveSideBar from "../components/ResponsiveSideBar";
 import Main from "../components/Main";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
