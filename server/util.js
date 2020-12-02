@@ -62,21 +62,81 @@ const coordinatesDistanceCalc = (lat1, lng1, lat2, lng2, unit = "K") => {
     return dist;
 };
 
+const encodeNumber = (num) => {
+    let encodeString = "";
+
+    while (num >= 0x20) {
+        encodeString += String.fromCharCode((0x20 | (num & 0x1f)) + 63);
+        num >>= 5;
+    }
+    encodeString += String.fromCharCode(num + 63);
+
+    return encodeString;
+}
+
+const encodeSignedNumber = (num) => {
+    let sgn_num = num << 1;
+
+    if (num < 0) {
+        sgn_num = ~sgn_num;
+    }
+
+    return encodeNumber(sgn_num);
+}
+
+const encodePoint = (plat, plng, lat, lng) => {
+    let dlng = 0;
+    let dlat = 0;
+
+    const late5 = Math.round(lat * 1e5);
+    const plate5 = Math.round(plat * 1e5);
+
+    const lnge5 = Math.round(lng * 1e5);
+    const plnge5 = Math.round(plng * 1e5);
+
+    dlng = lnge5 - plnge5;
+    dlat = late5 - plate5;
+
+    return encodeSignedNumber(dlat) + encodeSignedNumber(dlng);
+}
+
+
+const createEncodings = (coords) => {
+    let i = 0;
+
+    let plat = 0;
+    let plng = 0;
+
+    let encoded_points = "";
+
+    for (i = 0; i < coords.length; ++i) {
+        let lat = coords[i][0];
+        let lng = coords[i][1];
+
+        encoded_points += encodePoint(plat, plng, lat, lng);
+
+        plat = lat;
+        plng = lng;
+    }
+
+    return encoded_points;
+}
+
 // src: https://stackoverflow.com/questions/36506668/google-static-map-draw-a-circle
 const drawCirclePath = (lat, lng, radius, detail = 8) => {
-    let R = 6371;
+    const R = 6371;
 
-    let pi = Math.PI;
+    const pi = Math.PI;
 
     lat = (lat * pi) / 180;
     lng = (lng * pi) / 180;
-    let d = radius / R;
+    const d = radius / R;
 
-    let points = [];
+    const points = [];
     let i = 0;
 
     for (i = 0; i <= 360; i += detail) {
-        let brng = (i * pi) / 180;
+        const brng = (i * pi) / 180;
 
         let plat = Math.asin(
             Math.sin(lat) * Math.cos(d) + Math.cos(lat) * Math.sin(d) * Math.cos(brng)
@@ -91,70 +151,11 @@ const drawCirclePath = (lat, lng, radius, detail = 8) => {
             pi;
         plat = (plat * 180) / pi;
 
-        let currentPoints = [plat, plng];
+        const currentPoints = [plat, plng];
         points.push(currentPoints);
     }
 
     return createEncodings(points);
-}
-
-function createEncodings(coords) {
-    var i = 0;
-
-    var plat = 0;
-    var plng = 0;
-
-    var encoded_points = "";
-
-    for (i = 0; i < coords.length; ++i) {
-        var lat = coords[i][0];
-        var lng = coords[i][1];
-
-        encoded_points += encodePoint(plat, plng, lat, lng);
-
-        plat = lat;
-        plng = lng;
-    }
-
-    return encoded_points;
-}
-
-function encodePoint(plat, plng, lat, lng) {
-    var dlng = 0;
-    var dlat = 0;
-
-    var late5 = Math.round(lat * 1e5);
-    var plate5 = Math.round(plat * 1e5);
-
-    var lnge5 = Math.round(lng * 1e5);
-    var plnge5 = Math.round(plng * 1e5);
-
-    dlng = lnge5 - plnge5;
-    dlat = late5 - plate5;
-
-    return encodeSignedNumber(dlat) + encodeSignedNumber(dlng);
-}
-
-function encodeSignedNumber(num) {
-    var sgn_num = num << 1;
-
-    if (num < 0) {
-        sgn_num = ~sgn_num;
-    }
-
-    return encodeNumber(sgn_num);
-}
-
-function encodeNumber(num) {
-    var encodeString = "";
-
-    while (num >= 0x20) {
-        encodeString += String.fromCharCode((0x20 | (num & 0x1f)) + 63);
-        num >>= 5;
-    }
-    encodeString += String.fromCharCode(num + 63);
-
-    return encodeString;
 }
 
 module.exports = {
