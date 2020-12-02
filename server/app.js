@@ -30,7 +30,7 @@ app.get("/ping", loginRequired, (req, res) => res.json({ success: true }));
 app.use("/users", loginRequired, usersRouter);
 app.use("/chefs", loginRequired, chefsRouter);
 app.use("/meals", loginRequired, mealsRouter);
-app.use("/search", searchRouter);
+app.use("/search", loginRequired, searchRouter);
 app.use("/maps", mapsRouter);
 
 // catch 404 and forward to error handler

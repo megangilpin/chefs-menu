@@ -111,10 +111,8 @@ const UserContextProvider = ({ children }) => {
         });
 
         const data = await response.json();
-        console.log("loggin data");
-        console.log(data);
+
         if (data.user) {
-            console.log(data.user);
             dispatch({ type: SET_USER, payload: data });
         } else {
             dispatch({ type: LOGOUT });

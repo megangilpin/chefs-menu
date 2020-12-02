@@ -62,7 +62,6 @@ export default function UserProfile() {
     const history = useHistory();
     const user = React.useContext(UserContext);
     const { profile } = user;
-    console.log(profile);
     profile.chefProfile = { ...profile.chefProfile };
 
     // populate user data using profile from context
@@ -126,9 +125,10 @@ export default function UserProfile() {
                                             component="button"
                                             variant="body2"
                                             onClick={() =>
-                                                history.push(
-                                                    `chefs/${profile.chefProfile._id}`
-                                                )
+                                                history.push({
+                                                    pathname: "/chefprofile",
+                                                    state: profile,
+                                                })
                                             }
                                         >
                                             Edit Your Menu

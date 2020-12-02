@@ -25,11 +25,7 @@ function App() {
                 <ProtectedRoute exact path="/profile" component={UserProfile} />
                 <ProtectedRoute exact path="/editprofile" component={EditProfile} />
                 <ProtectedRoute exact path="/chefs" component={ChefSearch} />
-                <ProtectedRoute
-                    exact
-                    path="/chefs/:chefId"
-                    component={ChefProfile}
-                />
+                <ProtectedRoute exact path="/chefprofile" component={ChefProfile} />
             </Switch>
         </Page>
     );

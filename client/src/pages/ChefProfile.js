@@ -1,5 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import { useLocation } from "react-router-dom";
 import { UserContext } from "../contexts/user/UserContextProvider";
 import { useParams } from "react-router-dom";
 import ResponsiveSideBar from "../components/ResponsiveSideBar";
@@ -63,13 +64,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function ChefProfile(props) {
+    const location = useLocation();
     const user = React.useContext(UserContext);
     const classes = useStyles();
-    const { chefId } = useParams();
-
-    const chef = { ...user.profile.chefProfile };
     const [meals, setMeals] = React.useState([]);
     const [mealFormOpen, setMealFormOpen] = React.useState(false);
+
+    const chefInfo = location.state;
+    const id = chefInfo.chefProfile._id;
+    const currentChef = { ...user.profile.chefProfile };
+    const headerImage = { ...meals[0] };
+
     const initialMeal = {
         title: "",
         price: "",
@@ -78,7 +83,6 @@ function ChefProfile(props) {
         ingredients: "",
         requirements: "",
     };
-    const headerImage = { ...meals[0] };
 
     const handleMealFormOpen = () => {
         setMealFormOpen(true);
@@ -88,7 +92,7 @@ function ChefProfile(props) {
         setMealFormOpen(false);
     };
 
-    const getMeals = async () => {
+    const getMeals = async (chefId) => {
         const response = await fetch(`/meals/chef/${chefId}`, {
             method: "get",
             headers: {
@@ -108,7 +112,7 @@ function ChefProfile(props) {
     };
 
     const createMeal = async (formValues) => {
-        formValues.chefId = user.profile.chefProfile._id;
+        formValues.chefId = chefInfo.chefProfile._id;
 
         const response = await fetch("/meals", {
             method: "post",
@@ -133,11 +137,13 @@ function ChefProfile(props) {
     };
 
     React.useEffect(() => {
-        const meals = async () => await getMeals();
+        console.log(location.state.chefProfile._id);
+        const id = location.state.chefProfile._id;
+        const meals = async () => await getMeals(id);
         meals().catch((error) => {
             console.log(error);
         });
-    }, []);
+    }, [location]);
 
     return (
         <React.Fragment>
@@ -162,10 +168,8 @@ function ChefProfile(props) {
                             <Box
                                 boxShadow={2}
                                 component={Avatar}
-                                src={user.profile.profilePicURL}
-                                alt={
-                                    user.profile.profilePicURL ? "profile image" : ""
-                                }
+                                src={chefInfo.profilePicURL}
+                                alt={chefInfo.profilePicURL ? "profile image" : ""}
                                 className={classes.userImage}
                             />
                         </Grid>
@@ -184,12 +188,12 @@ function ChefProfile(props) {
                                 alignItems="center"
                             >
                                 <Typography variant="h6">
-                                    {`${user.profile.firstName}  ${user.profile.lastName}`}
+                                    {`${chefInfo.firstName}  ${chefInfo.lastName}`}
                                 </Typography>
                                 <Typography
                                     className={classes.subtitle}
                                     variant="caption"
-                                >{`${user.profile.primaryAddress.city}, ${user.profile.primaryAddress.country}`}</Typography>
+                                >{`${chefInfo.primaryAddress.city}, ${chefInfo.primaryAddress.country}`}</Typography>
                             </Grid>
                             <Grid item>
                                 <Box mt={3} mb={3}>
@@ -199,7 +203,7 @@ function ChefProfile(props) {
                             <Grid item>
                                 <Box mb={2}>
                                     <Typography variant="body1">
-                                        {user.profile.bio}
+                                        {chefInfo.bio}
                                     </Typography>
                                 </Box>
                             </Grid>
@@ -229,12 +233,12 @@ function ChefProfile(props) {
                         <Grid item>
                             <Typography variant="h5">
                                 <Box mt={5} fontWeight="fontWeightBold">
-                                    {`${user.profile.firstName}'s`} Menu:
+                                    {`${chefInfo.firstName}'s`} Menu:
                                 </Box>
                             </Typography>
                         </Grid>
                         <Grid item className={classes.color2}>
-                            {chefId !== chef._id ? null : (
+                            {id !== currentChef._id ? null : (
                                 <Box mb={2}>
                                     {/* Dialog Box with Form for adding / updating meal */}
                                     <MealForm
