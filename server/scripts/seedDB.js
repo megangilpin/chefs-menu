@@ -100,7 +100,7 @@ const mealSeed = [
 
 (async () => {
     try {
-        let res = await mealsController.deleteAll();
+        let res = await usersController.deleteAll();
         console.log("deleteing all users", res);
 
         // res = await Promise.all(mealSeed.map(mealsController.create));

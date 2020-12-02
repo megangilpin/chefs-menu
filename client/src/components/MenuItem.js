@@ -227,9 +227,9 @@ function MenuItem(props) {
                                     className={classes.subtitle}
                                     variant="subtitle2"
                                 >
-                                    {!requirements
-                                        ? "No Meal Requirements"
-                                        : { requirements }}
+                                    {requirements
+                                        ? `${requirements}`
+                                        : "No Meal Requirements"}
                                 </Typography>
                             </Box>
                         </Grid>

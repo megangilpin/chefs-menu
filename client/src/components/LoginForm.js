@@ -52,7 +52,7 @@ export default function LoginForm(props) {
                     user.login(values)
                         .then((res) => {
                             if (res.result) {
-                                history.push("/home");
+                                history.push("/meals");
                             } else {
                                 setMessage(res.message);
                                 setOpen(true);

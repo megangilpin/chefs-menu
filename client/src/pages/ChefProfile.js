@@ -303,8 +303,6 @@ function ChefProfile(props) {
                                     </Button>
                                 </Box>
                             )}
-                        </Grid>
-                        <Grid item>
                             {!meals.length > 0 ? (
                                 <Typography color="primary">
                                     No Meals Available

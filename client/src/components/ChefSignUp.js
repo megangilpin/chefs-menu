@@ -17,6 +17,7 @@ import {
     ListItemText,
     MenuItem,
     Select,
+    FormHelperText,
 } from "@material-ui/core";
 import allCuisines from "../lib/allCuisines";
 
@@ -33,6 +34,9 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: "10px",
         background: theme.background.secondary,
         color: "#ffffff",
+    },
+    error: {
+        color: "#f12",
     },
 }));
 
@@ -52,6 +56,7 @@ const ChefSignUp = (props) => {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const [specialty, setSpecialty] = React.useState([]);
+    const [hasError, setError] = React.useState(false);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -61,10 +66,16 @@ const ChefSignUp = (props) => {
         setOpen(false);
     };
     const handleChange = (event) => {
+        setError(false);
         setSpecialty(event.target.value);
     };
 
     const registerChef = () => {
+        if (!specialty.length > 0) {
+            setError(true);
+            return;
+        }
+
         const formValues = {
             cuisineSpecialty: [...specialty],
         };

@@ -1,6 +1,5 @@
 import * as React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { useHistory } from "react-router-dom";
 import { UserContext } from "../contexts/user/UserContextProvider";
 import {
     Box,
@@ -18,6 +17,7 @@ import {
     ListItemText,
     MenuItem,
     Select,
+    FormHelperText,
 } from "@material-ui/core";
 import allCuisines from "../lib/allCuisines";
 
@@ -39,6 +39,9 @@ const useStyles = makeStyles((theme) => ({
         background: theme.background.secondary,
         color: "#ffffff",
     },
+    error: {
+        color: "#f12",
+    },
 }));
 
 const ITEM_HEIGHT = 48;
@@ -56,10 +59,10 @@ const UpdateChef = (props) => {
     const user = React.useContext(UserContext);
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
+    const [hasError, setError] = React.useState(false);
     const [specialty, setSpecialty] = React.useState([
         ...user.profile.chefProfile.cuisineSpecialty,
     ]);
-
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -68,10 +71,16 @@ const UpdateChef = (props) => {
         setOpen(false);
     };
     const handleChange = (event) => {
+        setError(false);
         setSpecialty(event.target.value);
     };
 
     const updateUser = () => {
+        if (!specialty.length > 0) {
+            setError(true);
+            return;
+        }
+
         const formValues = {
             cuisineSpecialty: [...specialty],
         };
@@ -143,6 +152,11 @@ const UpdateChef = (props) => {
                                         </MenuItem>
                                     ))}
                                 </Select>
+                                {hasError && (
+                                    <FormHelperText className={classes.error}>
+                                        Must Select One
+                                    </FormHelperText>
+                                )}
                             </Grid>
                         </Grid>
                     </Box>
