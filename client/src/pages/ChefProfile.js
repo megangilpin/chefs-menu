@@ -72,7 +72,8 @@ function ChefProfile(props) {
     const classes = useStyles();
     const [meals, setMeals] = React.useState([]);
     const [mealFormOpen, setMealFormOpen] = React.useState(false);
-    const [chefInfo, setChefInfo] = React.useState({ ...location.state });
+    // const [chefInfo, setChefInfo] = React.useState({ ...location.state });
+    const chefInfo = location.state;
     const currentChef = { ...user.profile.chefProfile };
     const headerImage = { ...meals[0] };
 
@@ -163,6 +164,7 @@ function ChefProfile(props) {
                                 <img
                                     className={classes.headerImage}
                                     src={headerImage.picURL}
+                                    alt="meal"
                                 ></img>
                             )}
                             <Box
@@ -194,7 +196,10 @@ function ChefProfile(props) {
                                 <Typography
                                     className={classes.subtitle}
                                     variant="caption"
-                                >{`${chefInfo.primaryAddress.city}, ${chefInfo.primaryAddress.country}`}</Typography>
+                                >
+                                    {chefInfo.primaryAddress &&
+                                        `${chefInfo.primaryAddress.city}, ${chefInfo.primaryAddress.country}`}
+                                </Typography>
                             </Grid>
                             <Grid
                                 item
@@ -205,7 +210,7 @@ function ChefProfile(props) {
                                 alignContent="center"
                             >
                                 <Grid item>
-                                    {chefInfo.chefProfile.cuisineSpecialty
+                                    {chefInfo.chefProfile.cuisineSpecialty.length > 0
                                         ? chefInfo.chefProfile.cuisineSpecialty.map(
                                               (specialty, index) => (
                                                   <Box

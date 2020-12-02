@@ -192,7 +192,7 @@ function MealCard({ picURL, title, price, id, chefId }) {
                                         })
                                     }
                                 >
-                                    Learn More
+                                    View Chef's Menu
                                 </Link>
                             </Grid>
                         </Grid>

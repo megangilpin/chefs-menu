@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import ResponsiveSideBar from "../components/ResponsiveSideBar";
 import ChefCard from "../components/ChefCard";
 import Main from "../components/Main";
-import { Typography, Button, Grid, TextField, Toolbar } from "@material-ui/core";
+import { Typography, Button, Grid, TextField } from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import { UserContext } from "../contexts/user/UserContextProvider";
 import { abortableFetch } from "../utils";

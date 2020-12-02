@@ -177,6 +177,7 @@ const UserContextProvider = ({ children }) => {
                 message: data.errors,
             };
         } else {
+            console.log(data);
             dispatch({ type: UPDATE_CHEF_PROFILE, payload: data });
             return { result: true };
         }

@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
     },
     mealImage: {
         maxWidth: "100%",
-        maxHeight: "300px",
+        maxHeight: "500px",
         objectFit: "cover",
     },
     box: {
@@ -138,7 +138,7 @@ function MenuItem(props) {
         <div>
             <Box className={classes.mealCard} p={2}>
                 <Grid
-                    spacing={1}
+                    spacing={3}
                     container
                     direction="row"
                     justify="center"
@@ -203,7 +203,9 @@ function MenuItem(props) {
                             </Box>
                         </Grid>
                         <Grid item>
-                            <Typography variant="h5">{title}</Typography>
+                            <Typography variant="h5">
+                                <Box fontWeight="fontWeightBold">{title}</Box>
+                            </Typography>
 
                             <Typography color="primary" variant="subtitle1">
                                 {dollarFormatter.format(price / 100)}
@@ -233,14 +235,7 @@ function MenuItem(props) {
                             </Typography>
                         </Grid>
                     </Grid>
-                    <Grid
-                        xs={12}
-                        sm={6}
-                        item
-                        container
-                        // justify="center"
-                        alignItems="center"
-                    >
+                    <Grid xs={12} sm={6} item container alignItems="center">
                         {!picURL ? (
                             <Box className={classes.mealImage}>
                                 <Typography color="primary" variant="subtitle2">

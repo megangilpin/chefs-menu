@@ -2,10 +2,8 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
-import { Avatar, Typography, Grid, Box, Divider, Button } from "@material-ui/core";
-import CardMedia from "@material-ui/core/CardMedia";
-
-import chef1 from "../images/chef1.png";
+import { Avatar, Typography, Grid, Box, Button, Link } from "@material-ui/core";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -26,11 +24,16 @@ const useStyles = makeStyles((theme) => ({
         height: theme.spacing(15),
         border: "5px solid white",
     },
+    link: {
+        fontWeight: "bold",
+        fontSize: "1rem",
+    },
 }));
 
 function ChefCard(props) {
     const classes = useStyles();
-
+    const history = useHistory();
+    console.log(props);
     const { cuisineSpecialty, userId, distanceKm } = props;
     const {
         firstName,
@@ -58,28 +61,70 @@ function ChefCard(props) {
                 </Grid>
                 {/* <CardMedia className={classes.media} image={profilePicURL} /> */}
                 <CardContent>
-                    <Typography className={classes.name} gutterBottom>
-                        {firstName + " " + lastName}
-                    </Typography>
-                    <Typography className={classes.location} gutterBottom>
-                        {location}
-                    </Typography>
-                    <Typography className={classes.location} gutterBottom>
-                        {`${Math.round(distanceKm)} Km away`}
-                    </Typography>
-                    {cuisineSpecialty &&
-                        cuisineSpecialty.map((cuisine) => (
-                            <Button
-                                key={cuisine}
-                                color="primary"
-                                variant="contained"
+                    <Grid
+                        container
+                        direction="column"
+                        justify="center"
+                        alignItems="center"
+                        spacing={2}
+                    >
+                        <Grid item>
+                            <Typography className={classes.name} gutterBottom>
+                                {firstName + " " + lastName}
+                            </Typography>
+                            <Typography className={classes.location} gutterBottom>
+                                {location}
+                            </Typography>
+                            <Typography className={classes.location} gutterBottom>
+                                {`${Math.round(distanceKm)} Km away`}
+                            </Typography>
+                        </Grid>
+                        <Grid
+                            item
+                            container
+                            direction="row"
+                            justify="center"
+                            alignItems="center"
+                        >
+                            {cuisineSpecialty &&
+                                cuisineSpecialty.map((cuisine) => (
+                                    <Button
+                                        key={cuisine}
+                                        color="primary"
+                                        variant="contained"
+                                    >
+                                        <Typography variant="button">
+                                            {cuisine}
+                                        </Typography>
+                                    </Button>
+                                ))}
+                        </Grid>
+                        <Grid item>
+                            <Typography color="textSecondary">{bio}</Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Link
+                                component="button"
+                                variant="body2"
+                                className={classes.link}
+                                onClick={() =>
+                                    history.push({
+                                        pathname: "/chefprofile",
+                                        state: {
+                                            ...props.userId,
+                                            chefProfile: {
+                                                _id: props._id,
+                                                cuisineSpecialty:
+                                                    props.cuisineSpecialty,
+                                            },
+                                        },
+                                    })
+                                }
                             >
-                                <Typography variant="button">{cuisine}</Typography>
-                            </Button>
-                        ))}
-                    <Typography variant="body2" color="textSecondary" component="p">
-                        {bio}
-                    </Typography>
+                                View Chef's Menu
+                            </Link>
+                        </Grid>
+                    </Grid>
                 </CardContent>
             </Card>
         </Grid>

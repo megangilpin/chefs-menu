@@ -61,7 +61,7 @@ router.put(
                 userId: user._id,
             };
             chefProfile = await chefsController.create(data);
-            req.body.isChef = !req.body.isChef;
+            req.body.isChef = true;
         }
 
         const user = await usersController.sanatize(
@@ -73,7 +73,6 @@ router.put(
         }
 
         const responseObj = await createAuthResponseObj(user);
-        console.log(responseObj);
         res.json(responseObj);
     })
 );
