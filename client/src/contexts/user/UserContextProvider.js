@@ -14,7 +14,7 @@ const initialState = {
         email: "",
         primaryAddress: {},
         allergies: [],
-        chefProfile: { _id: "", cuisineSpecialty: [] },
+        chefProfile: {},
         favoriteCuisine: [],
     },
     isLoading: true,

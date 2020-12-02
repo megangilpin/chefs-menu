@@ -214,10 +214,9 @@ function ChefProfile(props) {
                             >
                                 {chefInfo.chefProfile.cuisineSpecialty.length > 0
                                     ? chefInfo.chefProfile.cuisineSpecialty.map(
-                                          (specialty, index) => (
-                                              <Grid item>
+                                          (specialty) => (
+                                              <Grid item key={specialty}>
                                                   <Box
-                                                      key={index}
                                                       className={classes.box}
                                                       p={1}
                                                       fontWeight={"fontWeightBold"}

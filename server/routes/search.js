@@ -4,7 +4,7 @@ const router = require("express").Router();
 const chefsController = require("../controllers/chefsController");
 const mealsController = require("../controllers/mealsController");
 const userController = require("../controllers/usersController");
-const { errorHandelingWrapper, coordinatesDistanceCalc } = require("../util");
+const { errorHandelingWrapper, coordinatesDistanceCalc, drawCirclePath } = require("../util");
 
 router.get(
     "/",

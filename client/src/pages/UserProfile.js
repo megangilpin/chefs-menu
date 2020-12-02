@@ -136,7 +136,7 @@ export default function UserProfile() {
                                 {user.profile.chefProfile.cuisineSpecialty &&
                                     user.profile.chefProfile.cuisineSpecialty.map(
                                         (specialty) => (
-                                            <Grid item>
+                                            <Grid item key={specialty}>
                                                 <Box className={classes.box}>
                                                     {specialty}
                                                 </Box>
