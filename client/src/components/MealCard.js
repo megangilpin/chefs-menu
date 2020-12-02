@@ -60,32 +60,26 @@ const useStyles = makeStyles({
     },
 });
 
-function MealCard({
-    picURL,
-    title,
-    price,
-    chefName,
-    chefPic,
-    location,
-    id,
-    chefId,
-}) {
+function MealCard({ picURL, title, price, id, chefId }) {
     const classes = useStyles();
     const history = useHistory();
     const { chef, addToCart } = useContext(CartContext);
     const [openDialog, setDialogOpen] = React.useState(false);
     const chefInfo = chefId.userId;
+
     const handleClose = () => {
         setDialogOpen(false);
     };
 
     const purchaseMeal = (e) => {
         e.preventDefault();
-        const id = parseFloat(e.currentTarget.value);
+
         if (chef && chefId._id !== chef) {
             setDialogOpen(true);
         } else {
-            const meal = { id, picURL, title, price, chefName, chefId };
+            const chefName = `${chefInfo.firstName} ${chefInfo.lastName}`;
+            const chefID = chefId._id;
+            const meal = { id, picURL, title, price, chefName, chefID };
             addToCart(meal);
         }
     };
@@ -153,13 +147,15 @@ function MealCard({
                 <CardActions>
                     <Box ml={1} mr={1}>
                         <Grid container spacing={1}>
-                            <Grid item xs={12}>
-                                <Avatar
-                                    className={classes.small}
-                                    alt={!chefInfo.profilePicURL ? "" : "Chef"}
-                                    src={chefInfo.profilePicURL}
-                                />
-                                <Grid item xs={12} container alignItems="center">
+                            <Grid item container spacing={2}>
+                                <Grid item>
+                                    <Avatar
+                                        className={classes.small}
+                                        alt={!chefInfo.profilePicURL ? "" : "Chef"}
+                                        src={chefInfo.profilePicURL}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm container alignItems="center">
                                     <Grid item container direction="column">
                                         <Grid item>
                                             <Typography
@@ -179,7 +175,6 @@ function MealCard({
                                 </Grid>
                             </Grid>
                             <Grid item xs={12}>
-                                {/* will need to connect with ChefProfile once cards have chef info */}
                                 <Link
                                     component="button"
                                     variant="body2"

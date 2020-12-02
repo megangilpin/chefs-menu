@@ -63,13 +63,13 @@ function ShoppingCart(props) {
     const updateQuantity = (e) => {
         e.preventDefault();
         const { name } = e.currentTarget;
-        const id = parseFloat(e.currentTarget.value);
+        const id = e.currentTarget.value;
         updateCartItem(id, name);
     };
 
     const deleteMeal = (e) => {
         e.preventDefault();
-        const id = parseFloat(e.currentTarget.value);
+        const id = e.currentTarget.value;
         deleteCartItem(id);
     };
 
