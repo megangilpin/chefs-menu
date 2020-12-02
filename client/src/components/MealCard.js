@@ -104,7 +104,6 @@ function MealCard({
                 ) : (
                     <React.Fragment>
                         <CardContent className={classes.replacement}>
-                            {/* <Box className={classes.replacement}> */}
                             <Typography
                                 color="primary"
                                 align="center"
@@ -112,7 +111,6 @@ function MealCard({
                             >
                                 The chef is still cooking up an image
                             </Typography>
-                            {/* </Box> */}
                         </CardContent>
                         <Divider />
                     </React.Fragment>
