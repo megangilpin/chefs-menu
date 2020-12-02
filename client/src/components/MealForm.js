@@ -42,8 +42,7 @@ function MealForm(props) {
 
     const validationSchema = Yup.object().shape({
         title: Yup.string().required("Required!"),
-        price: Yup.number()
-            .typeError("Price must be a number")
+        price: Yup.string()
             .required("Required!")
             .test("is-decimal", "must be to the nearest cent", (value) =>
                 (value + "").match(/^\d+(?:\.\d{0,2})$/)
