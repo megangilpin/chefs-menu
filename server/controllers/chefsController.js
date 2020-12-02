@@ -14,7 +14,7 @@ const findAllChefs = async (query) => {
 };
 
 const findOneWithUserId = async (userId) => {
-    const { _doc } = (await Chef.findOne({ userId })) || {};
+    const { _doc } = await Chef.findOne({ userId });
     return _doc;
 };
 

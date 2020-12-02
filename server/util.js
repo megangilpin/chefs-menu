@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
-const usersController = require("./controllers/usersController");
-const chefsController = require("./controllers/chefsController");
+const userController = require("./controllers/usersController");
+const chefController = require("./controllers/chefsController");
 
 const isArrayOfStrings = (arr) => Array.isArray(arr) && arr.every((ele) => typeof ele === "string");
 
@@ -18,10 +18,16 @@ const errorHandelingWrapper = (routeFunction) => async (req, res, next) => {
 const createAuthResponseObj = async (user) => {
     const token = await jwt.sign({ email: user.email, id: user._id }, process.env.SECRET, { expiresIn: process.env.TOKEN_TTL });
     return {
-        user: await usersController.sanatize(user),
-        chef: await chefsController.findOneWithUserId(user._id),
+        user: await userController.sanatize(user),
+        chef: await chefController.findOneWithUserId(user._id),
         token,
     };
+};
+
+const findChefProfile = async (id) => {
+    const chefData = await chefController.findOneWithUserId(id);
+    delete chefData.userId;
+    return chefData;
 };
 
 // src: https://www.geodatasource.com/developers/javascript
@@ -54,5 +60,6 @@ module.exports = {
     isArrayOfStrings,
     errorHandelingWrapper,
     createAuthResponseObj,
+    findChefProfile,
     coordinatesDistanceCalc,
 };

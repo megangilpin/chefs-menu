@@ -1,18 +1,18 @@
-// TEMPORARY PAGE WITH RECIPES WILL BE REMOVED WHEN CHEF PROFILE PAGE IS CREATED
-import React, { useState, useEffect } from "react";
-import makeStyles from "@material-ui/core/styles/makeStyles";
+import React, { useEffect, useState, useContext } from "react";
 import ResponsiveSideBar from "../components/ResponsiveSideBar";
+import ChefCard from "../components/ChefCard";
 import Main from "../components/Main";
-import { Typography, Grid, Button } from "@material-ui/core";
-import MealCard from "../components/MealCard";
-import useCuisineSelector from "../lib/useCuisineSelector";
+import { Typography, Button, Grid, TextField } from "@material-ui/core";
+import makeStyles from "@material-ui/core/styles/makeStyles";
+import { UserContext } from "../contexts/user/UserContextProvider";
 import { abortableFetch } from "../utils";
+import useCuisineSelector from "../lib/useCuisineSelector";
 
 const useStyles = makeStyles({
-    availableMeals: { paddingBottom: "15px", display: "inline", fontSize: "30px" },
+    availableChefs: { paddingBottom: "15px", display: "inline", fontSize: "30px" },
 });
 
-function Meals() {
+function ChefSearch() {
     const classes = useStyles();
     const {
         ALL,
@@ -21,28 +21,56 @@ function Meals() {
         addCuisine,
         removeCuisine,
     } = useCuisineSelector();
+    const { profile } = useContext(UserContext);
+    const {
+        primaryAddress: { city, region, country },
+    } = profile;
+    const location = [city, region, country].join(", ");
+    const [radiusKm, setRadiusKm] = useState(100);
+    const [chefs, setChefs] = useState([]);
 
-    const [meals, setMeals] = useState([]);
+    const handleChangeRadiusKm = ({ target }) =>
+        target.value > 0 && setRadiusKm(target.value);
 
     useEffect(() => {
-        let url = "/search?searchType=meals";
+        let url = `/search?searchType=chefs&radiusKm=${radiusKm}`;
         if (!cuisines.has(ALL)) {
             url = `${url}&cuisine=` + [...cuisines].join(",");
         }
         const { ready, abort } = abortableFetch(url);
         ready
             .then((res) => res.json())
-            .then((res) => res.meals)
-            .then(setMeals)
+            .then((res) => res.chefs)
+            .then(setChefs)
             // ignore any errors
             .catch(() => {});
         return abort;
-    }, [cuisines]);
+    }, [radiusKm, cuisines]);
 
     return (
         <>
             <ResponsiveSideBar>
                 <Grid container spacing={2} alignContent="flex-start">
+                    <Grid item xs={12}>
+                        <Typography>Location:</Typography>
+                        <TextField
+                            value={location}
+                            fullWidth
+                            variant="outlined"
+                            type="text"
+                            disabled={true}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Typography>Radius in Km:</Typography>
+                        <TextField
+                            value={radiusKm}
+                            fullWidth
+                            variant="outlined"
+                            type="number"
+                            onChange={handleChangeRadiusKm}
+                        />
+                    </Grid>
                     <Grid item xs={12}>
                         <Typography>Cuisine:</Typography>
                         {[...cuisines].map((cuisine) => (
@@ -72,12 +100,12 @@ function Meals() {
             <Main>
                 <Grid container spacing={4} alignContent="flex-start">
                     <Grid item xs={12}>
-                        <Typography className={classes.availableMeals}>
-                            Available Meals:
+                        <Typography className={classes.availableChefs}>
+                            Available Chefs:
                         </Typography>
                     </Grid>
-                    {meals.map((meal) => (
-                        <MealCard key={meal._id} id={meal._id} {...meal} />
+                    {chefs.map((chef) => (
+                        <ChefCard {...chef} key={chef._id} />
                     ))}
                 </Grid>
             </Main>
@@ -85,4 +113,4 @@ function Meals() {
     );
 }
 
-export default Meals;
+export default ChefSearch;

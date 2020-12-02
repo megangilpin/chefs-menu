@@ -1,6 +1,6 @@
 import React from "react";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
-
+import { Button, Typography, Grid, Divider } from "@material-ui/core";
 import CardSection from "./CardSection/CardSection";
 
 export default function CheckoutForm() {
@@ -44,8 +44,23 @@ export default function CheckoutForm() {
 
     return (
         <form onSubmit={handleSubmit}>
-            <CardSection />
-            <button disabled={!stripe}>Confirm order</button>
+            <Grid container spacing={4}>
+                <Grid item xs={12}>
+                    <Typography variant="h4">Checkout</Typography>
+                    <Divider />
+                </Grid>
+                <Grid item xs={12}>
+                    <Typography variant="h6">Enter your card details.</Typography>
+                </Grid>
+                <Grid item xs={12}>
+                    <CardSection />
+                </Grid>
+                <Grid item xs={12}>
+                    <Button color="primary" variant="contained" disabled={!stripe}>
+                        <Typography variant="button">Confirm Order</Typography>
+                    </Button>
+                </Grid>
+            </Grid>
         </form>
     );
 }

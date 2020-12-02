@@ -25,8 +25,8 @@ router.get(
 
         const accountLinks = await stripe.accountLinks.create({
             account: chef.stripeId,
-            refresh_url: "http://localhost:3001/stripe/link",
-            return_url: "http://localhost:3001/home",
+            refresh_url: "http://localhost:3000/stripe/link",
+            return_url: "http://localhost:3000/home",
             type: "account_onboarding",
         });
 
@@ -93,8 +93,9 @@ router.get(
     })
 );
 
+// This retrieves the stripe account itself
 router.get(
-    "/login",
+    "/dashboardlink",
     errorHandelingWrapper(async (req, res) => {
         const { id } = req.user;
         const chef = await chefsController.findOneWithUserId(id);
@@ -109,10 +110,10 @@ router.get(
         const loginLink = await stripe.accounts.createLoginLink(chef.stripeId);
 
         if (loginLink) {
-            res.redirect(301, loginLink);
+            res.json(loginLink);
         } else {
             res.status(500).json({
-                errors: ["Could not retrieve login link for Stripe account!"],
+                errors: ["Could not retrieve Stripe log in link!"],
             });
         }
     })

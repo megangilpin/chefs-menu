@@ -1,8 +1,9 @@
 const express = require("express");
 
-const { errorHandelingWrapper, createAuthResponseObj } = require("../util");
+const { errorHandelingWrapper, createAuthResponseObj, findChefProfile } = require("../util");
 const userController = require("../controllers/usersController");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const chefsController = require("../controllers/chefsController");
 
 const router = express.Router();
 
@@ -16,6 +17,9 @@ router.post(
         if (!user) {
             res.status(400).json({ errors: ["Email or password invalid"] });
             return;
+        }
+        if (user.isChef) {
+            user.chefProfile = await findChefProfile(user._id);
         }
         // verify that the passwords match
         const passwordsMatch = await userController.checkPassword({
@@ -76,19 +80,6 @@ router.post(
         if (addressArr.length === 4) {
             [street, city, region, country] = addressArr;
         }
-
-        console.log({
-            firstName,
-            lastName,
-            address,
-            street,
-            city,
-            region,
-            country,
-            email,
-            password,
-            isChef,
-        });
 
         // STRIPE CONNECTED ACCOUNT ONBOARDING FOR CHEFS
         var stripeId = "";

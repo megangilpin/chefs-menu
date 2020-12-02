@@ -2,7 +2,7 @@ import * as React from "react";
 // import { useHistory } from "react-router-dom";
 
 import { Typography, Grid, Button } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+// import { makeStyles } from "@material-ui/core/styles";
 
 import { UserContext } from "../contexts/user/UserContextProvider";
 
@@ -37,16 +37,27 @@ function SetUpStripe(props) {
         return <div>Error: {error.message}</div>;
     } else if (!isLoaded) {
         return <div>Loading...</div>;
-        // } else if (account.charges_enabled) {
-        //     return (
-        //         <Grid container justify="center" spacing={2}>
-        //             <Grid item xs={8}>
-        //                 <Typography variant="h5">
-        //                     Looks like your Stripe is all set up!
-        //                 </Typography>
-        //             </Grid>
-        //         </Grid>
-        //     );
+    } else if (account.charges_enabled) {
+        return (
+            <Grid container justify="center" spacing={2}>
+                <Grid item xs={8}>
+                    <Typography variant="h5">
+                        Looks like your Stripe is all set up!
+                    </Typography>
+                    <Button
+                        onClick={() => {
+                            user.getStripeLoginLink().then((data) => {
+                                window.location.replace(data.url);
+                            });
+                        }}
+                        color="primary"
+                        variant="contained"
+                    >
+                        <Typography variant="button">Stripe Dashboard</Typography>
+                    </Button>
+                </Grid>
+            </Grid>
+        );
     }
     return (
         <Grid container justify="center" spacing={2}>

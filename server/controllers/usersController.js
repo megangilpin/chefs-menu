@@ -44,8 +44,11 @@ const create = async ({ firstName, lastName, address, street, city, region, coun
         allergies: [],
     });
     if (isChef) {
-        chef_doc = await chefsController.create({ userId: _doc._id, stripeId });
+        const chefData = await chefsController.create({ userId: _doc._id, stripeId: stripeId });
+        delete chefData.userId;
+        _doc.chefProfile = chefData;
     }
+
     return _doc;
 };
 

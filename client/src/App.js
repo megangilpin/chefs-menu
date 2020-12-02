@@ -6,37 +6,35 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 import { theme } from "./themes/theme";
 import LoginSignUp from "./pages/LoginSignUp";
 import Home from "./pages/Home";
-import Meals from "./pages/Meals";
 import Page from "./components/Page";
 import { UserContext } from "../src/contexts/user/UserContextProvider";
 import UserProfile from "./pages/UserProfile";
 import EditProfile from "./pages/EditProfile";
+import ChefSearch from "./pages/ChefSearch";
+import ChefProfile from "./pages/ChefProfile";
+import Meals from "./pages/Meals";
+import Checkout from "./pages/Checkout";
 
 function App() {
     const user = React.useContext(UserContext);
 
-    const DefaultRoutes = () => {
-        return (
-            <div>
-                <Page>
-                    <Switch>
-                        <ProtectedRoute exact path="/home" component={Home} />
-                        <ProtectedRoute exact path="/meals" component={Meals} />
-                        <ProtectedRoute
-                            exact
-                            path="/profile"
-                            component={UserProfile}
-                        />
-                        <ProtectedRoute
-                            exact
-                            path="/editprofile"
-                            component={EditProfile}
-                        />
-                    </Switch>
-                </Page>
-            </div>
-        );
-    };
+    const DefaultRoutes = () => (
+        <Page>
+            <Switch>
+                <ProtectedRoute exact path="/home" component={Home} />
+                <ProtectedRoute exact path="/meals" component={Meals} />
+                <ProtectedRoute exact path="/profile" component={UserProfile} />
+                <ProtectedRoute exact path="/editprofile" component={EditProfile} />
+                <ProtectedRoute exact path="/chefs" component={ChefSearch} />
+                <ProtectedRoute
+                    exact
+                    path="/chefs/:chefId"
+                    component={ChefProfile}
+                />
+                <ProtectedRoute exact path="/checkout" component={Checkout} />
+            </Switch>
+        </Page>
+    );
 
     return (
         <ThemeProvider theme={theme}>
@@ -44,7 +42,7 @@ function App() {
             <BrowserRouter>
                 <Route path="/">
                     {user.isAuthenticated ? (
-                        <Redirect to="/home" />
+                        <Redirect to="/meals" />
                     ) : (
                         <Redirect to="/signup" />
                     )}

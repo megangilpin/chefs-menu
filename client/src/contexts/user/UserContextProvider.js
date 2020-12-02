@@ -6,8 +6,9 @@ const initialState = {
     profile: {
         email: "",
         primaryAddress: {},
-        favoriteCuisine: [],
         allergies: [],
+        chefProfile: {},
+        favoriteCuisine: [],
     },
     isLoading: true,
 };
@@ -19,15 +20,14 @@ const UserReducer = (state, action) => {
                 ...state,
                 isLoading: false,
                 isAuthenticated: true,
-                profile: action.payload.user,
-                chefProfile: action.payload.chef,
+                profile: { ...state.profile, ...action.payload.user },
             };
         case LOGOUT:
             return {
                 ...state,
                 isLoading: false,
                 isAuthenticated: false,
-                profile: null,
+                profile: {},
             };
         case SET_IS_LOADING:
             return {
@@ -115,7 +115,7 @@ const UserContextProvider = ({ children }) => {
         if (data.user) {
             dispatch({ type: SET_USER, payload: data });
         } else {
-            dispatch({ type: LOGOUT, payload: null });
+            dispatch({ type: LOGOUT });
         }
     };
 
@@ -192,10 +192,10 @@ const UserContextProvider = ({ children }) => {
         }
     };
     const getStripeLoginLink = async () => {
-        const response = await fetch("/stripe/login");
+        const response = await fetch("/stripe/dashboardlink");
         const data = response.json();
 
-        if (!data.url) {
+        if (!data) {
             return {
                 result: false,
             };

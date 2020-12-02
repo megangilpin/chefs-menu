@@ -2,7 +2,6 @@ import * as React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
     Avatar,
-    Badge,
     Button,
     Box,
     Divider,
@@ -13,21 +12,35 @@ import {
     ListItemAvatar,
     ListItemSecondaryAction,
     ListItemText,
-    Popover,
     Typography,
 } from "@material-ui/core";
 
 import DeleteIcon from "@material-ui/icons/Delete";
-import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
+
 import { CartContext } from "../contexts/cart/CartContextProvider";
 import { dollarFormatter, calcServiceFee, calcTotalWithFee } from "../lib/utils";
 import { useHistory } from "react-router-dom";
+
+import CheckoutForm from "../components/CheckoutForm";
+
 const useStyles = makeStyles((theme) => ({
-    root: {
-        marginRight: theme.spacing(0.5),
-    },
     container: {
-        padding: theme.spacing(2),
+        margin: "0px",
+        paddingTop: "10vh",
+        padding: theme.spacing(4),
+        overflow: "hidden",
+    },
+    orderSummary: {
+        background: "white",
+        width: "80%",
+        margin: "auto",
+        padding: "1rem",
+    },
+    checkoutForm: {
+        background: "white",
+        height: "50vh",
+        width: "100%",
+        margin: "0",
     },
     empty: {
         fontSize: ".8rem",
@@ -48,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function ShoppingCart(props) {
+function Checkout(props) {
     const classes = useStyles();
     const history = useHistory();
 
@@ -56,7 +69,6 @@ function ShoppingCart(props) {
         chefName,
         cart,
         totalPrice,
-        totalItems,
         updateCartItem,
         deleteCartItem,
     } = React.useContext(CartContext);
@@ -74,62 +86,30 @@ function ShoppingCart(props) {
         deleteCartItem(id);
     };
 
-    const [anchorEl, setAnchorEl] = React.useState(null);
-
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
-    const cartOpen = Boolean(anchorEl);
-    const id = cartOpen ? "simple-popover" : undefined;
-
     return (
-        <div>
-            <IconButton
-                aria-describedby={id}
-                onClick={handleClick}
-                className={classes.root}
-                aria-label="shopping cart"
+        <Grid container className={classes.container} spacing={4}>
+            <Box
+                component={Grid}
+                boxShadow={3}
+                item
+                xs={6}
+                className={classes.checkoutForm}
             >
-                <Badge badgeContent={totalItems} color="primary">
-                    <ShoppingCartIcon fontSize="inherit" />
-                </Badge>
-            </IconButton>
-            <Popover
-                id={id}
-                open={cartOpen}
-                anchorEl={anchorEl}
-                onClose={handleClose}
-                anchorOrigin={{
-                    vertical: "bottom",
-                    horizontal: "left",
-                }}
-                transformOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                }}
-            >
-                <Grid item xs={12} className={classes.container}>
-                    <Box mt={1}>
-                        <Typography color="primary" variant="h5">
-                            Your Cart
-                        </Typography>
-                    </Box>
-                    <Divider />
-                    {chefName ? (
-                        <Box p={2}>
-                            <Typography variant="subtitle2">
-                                Selected Chef:
-                            </Typography>
-                            <Typography variant="caption">{chefName}</Typography>
-                        </Box>
-                    ) : null}
-                    <Divider />
-                    <div>
+                <CheckoutForm />
+            </Box>
+
+            <Grid item xs={6}>
+                <Box
+                    component={Grid}
+                    boxShadow={3}
+                    container
+                    className={classes.orderSummary}
+                >
+                    <Grid item xs={12}>
+                        <Typography variant="h6">Your Order</Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                        {" "}
                         <List>
                             {cart.length > 0 ? (
                                 cart.map((meal, index) => {
@@ -139,7 +119,10 @@ function ShoppingCart(props) {
                                             alignItems="flex-start"
                                         >
                                             <ListItemAvatar>
-                                                <Avatar src={meal.mealPic} />
+                                                <Avatar
+                                                    src={meal.picURL}
+                                                    variant="square"
+                                                />
                                             </ListItemAvatar>
                                             <ListItemText
                                                 primary={`${
@@ -202,33 +185,32 @@ function ShoppingCart(props) {
                                 </Typography>
                             )}
                         </List>
-                    </div>
-                    <Divider />
-                    <Typography variant="subtitle2">
-                        SubTotal: {dollarFormatter.format(totalPrice / 100)}
-                    </Typography>
-                    <Typography variant="subtitle2">
-                        10% Service Fee:{" "}
-                        {dollarFormatter.format(calcServiceFee(totalPrice))}
-                    </Typography>
-                    <Divider />
-                    <Box pt={2}>
-                        <Typography variant="h6">
-                            Total:{" "}
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <Typography variant="subtitle2">
+                            Sub-total: {dollarFormatter.format(totalPrice / 100)}
+                        </Typography>
+
+                        <Typography variant="subtitle2">
+                            10% Service Fee:{" "}
+                            {dollarFormatter.format(calcServiceFee(totalPrice))}
+                        </Typography>
+                        <Divider />
+                    </Grid>
+
+                    <Grid item xs={6}>
+                        <Typography variant="h6">Total: </Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Typography color="primary" variant="h6">
                             {dollarFormatter.format(calcTotalWithFee(totalPrice))}
                         </Typography>
-                    </Box>
-                    <Button
-                        onClick={() => history.push("/checkout")}
-                        color="primary"
-                        variant="contained"
-                    >
-                        <Typography variant="button">Checkout</Typography>
-                    </Button>
-                </Grid>
-            </Popover>
-        </div>
+                    </Grid>
+                </Box>
+            </Grid>
+        </Grid>
     );
 }
 
-export default ShoppingCart;
+export default Checkout;

@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const chefSchema = new Schema({
-    cuisineSpecialty: [{ type: String, required: true }],
+    cuisineSpecialty: [{ type: String }],
     // To Do: structure availability : commenting out till we find a solution
     // availability: {
     //     date: { type: Date },
