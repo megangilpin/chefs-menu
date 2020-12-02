@@ -33,6 +33,14 @@ const useStyles = makeStyles({
         boxShadow: "0px 0px 10px 5px rgba(7,7,7,0.05)",
         margin: theme.spacing(3),
     },
+    replacement: {
+        height: 150,
+        width: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        margin: 0,
+    },
     small: {
         marginTop: theme.spacing(0.5),
         marginBottom: theme.spacing(0.5),
@@ -53,7 +61,7 @@ const useStyles = makeStyles({
 });
 
 function MealCard({
-    mealPic,
+    picURL,
     title,
     price,
     chefName,
@@ -77,7 +85,7 @@ function MealCard({
         if (chef && chefId !== chef) {
             setDialogOpen(true);
         } else {
-            const meal = { id, mealPic, title, price, chefName, chefId };
+            const meal = { id, picURL, title, price, chefName, chefId };
             addToCart(meal);
         }
     };
@@ -85,16 +93,31 @@ function MealCard({
     return (
         <>
             <Card className={classes.root}>
-                <CardMedia
-                    component="img"
-                    alt="meal1"
-                    height="150"
-                    image={mealPic}
-                    title="meal1"
-                />
+                {picURL ? (
+                    <CardMedia
+                        component="img"
+                        alt="meal1"
+                        height="150"
+                        image={picURL}
+                        title="meal1"
+                    />
+                ) : (
+                    <React.Fragment>
+                        <CardContent className={classes.replacement}>
+                            <Typography
+                                color="primary"
+                                align="center"
+                                variant="subtitle2"
+                            >
+                                The chef is still cooking up an image
+                            </Typography>
+                        </CardContent>
+                        <Divider />
+                    </React.Fragment>
+                )}
                 <CardContent>
                     <Grid container direction="row" spacing={2}>
-                        <Grid item xs={12}>
+                        <Grid item xs={8}>
                             <Typography gutterBottom className={classes.subtitle}>
                                 {title}
                             </Typography>
@@ -103,8 +126,17 @@ function MealCard({
                                 className={classes.subtitle1}
                                 color="secondary"
                             >
+                                {/* assuming we save price in cents on DB */}
                                 {dollarFormatter.format(price / 100)}
                             </Typography>
+                        </Grid>
+                        <Grid
+                            item
+                            xs={4}
+                            container
+                            justify="flex-end"
+                            alignContent="center"
+                        >
                             <IconButton
                                 value={id}
                                 color="primary"
@@ -153,7 +185,7 @@ function MealCard({
                                     variant="body2"
                                     onClick={() => history.push(`chefs/${chefId}`)}
                                 >
-                                    Edit Your Menu
+                                    Learn More
                                 </Link>
                             </Grid>
                         </Grid>

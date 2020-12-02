@@ -22,7 +22,7 @@ router.post(
             return;
         }
         if (user.isChef) {
-            user.chefProfile = await findChefProfile(user.id);
+            user.chefProfile = await findChefProfile(user._id);
         }
         // verify that the passwords match
         const passwordsMatch = await userController.checkPassword({
