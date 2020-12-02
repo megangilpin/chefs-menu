@@ -53,17 +53,6 @@ router.put(
             return;
         }
 
-        if (req.body.newChef && !req.body.isChef) {
-            const user = await usersController.findOneWithId(id);
-            console.log(user);
-            const data = {
-                cuisineSpecialty: [...req.body.cuisineSpecialty],
-                userId: user._id,
-            };
-            chefProfile = await chefsController.create(data);
-            req.body.isChef = true;
-        }
-
         const user = await usersController.sanatize(
             await usersController.update(id, req.body)
         );

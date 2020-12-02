@@ -5,6 +5,7 @@ import {
     SET_IS_LOADING,
     SET_PROFILE_IMAGE,
     UPDATE_CHEF_PROFILE,
+    SET_CHEF_PROFILE,
 } from "../types";
 
 const initialState = {
@@ -46,6 +47,15 @@ const UserReducer = (state, action) => {
                 profile: {
                     ...state.profile,
                     profilePicURL: action.payload,
+                },
+            };
+        case SET_CHEF_PROFILE:
+            return {
+                ...state,
+                profile: {
+                    ...state.profile,
+                    isChef: true,
+                    chefProfile: { ...action.payload },
                 },
             };
         case UPDATE_CHEF_PROFILE:
@@ -160,6 +170,28 @@ const UserContextProvider = ({ children }) => {
         dispatch({ type: LOGOUT, payload: null });
     };
 
+    const registerChef = async (formValues) => {
+        const response = await fetch("/chefs", {
+            method: "post",
+            body: JSON.stringify(formValues),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        const data = await response.json();
+
+        if (data.errors) {
+            return {
+                result: false,
+                message: data.errors,
+            };
+        } else {
+            dispatch({ type: SET_CHEF_PROFILE, payload: data });
+            return { result: true };
+        }
+    };
+
     const updateChefProfile = async (formValues) => {
         const response = await fetch("/chefs", {
             method: "put",
@@ -177,7 +209,6 @@ const UserContextProvider = ({ children }) => {
                 message: data.errors,
             };
         } else {
-            console.log(data);
             dispatch({ type: UPDATE_CHEF_PROFILE, payload: data });
             return { result: true };
         }
@@ -219,6 +250,7 @@ const UserContextProvider = ({ children }) => {
             value={{
                 ...state,
                 register,
+                registerChef,
                 login,
                 logoutUser,
                 updateUser,

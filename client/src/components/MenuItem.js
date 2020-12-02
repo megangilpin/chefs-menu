@@ -71,7 +71,6 @@ function MenuItem(props) {
         const id = e.currentTarget.value;
         const chefID = chefId;
         const meal = { id, picURL, title, price, chefName, chefID };
-        console.log(meal);
         if (chef && chefId !== chef) {
             setDialogOpen(true);
         } else {
@@ -101,7 +100,6 @@ function MenuItem(props) {
     };
 
     const editMeal = async (formValues) => {
-        console.log(formValues);
         const response = await fetch(`/meals/${id}`, {
             method: "put",
             body: JSON.stringify(formValues),
@@ -117,7 +115,6 @@ function MenuItem(props) {
                 message: data.errors,
             };
         } else {
-            console.log(data);
             props.update(chefProfile._id);
         }
     };
@@ -138,7 +135,7 @@ function MenuItem(props) {
         <div>
             <Box className={classes.mealCard} p={2}>
                 <Grid
-                    spacing={3}
+                    spacing={1}
                     container
                     direction="row"
                     justify="center"
@@ -222,17 +219,19 @@ function MenuItem(props) {
                             </Typography>
                         </Grid>
                         <Grid item>
-                            <Typography variant="subtitle2">
-                                REQUIRED STUFF
-                            </Typography>
-                            <Typography
-                                className={classes.subtitle}
-                                variant="subtitle2"
-                            >
-                                {!requirements
-                                    ? "No Meal Requirements"
-                                    : { requirements }}
-                            </Typography>
+                            <Box mb={2}>
+                                <Typography variant="subtitle2">
+                                    REQUIRED STUFF
+                                </Typography>
+                                <Typography
+                                    className={classes.subtitle}
+                                    variant="subtitle2"
+                                >
+                                    {!requirements
+                                        ? "No Meal Requirements"
+                                        : { requirements }}
+                                </Typography>
+                            </Box>
                         </Grid>
                     </Grid>
                     <Grid xs={12} sm={6} item container alignItems="center">

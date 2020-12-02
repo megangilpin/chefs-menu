@@ -9,4 +9,5 @@ export const SET_MEAL = "SET_MEAL";
 export const SET_USER = "SET_USER";
 export const SET_PROFILE_IMAGE = "SET_PROFILE_IMAGE";
 export const UPDATE_CART_ITEM = "UPDATE_CART_ITEM";
-export const UPDATE_CHEF_PROFILE = "SET_USER";
+export const UPDATE_CHEF_PROFILE = "UPDATE_CHEF_PROFILE";
+export const SET_CHEF_PROFILE = "SET_CHEF_PROFILE";

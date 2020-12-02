@@ -8,6 +8,7 @@ import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import { Avatar, Typography, Grid, Box, Divider, Button } from "@material-ui/core";
 import MenuItem from "../components/MenuItem";
 import MealForm from "../components/MealForm";
+import UpdateChef from "../components/UpdateChef";
 
 const useStyles = makeStyles((theme) => ({
     sideBar: {
@@ -73,7 +74,7 @@ function ChefProfile(props) {
     const [meals, setMeals] = React.useState([]);
     const [mealFormOpen, setMealFormOpen] = React.useState(false);
     // const [chefInfo, setChefInfo] = React.useState({ ...location.state });
-    const chefInfo = location.state;
+    const chefInfo = location.state ? location.state : user.profile;
     const currentChef = { ...user.profile.chefProfile };
     const headerImage = { ...meals[0] };
 
@@ -139,7 +140,9 @@ function ChefProfile(props) {
     };
 
     React.useEffect(() => {
-        const id = location.state.chefProfile._id;
+        const id = location.state
+            ? location.state.chefProfile._id
+            : user.profile.chefProfile._id;
         const meals = async () => await getMeals(id);
         meals().catch((error) => {
             console.log(error);
@@ -207,12 +210,12 @@ function ChefProfile(props) {
                                 spacing={2}
                                 direction="row"
                                 justify="center"
-                                alignContent="center"
+                                alignItems="center"
                             >
-                                <Grid item>
-                                    {chefInfo.chefProfile.cuisineSpecialty.length > 0
-                                        ? chefInfo.chefProfile.cuisineSpecialty.map(
-                                              (specialty, index) => (
+                                {chefInfo.chefProfile.cuisineSpecialty.length > 0
+                                    ? chefInfo.chefProfile.cuisineSpecialty.map(
+                                          (specialty, index) => (
+                                              <Grid item>
                                                   <Box
                                                       key={index}
                                                       className={classes.box}
@@ -223,10 +226,10 @@ function ChefProfile(props) {
                                                           {specialty}
                                                       </Typography>
                                                   </Box>
-                                              )
+                                              </Grid>
                                           )
-                                        : null}
-                                </Grid>
+                                      )
+                                    : null}
                             </Grid>
                             <Grid item>
                                 <Box mt={1} mb={1}>
@@ -251,7 +254,9 @@ function ChefProfile(props) {
                             >
                                 Send Request
                             </Button>
-                        ) : null}
+                        ) : (
+                            <UpdateChef />
+                        )}
                     </div>
                 </div>
             </ResponsiveSideBar>
@@ -279,7 +284,7 @@ function ChefProfile(props) {
                         </Grid>
                         <Grid item>
                             {chefInfo.chefProfile._id !== currentChef._id ? null : (
-                                <Box mb={2}>
+                                <Box mb={2} mr={0}>
                                     {/* Dialog Box with Form for adding / updating meal */}
                                     <MealForm
                                         update={getMeals}
@@ -298,6 +303,8 @@ function ChefProfile(props) {
                                     </Button>
                                 </Box>
                             )}
+                        </Grid>
+                        <Grid item>
                             {!meals.length > 0 ? (
                                 <Typography color="primary">
                                     No Meals Available

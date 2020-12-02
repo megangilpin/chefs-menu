@@ -64,14 +64,11 @@ const ChefSignUp = (props) => {
         setSpecialty(event.target.value);
     };
 
-    const updateUser = () => {
+    const registerChef = () => {
         const formValues = {
-            isChef: user.profile.isChef,
-            newChef: true,
             cuisineSpecialty: [...specialty],
         };
-        console.log(formValues);
-        user.updateUser(formValues);
+        user.registerChef(formValues);
     };
 
     return (
@@ -144,7 +141,7 @@ const ChefSignUp = (props) => {
                     <Button onClick={handleClose} color="primary">
                         Cancel
                     </Button>
-                    <Button onClick={updateUser} color="primary">
+                    <Button onClick={registerChef} color="primary">
                         Sign Up
                     </Button>
                 </DialogActions>

@@ -59,6 +59,7 @@ const useStyles = makeStyles((theme) => ({
         padding: "10px",
     },
     box: {
+        padding: "8px",
         color: "#ffff",
         background: theme.background.secondary,
     },
@@ -123,34 +124,43 @@ export default function UserProfile() {
                                     {userData.location}
                                 </Typography>
                             </Grid>
-                            <Grid item xs={12} container direction="row">
-                                <Box className={classes.box}>
-                                    {user.profile.chefProfile.cuisineSpecialty}
-                                </Box>
+                            <Grid
+                                item
+                                xs={12}
+                                container
+                                direction="row"
+                                justify="center"
+                                alignItems="center"
+                                spacing={2}
+                            >
+                                {user.profile.chefProfile.cuisineSpecialty &&
+                                    user.profile.chefProfile.cuisineSpecialty.map(
+                                        (specialty) => (
+                                            <Grid item>
+                                                <Box className={classes.box}>
+                                                    {specialty}
+                                                </Box>
+                                            </Grid>
+                                        )
+                                    )}
                             </Grid>
                             <Grid item xs={12}>
                                 {!user.profile.isChef ? (
                                     <ChefSignUp />
                                 ) : (
                                     <div>
-                                        <Grid item>
-                                            <Button
-                                                className={classes.chefButton}
-                                                variant="outlined"
-                                                color="primary"
-                                                onClick={() =>
-                                                    history.push({
-                                                        pathname: "/chefprofile",
-                                                        state: profile,
-                                                    })
-                                                }
-                                            >
-                                                Edit Menu
-                                            </Button>
-                                        </Grid>
-                                        <Grid item>
-                                            <UpdateChef />
-                                        </Grid>
+                                        <Button
+                                            className={classes.chefButton}
+                                            variant="outlined"
+                                            color="primary"
+                                            onClick={() =>
+                                                history.push({
+                                                    pathname: "/chefprofile",
+                                                })
+                                            }
+                                        >
+                                            Edit Menu
+                                        </Button>
                                     </div>
                                 )}
                             </Grid>

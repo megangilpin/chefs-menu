@@ -36,7 +36,6 @@ router.post(
         }
         // create and return jwt with user obj
         const responseObj = await createAuthResponseObj(user);
-        console.log(responseObj);
         res.cookie("token", responseObj.token, { httpOnly: true });
         res.json(responseObj);
     })

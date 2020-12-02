@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
 function ChefCard(props) {
     const classes = useStyles();
     const history = useHistory();
-    console.log(props);
+
     const { cuisineSpecialty, userId, distanceKm } = props;
     const {
         firstName,
@@ -100,7 +100,7 @@ function ChefCard(props) {
                                 ))}
                         </Grid>
                         <Grid item>
-                            <Typography color="textSecondary">{bio}</Typography>
+                            <Typography className={classes.name}>{bio}</Typography>
                         </Grid>
                         <Grid item xs={12}>
                             <Link
