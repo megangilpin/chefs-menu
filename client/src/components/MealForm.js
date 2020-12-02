@@ -1,5 +1,6 @@
 import * as React from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import { UserContext } from "../contexts/user/UserContextProvider";
 import MealPicLoader from "./MealPicLoader";
 import {
     Grid,
@@ -29,12 +30,15 @@ const useStyles = makeStyles((theme) => ({
 
 function MealForm(props) {
     const classes = useStyles();
-    const [picURL, setMealPicUrl] = React.useState("");
+    const [picURL, setMealPicUrl] = React.useState(
+        props.meal.picURL ? props.meal.picURL : ""
+    );
 
     const meal = props.meal;
     const price = meal.price !== "" ? meal.price / 100 : meal.price;
     const cuisineType = meal.cuisineType[0] ? meal.cuisineType[0] : "";
     const pic = meal.picURL !== undefined ? meal.picURL : "";
+    const user = React.useContext(UserContext);
 
     const validationSchema = Yup.object().shape({
         title: Yup.string().required("Required!"),
@@ -78,7 +82,7 @@ function MealForm(props) {
                         values.cuisineType = [values.cuisineType];
                         props.onSubmit(values);
 
-                        props.update();
+                        props.update(user.profile.chefProfile._id);
                         setMealPicUrl("");
                         props.close();
                     }}
@@ -90,10 +94,10 @@ function MealForm(props) {
                                     <Grid container spacing={2} direction="column">
                                         {/* MEAL IMAGE INPUT */}
                                         <Grid xs={12} item>
-                                            {pic === "" ? null : (
+                                            {picURL === "" ? null : (
                                                 <img
                                                     className={classes.addImage}
-                                                    src={pic}
+                                                    src={picURL}
                                                     alt="Meal"
                                                 />
                                             )}

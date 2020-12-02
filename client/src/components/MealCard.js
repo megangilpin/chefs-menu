@@ -185,8 +185,8 @@ function MealCard({ picURL, title, price, id, chefId }) {
                                                 ...chefInfo,
                                                 chefProfile: {
                                                     _id: chefId._id,
-                                                    cuisineSpecialties:
-                                                        chefId.cuisineSpecialties,
+                                                    cuisineSpecialty:
+                                                        chefId.cuisineSpecialty,
                                                 },
                                             },
                                         })

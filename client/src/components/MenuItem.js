@@ -22,14 +22,14 @@ import MealForm from "../components/MealForm";
 
 const useStyles = makeStyles((theme) => ({
     mealCard: {
-        minHeight: "auto",
+        maxHeight: "auto",
         width: "100%",
         maxWidth: "800px",
         overflow: "auto",
     },
     mealImage: {
         maxWidth: "100%",
-        maxHeight: "auto",
+        maxHeight: "300px",
         objectFit: "cover",
     },
     box: {
@@ -65,7 +65,6 @@ function MenuItem(props) {
         picURL,
     } = props.meal;
     const id = props.meal._id;
-    console.log(props.meal);
 
     const purchaseMeal = (e) => {
         e.preventDefault();
@@ -97,7 +96,7 @@ function MenuItem(props) {
                 message: data.errors,
             };
         } else {
-            props.update();
+            props.update(chefProfile._id);
         }
     };
 
@@ -119,7 +118,7 @@ function MenuItem(props) {
             };
         } else {
             console.log(data);
-            props.update();
+            props.update(chefProfile._id);
         }
     };
 

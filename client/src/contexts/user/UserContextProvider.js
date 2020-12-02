@@ -1,5 +1,11 @@
 import * as React from "react";
-import { SET_USER, LOGOUT, SET_IS_LOADING, SET_PROFILE_IMAGE } from "../types";
+import {
+    SET_USER,
+    LOGOUT,
+    SET_IS_LOADING,
+    SET_PROFILE_IMAGE,
+    UPDATE_CHEF_PROFILE,
+} from "../types";
 
 const initialState = {
     isAuthenticated: false,
@@ -7,7 +13,7 @@ const initialState = {
         email: "",
         primaryAddress: {},
         allergies: [],
-        chefProfile: {},
+        chefProfile: { _id: "", cuisineSpecialty: [] },
         favoriteCuisine: [],
     },
     isLoading: true,
@@ -40,6 +46,17 @@ const UserReducer = (state, action) => {
                 profile: {
                     ...state.profile,
                     profilePicURL: action.payload,
+                },
+            };
+        case UPDATE_CHEF_PROFILE:
+            return {
+                ...state,
+                profile: {
+                    ...state.profile,
+                    chefProfile: {
+                        ...state.profile.chefProfile,
+                        cuisineSpecialty: [...action.payload],
+                    },
                 },
             };
         default:
@@ -143,8 +160,31 @@ const UserContextProvider = ({ children }) => {
         dispatch({ type: LOGOUT, payload: null });
     };
 
+    const updateChefProfile = async (formValues) => {
+        const response = await fetch("/chefs", {
+            method: "put",
+            body: JSON.stringify(formValues),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        const data = await response.json();
+
+        if (data.errors) {
+            return {
+                result: false,
+                message: data.errors,
+            };
+        } else {
+            dispatch({ type: UPDATE_CHEF_PROFILE, payload: data });
+            return { result: true };
+        }
+    };
+
     const updateUser = async (formValues) => {
         isLoading(true);
+
         const response = await fetch("/users", {
             method: "put",
             body: JSON.stringify(formValues),
@@ -181,6 +221,7 @@ const UserContextProvider = ({ children }) => {
                 login,
                 logoutUser,
                 updateUser,
+                updateChefProfile,
                 uploadProfileImage,
             }}
         >

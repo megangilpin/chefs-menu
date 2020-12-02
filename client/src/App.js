@@ -36,7 +36,7 @@ function App() {
             <BrowserRouter>
                 <Route path="/">
                     {user.isAuthenticated ? (
-                        <Redirect to="/meals" />
+                        <Redirect to="/profile" />
                     ) : (
                         <Redirect to="/signup" />
                     )}

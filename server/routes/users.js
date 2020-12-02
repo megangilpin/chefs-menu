@@ -53,8 +53,6 @@ router.put(
             return;
         }
 
-        let chefProfile = {};
-
         if (req.body.newChef && !req.body.isChef) {
             const user = await usersController.findOneWithId(id);
             console.log(user);
@@ -63,14 +61,17 @@ router.put(
                 userId: user._id,
             };
             chefProfile = await chefsController.create(data);
-            delete chefProfile.userId;
             req.body.isChef = !req.body.isChef;
         }
 
         const user = await usersController.sanatize(
             await usersController.update(id, req.body)
         );
-        user.chefProfile = chefProfile;
+
+        if (user.isChef) {
+            user.chefProfile = await findChefProfile(id);
+        }
+
         const responseObj = await createAuthResponseObj(user);
         console.log(responseObj);
         res.json(responseObj);

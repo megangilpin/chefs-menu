@@ -57,7 +57,8 @@ router.put(
             cuisineSpecialty,
             userId: id,
         });
-        res.json(newChef);
+
+        res.json(newChef.cuisineSpecialty);
     })
 );
 
@@ -84,13 +85,11 @@ router.post(
     })
 );
 
-
 function validationMiddleware(req, res, next) {
     let { cuisineSpecialty } = req.body;
     // input validation
     const errors = [];
     if (cuisineSpecialty) {
-        cuisineSpecialty = JSON.parse(cuisineSpecialty);
         if (!isArrayOfStrings(cuisineSpecialty))
             errors.push("Invalid cuisineSpecialty type");
     }

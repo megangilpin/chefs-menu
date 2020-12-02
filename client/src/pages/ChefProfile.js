@@ -60,6 +60,10 @@ const useStyles = makeStyles((theme) => ({
         borderBottom: "1px solid #DCDCDC",
         background: "#ffffff",
     },
+    box: {
+        color: "#ffff",
+        background: theme.background.secondary,
+    },
 }));
 
 function ChefProfile(props) {
@@ -68,9 +72,7 @@ function ChefProfile(props) {
     const classes = useStyles();
     const [meals, setMeals] = React.useState([]);
     const [mealFormOpen, setMealFormOpen] = React.useState(false);
-
-    const chefInfo = location.state;
-    const id = chefInfo.chefProfile._id;
+    const [chefInfo, setChefInfo] = React.useState({ ...location.state });
     const currentChef = { ...user.profile.chefProfile };
     const headerImage = { ...meals[0] };
 
@@ -136,7 +138,6 @@ function ChefProfile(props) {
     };
 
     React.useEffect(() => {
-        console.log(location.state.chefProfile._id);
         const id = location.state.chefProfile._id;
         const meals = async () => await getMeals(id);
         meals().catch((error) => {
@@ -174,6 +175,7 @@ function ChefProfile(props) {
                         </Grid>
                         <Grid
                             container
+                            spacing={2}
                             direction="column"
                             justify="center"
                             alignItems="center"
@@ -194,13 +196,40 @@ function ChefProfile(props) {
                                     variant="caption"
                                 >{`${chefInfo.primaryAddress.city}, ${chefInfo.primaryAddress.country}`}</Typography>
                             </Grid>
+                            <Grid
+                                item
+                                container
+                                spacing={2}
+                                direction="row"
+                                justify="center"
+                                alignContent="center"
+                            >
+                                <Grid item>
+                                    {chefInfo.chefProfile.cuisineSpecialty
+                                        ? chefInfo.chefProfile.cuisineSpecialty.map(
+                                              (specialty, index) => (
+                                                  <Box
+                                                      key={index}
+                                                      className={classes.box}
+                                                      p={1}
+                                                      fontWeight={"fontWeightBold"}
+                                                  >
+                                                      <Typography>
+                                                          {specialty}
+                                                      </Typography>
+                                                  </Box>
+                                              )
+                                          )
+                                        : null}
+                                </Grid>
+                            </Grid>
                             <Grid item>
-                                <Box mt={3} mb={3}>
+                                <Box mt={1} mb={1}>
                                     <Divider className={classes.line} />
                                 </Box>
                             </Grid>
                             <Grid item>
-                                <Box mb={2}>
+                                <Box mb={3}>
                                     <Typography variant="body1">
                                         {chefInfo.bio}
                                     </Typography>
@@ -209,13 +238,15 @@ function ChefProfile(props) {
                         </Grid>
                     </div>
                     <div>
-                        <Button
-                            color="primary"
-                            variant="contained"
-                            className={classes.footer}
-                        >
-                            Send Request
-                        </Button>
+                        {chefInfo.chefProfile._id !== currentChef._id ? (
+                            <Button
+                                color="primary"
+                                variant="contained"
+                                className={classes.footer}
+                            >
+                                Send Request
+                            </Button>
+                        ) : null}
                     </div>
                 </div>
             </ResponsiveSideBar>
@@ -227,17 +258,22 @@ function ChefProfile(props) {
                         direction="column"
                         justify="center"
                         alignItems="center"
-                        className={classes.color1}
                     >
                         <Grid item>
                             <Typography variant="h5">
-                                <Box mt={5} fontWeight="fontWeightBold">
-                                    {`${chefInfo.firstName}'s`} Menu:
-                                </Box>
+                                {chefInfo.chefProfile._id !== currentChef._id ? (
+                                    <Box mt={5} fontWeight="fontWeightBold">
+                                        {`${chefInfo.firstName}'s`} Menu:
+                                    </Box>
+                                ) : (
+                                    <Box mt={5} fontWeight="fontWeightBold">
+                                        Your Menu:
+                                    </Box>
+                                )}
                             </Typography>
                         </Grid>
-                        <Grid item className={classes.color2}>
-                            {id !== currentChef._id ? null : (
+                        <Grid item>
+                            {chefInfo.chefProfile._id !== currentChef._id ? null : (
                                 <Box mb={2}>
                                     {/* Dialog Box with Form for adding / updating meal */}
                                     <MealForm

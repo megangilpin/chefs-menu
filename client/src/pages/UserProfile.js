@@ -5,7 +5,6 @@ import { Typography, Grid, Button } from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Avatar from "@material-ui/core/Avatar";
 import Box from "@material-ui/core/Box";
-import Link from "@material-ui/core/Link";
 import EditIcon from "@material-ui/icons/Edit";
 import IconButton from "@material-ui/core/IconButton";
 
@@ -13,8 +12,9 @@ import UserProfileMap from "../components/UserProfileMap";
 import { UserContext } from "../contexts/user/UserContextProvider";
 import ChefSignUp from "../components/ChefSignUp";
 import Main from "../components/Main";
+import UpdateChef from "../components/UpdateChef";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     profile: {
         margin: "12vh auto",
 
@@ -55,7 +55,14 @@ const useStyles = makeStyles({
         color: "white",
         background: "#FF743D",
     },
-});
+    chefButton: {
+        padding: "10px",
+    },
+    box: {
+        color: "#ffff",
+        background: theme.background.secondary,
+    },
+}));
 
 export default function UserProfile() {
     const classes = useStyles();
@@ -116,24 +123,35 @@ export default function UserProfile() {
                                     {userData.location}
                                 </Typography>
                             </Grid>
+                            <Grid item xs={12} container direction="row">
+                                <Box className={classes.box}>
+                                    {user.profile.chefProfile.cuisineSpecialty}
+                                </Box>
+                            </Grid>
                             <Grid item xs={12}>
                                 {!user.profile.isChef ? (
                                     <ChefSignUp />
                                 ) : (
-                                    <Box mb={2}>
-                                        <Link
-                                            component="button"
-                                            variant="body2"
-                                            onClick={() =>
-                                                history.push({
-                                                    pathname: "/chefprofile",
-                                                    state: profile,
-                                                })
-                                            }
-                                        >
-                                            Edit Your Menu
-                                        </Link>
-                                    </Box>
+                                    <div>
+                                        <Grid item>
+                                            <Button
+                                                className={classes.chefButton}
+                                                variant="outlined"
+                                                color="primary"
+                                                onClick={() =>
+                                                    history.push({
+                                                        pathname: "/chefprofile",
+                                                        state: profile,
+                                                    })
+                                                }
+                                            >
+                                                Edit Menu
+                                            </Button>
+                                        </Grid>
+                                        <Grid item>
+                                            <UpdateChef />
+                                        </Grid>
+                                    </div>
                                 )}
                             </Grid>
                         </Grid>
