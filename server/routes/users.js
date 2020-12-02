@@ -53,18 +53,22 @@ router.put(
             return;
         }
 
+        if (req.body.newChef && !req.body.isChef) {
+            const user = await usersController.findOneWithId(id);
+            const data = {
+                cuisineSpecialty: [...req.body.cuisineSpecialty],
+                userId: user._id,
+            };
+            chefProfile = await chefsController.create(data);
+            req.body.isChef = true;
+        }
+
         const user = await usersController.sanatize(
             await usersController.update(id, req.body)
         );
 
-        if (req.body.isChef && !user.isChef) {
-            const data = {
-                cuisineSpecialty: [...req.body.cuisineSpecialty],
-                userId: id,
-            };
-            const chefData = await chefsController.create(data);
-            delete chefData.userId;
-            user.chefProfile = chefData;
+        if (user.isChef) {
+            user.chefProfile = await findChefProfile(id);
         }
 
         const responseObj = await createAuthResponseObj(user);
