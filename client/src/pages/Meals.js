@@ -30,7 +30,6 @@ function Meals() {
     } = useCuisineSelector();
 
     const [meals, setMeals] = useState([]);
-    console.log(meals);
     useEffect(() => {
         let url = "/search?searchType=meals";
         if (!cuisines.has(ALL)) {

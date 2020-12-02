@@ -138,7 +138,7 @@ function ShoppingCart(props) {
                                             alignItems="flex-start"
                                         >
                                             <ListItemAvatar>
-                                                <Avatar src={meal.mealPic} />
+                                                <Avatar src={meal.picURL} />
                                             </ListItemAvatar>
                                             <ListItemText
                                                 primary={`${

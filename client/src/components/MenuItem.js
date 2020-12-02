@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import { UserContext } from "../contexts/user/UserContextProvider";
 import { CartContext } from "../contexts/cart/CartContextProvider";
 import {
     Button,
@@ -49,14 +50,13 @@ const useStyles = makeStyles((theme) => ({
 
 function MenuItem(props) {
     const classes = useStyles();
+    const user = React.useContext(UserContext);
     const { chef, addToCart } = useContext(CartContext);
     const [mealFormOpen, setMealFormOpen] = React.useState(false);
     const [openDialog, setDialogOpen] = React.useState(false);
-
-    const params = useParams();
+    const chefProfile = { ...user.profile.chefProfile };
 
     const {
-        mealPic,
         title,
         price,
         chefName,
@@ -66,15 +66,17 @@ function MenuItem(props) {
         picURL,
     } = props.meal;
     const id = props.meal._id;
+    console.log(props.meal);
 
     const purchaseMeal = (e) => {
         e.preventDefault();
-        const id = parseFloat(e.currentTarget.value);
+        const id = e.currentTarget.value;
+        const meal = { id, picURL, title, price, chefName, chefId };
+        console.log(meal);
         if (chef && chefId !== chef) {
             setDialogOpen(true);
         } else {
-            const meal = { id, mealPic, title, price, chefName, chefId };
-            addToCart(meal, id);
+            // addToCart(meal, id);
         }
     };
 
@@ -144,7 +146,7 @@ function MenuItem(props) {
                     alignItems="stretch"
                 >
                     <Grid className={classes.editRow} item xs={12}>
-                        {params.chefId === chefId ? (
+                        {chefProfile._id === chefId ? (
                             <React.Fragment>
                                 <IconButton
                                     onClick={handleMealFormOpen}
