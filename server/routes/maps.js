@@ -1,6 +1,6 @@
 const express = require("express");
 
-const { errorHandelingWrapper } = require("../util");
+const { errorHandelingWrapper, drawCirclePath } = require("../util");
 const { loginRequired } = require("../middleware");
 const userController = require("../controllers/usersController");
 const mapsController = require("../controllers/mapsController");
@@ -11,9 +11,7 @@ router.get(
     "/autocomplete",
     errorHandelingWrapper(async (req, res) => {
         const { input } = req.query;
-        const predictions = await mapsController.getAutoCompletePredictions(
-            input
-        );
+        const predictions = await mapsController.getAutoCompletePredictions(input);
         res.json({ predictions });
     })
 );
@@ -35,13 +33,17 @@ router.get(
             if (country) center = center + "," + country;
         }
 
-        const { primaryAddress: { lat, lng } } = user;
-
         const {
-            status,
-            headers,
-            data,
-        } = await mapsController.getStaticMapImage(center, lat, lng);
+            primaryAddress: { lat, lng },
+        } = user;
+
+        let circlePath;
+        if (lat && lng) {
+            center = [lat, lng].join(',');
+            circlePath = `fillcolor:0xff00002D|color:0xf96332ff|enc:${drawCirclePath(lat, lng, 3)}`;
+        }
+
+        const { status, headers, data } = await mapsController.getStaticMapImage(center, circlePath);
 
         res.set(headers);
         res.status(status);

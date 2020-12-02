@@ -1,10 +1,5 @@
 const axios = require("axios");
 
-const { errorHandelingWrapper, coordinatesDistanceCalc, drawCirclePath } = require("../util");
-
-console.log('drawCirclePath(lat, lng, 100)', drawCirclePath, errorHandelingWrapper) //(43.4698605, -80.5695588, 100))
-
-
 const KEY = process.env.GOOGLE_MAPS_API_KEY;
 
 const getAutoCompletePredictions = async (input) => {
@@ -16,17 +11,16 @@ const getAutoCompletePredictions = async (input) => {
     return data.predictions.map(({ description }) => description);
 };
 
-const getStaticMapImage = async (center, lat, lng) => {
+const getStaticMapImage = async (center, circlePath) => {
     let url =
         "https://maps.googleapis.com/maps/api/staticmap" +
-        `?center=${center}&scale=2&zoom=13&size=600x300&maptype=roadmap`
+        `?center=${center}&scale=2&zoom=11&size=600x300&maptype=roadmap`;
 
-    if (lat && lng) { //&& Number.isSafeInteger(lat) && Number.isSafeInteger(lng)) {
-        url += `&fillcolor:0xff00002D|color:0xf96332ff|enc:${drawCirclePath(lat, lng, 100)}`
+    if (circlePath) {
+        url += `&path=${circlePath}`;
     }
     url += `&key=${KEY}`;
 
-    console.log({center, lat, lng, url})
     return await axios({ method: "get", url, responseType: "stream" });
 };
 
