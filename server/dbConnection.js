@@ -4,7 +4,8 @@ const mongoose = require("mongoose");
 const connection = mongoose.createConnection(process.env.ATLAS_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useCreateIndex: true
+    useCreateIndex: true,
+    useFindAndModify: false,
 });
 connection.once("open", () =>
     console.log("MongoDB database connection established")
