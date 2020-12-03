@@ -5,36 +5,67 @@ const Conversation = connection.model("Conversation", conversationSchema);
 
 // Create conversation
 const create = async ({ userId1, userId2 }) => {
-    const { _doc } = (await Conversation.create({ userId1, userId2 })) || {};
-    return _doc;
+    const data = await Conversation.create({ userId1, userId2 });
+    return data;
 };
 
 // Find one with Conversation id
 const findOneWithId = async (id) => {
     const data = await Conversation.findById(id)
         .populate("messages")
-        .populate("userId1")
-        .populate("userId2");
-    return data;
-};
-
-// Find all by userId1 or userId2
-const findAllWithUserId = async ({ id }) => {
-    const data = await Conversation.find()
-        .or([{ userId1: id }, { userId2: id }])
-        .populate("messages")
         .populate({
-            path: "messages",
-            // match: { _id: { $ne: id } },
+            path: "userId1",
+            select:
+                "firstName lastName email primaryPhone profilePicURL isChef",
         })
         .populate({
-            path: "receiver",
-            // match: { _id: { $ne: id } },
+            path: "userId2",
+            select:
+                "firstName lastName email primaryPhone profilePicURL isChef",
         });
     return data;
 };
 
-// Find conversation id and update with message id
+// Finds all by user Id
+const findAllWithUserId = async ({ id }) => {
+    const data = await Conversation.find()
+        .or([{ userId1: id }, { userId2: id }])
+        .populate({
+            path: "userId1",
+            select:
+                "firstName lastName email primaryPhone profilePicURL isChef",
+        })
+        .populate({
+            path: "userId2",
+            select:
+                "firstName lastName email primaryPhone profilePicURL isChef",
+        });
+    return data;
+};
+
+// Finds one with both users
+const findOneWithUserId = async (userId2, userId1) => {
+    const data = await Conversation.find()
+        .and([
+            { $or: [{ userId1: userId1 }, { userId2: userId1 }] },
+            { $or: [{ userId1: userId2 }, { userId2: userId2 }] },
+        ])
+        .populate("messages")
+        .populate({
+            path: "userId1",
+            select:
+                "firstName lastName email primaryPhone profilePicURL isChef",
+        })
+        .populate({
+            path: "userId2",
+            select:
+                "firstName lastName email primaryPhone profilePicURL isChef",
+        })
+        .exec();
+    return data;
+};
+
+// Finds by conversation id and updates with message id
 const findAndUpdate = async (id, messageId) => {
     const data = await Conversation.findByIdAndUpdate(
         id,
@@ -46,7 +77,7 @@ const findAndUpdate = async (id, messageId) => {
     return data;
 };
 
-// Find all conversations
+// Finds all conversations
 const findAll = async () => {
     const messages = await Conversation.find({});
     return messages;
@@ -65,9 +96,10 @@ const deleteAll = async () => {
 module.exports = {
     create,
     findAndUpdate,
+    findAll,
     findOneWithId,
     findAllWithUserId,
-    findAll,
+    findOneWithUserId,
     remove,
     deleteAll,
 };

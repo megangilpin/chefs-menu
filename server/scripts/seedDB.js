@@ -5,6 +5,7 @@ const chefsDB = require("../models/chef");
 const mealsController = require("../controllers/mealsController");
 const chefsController = require("../controllers/chefsController");
 const messagesController = require("../controllers/messagesController");
+const conversationsController = require("../controllers/conversationsController");
 const connection = require("../dbConnection");
 
 // This file can empty and seed all the Users, Chefs, and Meals collections.

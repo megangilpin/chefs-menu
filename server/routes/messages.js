@@ -9,8 +9,8 @@ const router = express.Router();
 router.post(
     "/",
     errorHandelingWrapper(async (req, res) => {
-        const userId1 = req.user;
-        const { userId2 } = req.body;
+        // const userId1 = req.user;
+        const { userId2, userId1 } = req.body;
 
         // check that user2 exists
         const errors = [];
@@ -21,48 +21,22 @@ router.post(
             return res.status(400).json({ errors });
         }
 
-        const conversation = await conversationsController.create({
+        // check if a convo already exists for users
+        const conversation = await conversationsController.findOneWithUserId(
+            userId1,
+            userId2
+        );
+
+        if (conversation.length > 0) {
+            return res.json(conversation);
+        }
+
+        const newConversation = await conversationsController.create({
             userId1,
             userId2,
         });
 
-        res.json(conversation);
-    })
-);
-
-// Get by conversation id and populate messages and sender/receiver user info
-router.get(
-    "/:id",
-    errorHandelingWrapper(async (req, res) => {
-        // const userId1 = req.user;
-        const { id } = req.params;
-
-        const conversation = await conversationsController.findOneWithId(id);
-
-        res.json(conversation);
-    })
-);
-
-// Get all conversations by user id and populate messages
-router.get(
-    "/",
-    errorHandelingWrapper(async (req, res) => {
-        // const id = req.user;
-        const { id } = req.body;
-
-        const conversation = await conversationsController.findAllWithUserId({
-            id,
-        });
-        res.json(conversation);
-    })
-);
-
-// Get all conversations
-router.get(
-    "/all/conversations",
-    errorHandelingWrapper(async (req, res) => {
-        const conversation = await conversationsController.findAll();
-        res.json(conversation);
+        return res.json(newConversation);
     })
 );
 
@@ -103,7 +77,55 @@ router.put(
             messageId
         );
 
-        res.json(updatedConvo);
+        return res.json(updatedConvo);
+    })
+);
+
+// Finds a conversation by conversation id and populates the messages and userId1 & userId1 profile info
+router.get(
+    "/:id",
+    errorHandelingWrapper(async (req, res) => {
+        const { id } = req.params;
+        const errors = [];
+
+        const conversation = await conversationsController.findOneWithId(id);
+
+        if (!conversation) errors.push("Conversation Does Not Exist");
+        if (errors.length > 0) {
+            return res.status(400).json({ errors });
+        }
+
+        res.json(conversation);
+    })
+);
+
+// Finds all conversations by user id
+router.get(
+    "/",
+    errorHandelingWrapper(async (req, res) => {
+        // const id = req.user;
+        const { id } = req.body;
+        const errors = [];
+
+        const conversations = await conversationsController.findAllWithUserId({
+            id,
+        });
+
+        if (!conversations.length > 0) errors.push("No Conversations Exist");
+        if (errors.length > 0) {
+            return res.status(400).json({ errors });
+        }
+
+        return res.json(conversations);
+    })
+);
+
+// Get all conversations
+router.get(
+    "/all/conversations",
+    errorHandelingWrapper(async (req, res) => {
+        const conversation = await conversationsController.findAll();
+        return res.json(conversation);
     })
 );
 
@@ -126,11 +148,6 @@ router.delete(
 );
 
 module.exports = router;
-// {
-//     "userId1": "5fc800c3b82cfedb6642b61f",
-//     "userId2": "5fc80855ca17dcdfded6d5c7",
-//     "message": "hello"
-//   }
 
 // {
 //     "userId1": "5fc80855ca17dcdfded6d5c7",
@@ -139,11 +156,9 @@ module.exports = router;
 
 // {
 //     "messages": [],
-//     "_id": "5fc8d2d31a3bd90d82e85652",
-//     "userId1": "5fc800c3b82cfedb6642b61f",
-//     "userId2": "5fc80855ca17dcdfded6d5c7",
-//     "createdAt": "2020-12-03T11:58:11.227Z",
+//     "_id": "5fc93aa17d12e6424d0c43c5",
+//     "userId1": "5fc80855ca17dcdfded6d5c7",
+//     "userId2": "5fc800c3b82cfedb6642b61f",
+//     "createdAt": "2020-12-03T19:21:05.166Z",
 //     "__v": 0
-// },
-
-// 5fc8d2d31a3bd90d82e85652
+// }
