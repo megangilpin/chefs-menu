@@ -4,6 +4,8 @@ const usersController = require("../controllers/usersController");
 const chefsDB = require("../models/chef");
 const mealsController = require("../controllers/mealsController");
 const chefsController = require("../controllers/chefsController");
+const messagesController = require("../controllers/messagesController");
+const conversationsController = require("../controllers/conversationsController");
 const connection = require("../dbConnection");
 
 // This file can empty and seed all the Users, Chefs, and Meals collections.
@@ -100,7 +102,7 @@ const mealSeed = [
 
 (async () => {
     try {
-        let res = await usersController.deleteAll();
+        let res = await messagesController.deleteAll();
         console.log("deleteing all users", res);
 
         // res = await Promise.all(mealSeed.map(mealsController.create));
