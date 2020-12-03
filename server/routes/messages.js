@@ -75,7 +75,7 @@ router.put(
     })
 );
 
-// Finds a conversation by conversation id and populates the messages and userId1 & userId1 profile info
+// Finds a conversation by conversation id and populates the messages and userId1 & userId2 profile info
 router.get(
     "/:id",
     errorHandelingWrapper(async (req, res) => {
