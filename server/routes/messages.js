@@ -9,10 +9,10 @@ const router = express.Router();
 router.post(
     "/",
     errorHandelingWrapper(async (req, res) => {
-        // const userId1 = req.user;
-        const { userId2, userId1 } = req.body;
+        const userId1 = req.user;
+        const { userId2 } = req.body;
 
-        // check that user2 exists
+        // Checks that user2 exists
         const errors = [];
         if (!userId2) errors.push("No user provided");
         const user2 = await usersController.findOneWithId(userId2);
@@ -21,16 +21,16 @@ router.post(
             return res.status(400).json({ errors });
         }
 
-        // check if a convo already exists for users
+        // Check if a convo already exists for users
         const conversation = await conversationsController.findOneWithUserId(
             userId1,
             userId2
         );
-
         if (conversation.length > 0) {
             return res.json(conversation);
         }
 
+        // Otherwise create convo
         const newConversation = await conversationsController.create({
             userId1,
             userId2,
@@ -40,27 +40,23 @@ router.post(
     })
 );
 
-// Add a message to a conversation
+// Add a message to a conversation with conversation id
 router.put(
     "/:id",
     errorHandelingWrapper(async (req, res) => {
-        // const userId1 = req.user;
+        // Conversation id
         const { id } = req.params;
-
-        const { message, userId2, userId1 } = req.body;
-        const sender = userId2;
-        const receiver = userId1;
-
+        const { message, sender, receiver } = req.body;
         const errors = [];
-        if (!message) errors.push("No message sent");
-        if (!userId2) errors.push("No user provided");
-        const user2 = await usersController.findOneWithId(userId2);
-        if (!user2) errors.push("Recipient is not a user");
+
+        if (!message) errors.push("No message provided");
+        if (!sender) errors.push("No sender provided");
+        if (!receiver) errors.push("No receiver provided");
         if (errors.length > 0) {
             return res.status(400).json({ errors });
         }
 
-        // create message
+        // Create message
         const savedMessage = await messagesController.create({
             receiver,
             sender,
@@ -68,8 +64,6 @@ router.put(
         });
 
         const messageId = savedMessage._id;
-        console.log(messageId);
-        console.log(id);
 
         // Add message to conversation by conversation id
         const updatedConvo = await conversationsController.findAndUpdate(
@@ -85,6 +79,7 @@ router.put(
 router.get(
     "/:id",
     errorHandelingWrapper(async (req, res) => {
+        // Conversation id
         const { id } = req.params;
         const errors = [];
 
@@ -103,29 +98,13 @@ router.get(
 router.get(
     "/",
     errorHandelingWrapper(async (req, res) => {
-        // const id = req.user;
-        const { id } = req.body;
-        const errors = [];
+        const id = req.user;
 
         const conversations = await conversationsController.findAllWithUserId({
             id,
         });
 
-        if (!conversations.length > 0) errors.push("No Conversations Exist");
-        if (errors.length > 0) {
-            return res.status(400).json({ errors });
-        }
-
         return res.json(conversations);
-    })
-);
-
-// Get all conversations
-router.get(
-    "/all/conversations",
-    errorHandelingWrapper(async (req, res) => {
-        const conversation = await conversationsController.findAll();
-        return res.json(conversation);
     })
 );
 
@@ -148,17 +127,3 @@ router.delete(
 );
 
 module.exports = router;
-
-// {
-//     "userId1": "5fc80855ca17dcdfded6d5c7",
-//     "userId2": "5fc800c3b82cfedb6642b61f"
-//   }
-
-// {
-//     "messages": [],
-//     "_id": "5fc93aa17d12e6424d0c43c5",
-//     "userId1": "5fc80855ca17dcdfded6d5c7",
-//     "userId2": "5fc800c3b82cfedb6642b61f",
-//     "createdAt": "2020-12-03T19:21:05.166Z",
-//     "__v": 0
-// }
