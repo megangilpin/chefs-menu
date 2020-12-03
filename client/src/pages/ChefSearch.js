@@ -35,7 +35,6 @@ function ChefSearch() {
     const location = [city, region, country].join(", ");
     const [radiusKm, setRadiusKm] = useState(100);
     const [chefs, setChefs] = useState([]);
-    console.log(chefs);
     const handleChangeRadiusKm = ({ target }) =>
         target.value > 0 && setRadiusKm(target.value);
 
