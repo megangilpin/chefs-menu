@@ -82,7 +82,14 @@ const remove = async (id) => {
 };
 
 const findAllMeals = async (query) => {
-    const meals = await Meal.find(query);
+    const meals = await Meal.find(query).populate({
+        path: "chefId",
+        populate: {
+            path: "userId",
+            select:
+                "bio firstName lastName email primaryAddress primaryPhone profilePicURL favoriteCuisine allergies isChef",
+        },
+    });
     return meals;
 };
 

@@ -320,6 +320,7 @@ export default function EditProfile() {
                                         label="Allergen"
                                     />
                                 </Grid>
+
                                 <Grid item xs={4}>
                                     <Button
                                         className={classes.cuisineButton}

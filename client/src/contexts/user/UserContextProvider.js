@@ -1,5 +1,12 @@
 import * as React from "react";
-import { SET_USER, LOGOUT, SET_IS_LOADING, SET_PROFILE_IMAGE } from "../types";
+import {
+    SET_USER,
+    LOGOUT,
+    SET_IS_LOADING,
+    SET_PROFILE_IMAGE,
+    UPDATE_CHEF_PROFILE,
+    SET_CHEF_PROFILE,
+} from "../types";
 
 const initialState = {
     isAuthenticated: false,
@@ -40,6 +47,26 @@ const UserReducer = (state, action) => {
                 profile: {
                     ...state.profile,
                     profilePicURL: action.payload,
+                },
+            };
+        case SET_CHEF_PROFILE:
+            return {
+                ...state,
+                profile: {
+                    ...state.profile,
+                    isChef: true,
+                    chefProfile: { ...action.payload },
+                },
+            };
+        case UPDATE_CHEF_PROFILE:
+            return {
+                ...state,
+                profile: {
+                    ...state.profile,
+                    chefProfile: {
+                        ...state.profile.chefProfile,
+                        cuisineSpecialty: [...action.payload],
+                    },
                 },
             };
         default:
@@ -143,8 +170,53 @@ const UserContextProvider = ({ children }) => {
         dispatch({ type: LOGOUT, payload: null });
     };
 
+    const registerChef = async (formValues) => {
+        const response = await fetch("/chefs", {
+            method: "post",
+            body: JSON.stringify(formValues),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        const data = await response.json();
+
+        if (data.errors) {
+            return {
+                result: false,
+                message: data.errors,
+            };
+        } else {
+            dispatch({ type: SET_CHEF_PROFILE, payload: data });
+            return { result: true };
+        }
+    };
+
+    const updateChefProfile = async (formValues) => {
+        const response = await fetch("/chefs", {
+            method: "put",
+            body: JSON.stringify(formValues),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        const data = await response.json();
+
+        if (data.errors) {
+            return {
+                result: false,
+                message: data.errors,
+            };
+        } else {
+            dispatch({ type: UPDATE_CHEF_PROFILE, payload: data });
+            return { result: true };
+        }
+    };
+
     const updateUser = async (formValues) => {
         isLoading(true);
+
         const response = await fetch("/users", {
             method: "put",
             body: JSON.stringify(formValues),
@@ -178,9 +250,11 @@ const UserContextProvider = ({ children }) => {
             value={{
                 ...state,
                 register,
+                registerChef,
                 login,
                 logoutUser,
                 updateUser,
+                updateChefProfile,
                 uploadProfileImage,
             }}
         >

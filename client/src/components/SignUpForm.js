@@ -50,7 +50,8 @@ export default function SignUp() {
 
     const handleChange = (e) => {
         setAddress(e.target.value);
-        address && address.length > 3 &&
+        address &&
+            address.length > 3 &&
             fetch(`/maps/autocomplete?input=${e.target.value}`, {
                 method: "get",
                 headers: { "Content-Type": "application/json" },
@@ -75,7 +76,7 @@ export default function SignUp() {
                     user.register({ ...values, address })
                         .then((res) => {
                             if (res.result) {
-                                history.push("/home");
+                                history.push("/meals");
                             } else {
                                 setMessage(res.message);
                                 setOpen(true);

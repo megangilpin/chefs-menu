@@ -75,10 +75,10 @@ const CartContextProvider = ({ children }) => {
         let totalPrice = state.totalPrice;
         let totalItems = state.totalItems;
 
-        if (state.chef !== meal.chefId) {
+        if (state.chef !== meal.chefID) {
             dispatch({
                 type: SET_CART_CHEF,
-                payload: { chef: meal.chefId, chefName: meal.chefName },
+                payload: { chef: meal.chefID, chefName: meal.chefName },
             });
         }
 
@@ -100,7 +100,7 @@ const CartContextProvider = ({ children }) => {
 
     const updateCartItem = (id, action) => {
         const cart = [...state.cart];
-        const mealId = parseFloat(id);
+        const mealId = id;
         let totalPrice = state.totalPrice;
         let totalItems = state.totalItems;
 
@@ -164,7 +164,7 @@ const CartContextProvider = ({ children }) => {
 
         if (cart) {
             const { totalPrice, totalItems } = calcTotal(cart);
-            const chef = cart[0].chefId;
+            const chef = cart[0].chefID;
             const chefName = cart[0].chefName;
             dispatch({
                 type: SET_CART,

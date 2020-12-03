@@ -12,8 +12,6 @@ function ChefSearch() {
     const userId = "245";
     const { chefId } = useParams();
 
-    console.log("In caht page");
-
     const messages = [
         {
             sender: "123",
@@ -46,18 +44,22 @@ function ChefSearch() {
                 </Grid>
             </ResponsiveSideBar>
             <Main>
-                <Grid container spacing={4} alignContent="flex-start">
-                    <Grid item xs={12}>
-                        {`Selected chatId: ${chefId}`}
+                {chefId ? (
+                    <Grid container spacing={4} alignContent="flex-start">
+                        <Grid item xs={12}>
+                            {`Selected chatId: ${chefId}`}
+                        </Grid>
+                        {messages.map(({ sender, message, createdAt }) => (
+                            <Message
+                                senderMsg={userId === sender}
+                                message={message}
+                                createdAt={createdAt}
+                            />
+                        ))}
                     </Grid>
-                    {messages.map(({ sender, message, createdAt }) => (
-                        <Message
-                            senderMsg={userId === sender}
-                            message={message}
-                            createdAt={createdAt}
-                        />
-                    ))}
-                </Grid>
+                ) : (
+                    "Please select a chat to see conversation"
+                )}
             </Main>
         </>
     );
