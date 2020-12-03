@@ -19,12 +19,6 @@ const findOneWithId = async (id) => {
     return data;
 };
 
-// Finds message with message id
-const findAllWithSender = async ({ sender: id }) => {
-    const data = await Message.find({ sender: id });
-    return data;
-};
-
 const deleteAll = async () => {
     await Message.deleteMany();
 };
@@ -32,7 +26,6 @@ const deleteAll = async () => {
 module.exports = {
     create,
     findOneWithId,
-    findAllWithSender,
     findAllMessages,
     deleteAll,
 };
