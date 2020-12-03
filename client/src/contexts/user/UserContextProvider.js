@@ -204,8 +204,15 @@ const UserContextProvider = ({ children }) => {
         }
     };
 
-    const getStripeSecret = async () => {
-        const response = await fetch("/stripe/secret");
+    const getStripeSecret = async (body) => {
+        console.log(body);
+        const response = await fetch("/stripe/secret", {
+            method: "post",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(body),
+        });
         const data = response.json();
 
         if (!data.clientSecret) {
@@ -236,6 +243,7 @@ const UserContextProvider = ({ children }) => {
                 getStripeOnboardingLink,
                 getStripeAccount,
                 getStripeLoginLink,
+                getStripeSecret,
             }}
         >
             {children}

@@ -25,39 +25,32 @@ import CheckoutForm from "../components/CheckoutForm";
 
 const useStyles = makeStyles((theme) => ({
     container: {
-        margin: "0px",
-        paddingTop: "10vh",
-        padding: theme.spacing(4),
-        overflow: "hidden",
+        marginTop: "10vh",
+        width: "100%",
     },
     orderSummary: {
         background: "white",
-        width: "80%",
-        margin: "auto",
         padding: "1rem",
     },
     checkoutForm: {
+        marginTop: "1rem",
+        padding: "1rem 3rem 1rem 3rem !important",
         background: "white",
         height: "50vh",
         width: "100%",
-        margin: "0",
     },
     empty: {
         fontSize: ".8rem",
-        paddingTop: theme.spacing(1),
-        paddingBottom: theme.spacing(1),
     },
     quantityBttnPlus: {
         minWidth: "43px",
         padding: 0,
         margin: 0,
-        marginRight: theme.spacing(1),
     },
     quantityBttnMinus: {
         minWidth: "43px",
         padding: 0,
         margin: 0,
-        marginLeft: theme.spacing(1),
     },
 }));
 

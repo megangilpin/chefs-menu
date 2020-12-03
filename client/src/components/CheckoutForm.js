@@ -2,10 +2,13 @@ import React from "react";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import { Button, Typography, Grid, Divider } from "@material-ui/core";
 import CardSection from "./CardSection/CardSection";
-
+import { UserContext } from "../contexts/user/UserContextProvider";
+import { CartContext } from "../contexts/cart/CartContextProvider";
 export default function CheckoutForm() {
     const stripe = useStripe();
     const elements = useElements();
+    const user = React.useContext(UserContext);
+    const { cart } = React.useContext(CartContext);
 
     const handleSubmit = async (event) => {
         // We don't want to let default form submission happen here,
@@ -14,8 +17,12 @@ export default function CheckoutForm() {
 
         if (!stripe || !elements) {
             // Stripe.js has not yet loaded.
-            // Make sure to disable form submission until Stripe.js has loaded.
             return;
+        }
+
+        const secret_result = await user.getStripeSecret({ meals: cart });
+        if (secret_result) {
+            console.log(secret_result);
         }
 
         const result = await stripe.confirmCardPayment("{CLIENT_SECRET}", {
@@ -56,7 +63,12 @@ export default function CheckoutForm() {
                     <CardSection />
                 </Grid>
                 <Grid item xs={12}>
-                    <Button color="primary" variant="contained" disabled={!stripe}>
+                    <Button
+                        type="submit"
+                        color="primary"
+                        variant="contained"
+                        disabled={!stripe}
+                    >
                         <Typography variant="button">Confirm Order</Typography>
                     </Button>
                 </Grid>

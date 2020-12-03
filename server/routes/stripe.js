@@ -4,6 +4,7 @@ const { errorHandelingWrapper } = require("../util");
 const { loginRequired } = require("../middleware");
 
 const chefsController = require("../controllers/chefsController");
+const mealsController = require("../controllers/mealsController");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 // ROUTER FOR STRIPE
@@ -129,16 +130,26 @@ const calculateOrderAmount = (items) => {
 const calculateApplicationFeeAmount = (amount) => 0.1 * amount;
 
 router.post("/secret", async (req, res) => {
-    const data = req.body;
-    const amount = calculateOrderAmount(data.items);
+    const meals = req.body.meals;
+    const chefId = meals[0].chefId;
+    const chef = await chefsController.findOneWithId(chefId);
+
+    let price = 0.0;
+
+    meals.forEach((meal) => {
+        // TODO search chef/meal id to verify if the the price the client says
+        // is the same as the server
+        console.log(meal);
+        price += meal.price * meal.quantity;
+    });
 
     await stripe.paymentIntents
         .create({
-            amount: amount,
-            currency: data.currency,
-            application_fee_amount: calculateApplicationFeeAmount(amount),
+            amount: price,
+            currency: "CAD",
+            application_fee_amount: 0,
             transfer_data: {
-                destination: data.account,
+                destination: chef.stripeId,
             },
         })
         .then(function (paymentIntent) {
