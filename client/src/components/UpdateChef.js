@@ -106,7 +106,7 @@ const UpdateChef = (props) => {
                 aria-labelledby="form-dialog-title"
             >
                 <DialogTitle id="form-dialog-title" color="primary">
-                    {/* Update Your Specialties */}
+                    Update Your Specialties
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
@@ -154,7 +154,7 @@ const UpdateChef = (props) => {
                                 </Select>
                                 {hasError && (
                                     <FormHelperText className={classes.error}>
-                                        Must Select One
+                                        Must Select At Least One
                                     </FormHelperText>
                                 )}
                             </Grid>

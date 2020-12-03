@@ -73,7 +73,6 @@ function ChefProfile(props) {
     const classes = useStyles();
     const [meals, setMeals] = React.useState([]);
     const [mealFormOpen, setMealFormOpen] = React.useState(false);
-    // const [chefInfo, setChefInfo] = React.useState({ ...location.state });
     const chefInfo = location.state ? location.state : user.profile;
     const currentChef = { ...user.profile.chefProfile };
     const headerImage = { ...meals[0] };
@@ -270,15 +269,12 @@ function ChefProfile(props) {
                     >
                         <Grid item>
                             <Typography variant="h5">
-                                {chefInfo.chefProfile._id !== currentChef._id ? (
-                                    <Box mt={5} fontWeight="fontWeightBold">
-                                        {`${chefInfo.firstName}'s`} Menu:
-                                    </Box>
-                                ) : (
-                                    <Box mt={5} fontWeight="fontWeightBold">
-                                        Your Menu:
-                                    </Box>
-                                )}
+                                <Box mt={5} fontWeight="fontWeightBold">
+                                    {chefInfo.chefProfile._id !== currentChef._id
+                                        ? `${chefInfo.firstName}'s`
+                                        : `Your`}{" "}
+                                    Menu:
+                                </Box>
                             </Typography>
                         </Grid>
                         <Grid item>

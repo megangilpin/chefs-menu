@@ -68,7 +68,6 @@ function MenuItem(props) {
 
     const purchaseMeal = (e) => {
         e.preventDefault();
-        const id = e.currentTarget.value;
         const chefID = chefId;
         const meal = { id, picURL, title, price, chefName, chefID };
         if (chef && chefId !== chef) {

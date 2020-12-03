@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useHistory } from "react-router-dom";
 
-import { Typography, Grid, Button, MenuItem } from "@material-ui/core";
+import { Typography, Grid, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Avatar from "@material-ui/core/Avatar";
 import Box from "@material-ui/core/Box";
@@ -11,7 +11,6 @@ import Chip from "@material-ui/core/Chip";
 
 import { UserContext } from "../contexts/user/UserContextProvider";
 import ProfilePicLoader from "../components/ProfilePicLoader";
-import allCuisines from "../lib/allCuisines";
 
 import { Formik, Form, Field } from "formik";
 import { TextField } from "formik-material-ui";
