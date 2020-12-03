@@ -59,7 +59,6 @@ function ChefCard(props) {
                         className={classes.userImage}
                     />
                 </Grid>
-                {/* <CardMedia className={classes.media} image={profilePicURL} /> */}
                 <CardContent>
                     <Grid
                         container
