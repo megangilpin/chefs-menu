@@ -14,8 +14,8 @@ const findAllChefs = async (query) => {
 };
 
 const findOneWithUserId = async (userId) => {
-    const { _doc } = await Chef.findOne({ userId });
-    return _doc;
+    const chef = await Chef.findOne({ userId });
+    return chef;
 };
 
 const create = async ({ cuisineSpecialty, userId }) => {

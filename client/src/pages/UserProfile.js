@@ -5,7 +5,6 @@ import { Typography, Grid, Button } from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Avatar from "@material-ui/core/Avatar";
 import Box from "@material-ui/core/Box";
-import Link from "@material-ui/core/Link";
 import EditIcon from "@material-ui/icons/Edit";
 import IconButton from "@material-ui/core/IconButton";
 
@@ -13,8 +12,9 @@ import UserProfileMap from "../components/UserProfileMap";
 import { UserContext } from "../contexts/user/UserContextProvider";
 import ChefSignUp from "../components/ChefSignUp";
 import Main from "../components/Main";
+import UpdateChef from "../components/UpdateChef";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     profile: {
         margin: "12vh auto",
 
@@ -55,7 +55,15 @@ const useStyles = makeStyles({
         color: "white",
         background: "#FF743D",
     },
-});
+    chefButton: {
+        padding: "10px",
+    },
+    box: {
+        padding: "8px",
+        color: "#ffff",
+        background: theme.background.secondary,
+    },
+}));
 
 export default function UserProfile() {
     const classes = useStyles();
@@ -116,23 +124,44 @@ export default function UserProfile() {
                                     {userData.location}
                                 </Typography>
                             </Grid>
+                            <Grid
+                                item
+                                xs={12}
+                                container
+                                direction="row"
+                                justify="center"
+                                alignItems="center"
+                                spacing={2}
+                            >
+                                {user.profile.chefProfile.cuisineSpecialty &&
+                                    user.profile.chefProfile.cuisineSpecialty.map(
+                                        (specialty) => (
+                                            <Grid item key={specialty}>
+                                                <Box className={classes.box}>
+                                                    {specialty}
+                                                </Box>
+                                            </Grid>
+                                        )
+                                    )}
+                            </Grid>
                             <Grid item xs={12}>
                                 {!user.profile.isChef ? (
                                     <ChefSignUp />
                                 ) : (
-                                    <Box mb={2}>
-                                        <Link
-                                            component="button"
-                                            variant="body2"
+                                    <div>
+                                        <Button
+                                            className={classes.chefButton}
+                                            variant="outlined"
+                                            color="primary"
                                             onClick={() =>
-                                                history.push(
-                                                    `chefs/${profile.chefProfile._id}`
-                                                )
+                                                history.push({
+                                                    pathname: "/chefprofile",
+                                                })
                                             }
                                         >
-                                            Edit Your Menu
-                                        </Link>
-                                    </Box>
+                                            Edit Menu
+                                        </Button>
+                                    </div>
                                 )}
                             </Grid>
                         </Grid>

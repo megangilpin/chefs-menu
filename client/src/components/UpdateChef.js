@@ -23,7 +23,11 @@ import allCuisines from "../lib/allCuisines";
 
 const useStyles = makeStyles((theme) => ({
     chefButton: {
-        padding: "10px",
+        alignSelf: "flex-end",
+        fontWeight: "bold",
+        height: "100px",
+        width: "100%",
+        margin: 0,
     },
     chips: {
         display: "flex",
@@ -51,13 +55,14 @@ const MenuProps = {
     },
 };
 
-const ChefSignUp = (props) => {
+const UpdateChef = (props) => {
     const user = React.useContext(UserContext);
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
-    const [specialty, setSpecialty] = React.useState([]);
     const [hasError, setError] = React.useState(false);
-
+    const [specialty, setSpecialty] = React.useState([
+        ...user.profile.chefProfile.cuisineSpecialty,
+    ]);
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -70,7 +75,7 @@ const ChefSignUp = (props) => {
         setSpecialty(event.target.value);
     };
 
-    const registerChef = () => {
+    const updateUser = () => {
         if (!specialty.length > 0) {
             setError(true);
             return;
@@ -79,18 +84,21 @@ const ChefSignUp = (props) => {
         const formValues = {
             cuisineSpecialty: [...specialty],
         };
-        user.registerChef(formValues);
+
+        user.updateChefProfile(formValues);
+
+        handleClose();
     };
 
     return (
         <React.Fragment>
             <Button
                 className={classes.chefButton}
-                variant="outlined"
                 color="primary"
+                variant="contained"
                 onClick={handleClickOpen}
             >
-                Become A Chef
+                Update Specialties
             </Button>
             <Dialog
                 open={open}
@@ -98,12 +106,12 @@ const ChefSignUp = (props) => {
                 aria-labelledby="form-dialog-title"
             >
                 <DialogTitle id="form-dialog-title" color="primary">
-                    Become A Chef!
+                    Update Your Specialties
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        To become a chef simply pick at least one specialty type, hit
-                        sign up and then start creating your personal menu!
+                        Choose a specialty cuisine to allow clients to easily search
+                        for your menu
                     </DialogContentText>
                     <Box mt={3}>
                         <Grid container>
@@ -144,6 +152,11 @@ const ChefSignUp = (props) => {
                                         </MenuItem>
                                     ))}
                                 </Select>
+                                {hasError && (
+                                    <FormHelperText className={classes.error}>
+                                        Must Select At Least One
+                                    </FormHelperText>
+                                )}
                             </Grid>
                         </Grid>
                     </Box>
@@ -152,8 +165,8 @@ const ChefSignUp = (props) => {
                     <Button onClick={handleClose} color="primary">
                         Cancel
                     </Button>
-                    <Button onClick={registerChef} color="primary">
-                        Sign Up
+                    <Button onClick={updateUser} color="primary">
+                        Submit
                     </Button>
                 </DialogActions>
             </Dialog>
@@ -161,4 +174,4 @@ const ChefSignUp = (props) => {
     );
 };
 
-export default ChefSignUp;
+export default UpdateChef;

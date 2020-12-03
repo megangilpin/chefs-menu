@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import { UserContext } from "../contexts/user/UserContextProvider";
 import { CartContext } from "../contexts/cart/CartContextProvider";
 import {
     Button,
@@ -17,19 +18,18 @@ import EditIcon from "@material-ui/icons/Edit";
 import ClearIcon from "@material-ui/icons/Clear";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import { dollarFormatter } from "../lib/utils";
-import { useParams } from "react-router-dom";
 import MealForm from "../components/MealForm";
 
 const useStyles = makeStyles((theme) => ({
     mealCard: {
-        minHeight: "auto",
+        maxHeight: "auto",
         width: "100%",
         maxWidth: "800px",
         overflow: "auto",
     },
     mealImage: {
         maxWidth: "100%",
-        maxHeight: "auto",
+        maxHeight: "500px",
         objectFit: "cover",
     },
     box: {
@@ -49,14 +49,13 @@ const useStyles = makeStyles((theme) => ({
 
 function MenuItem(props) {
     const classes = useStyles();
+    const user = React.useContext(UserContext);
     const { chef, addToCart } = useContext(CartContext);
     const [mealFormOpen, setMealFormOpen] = React.useState(false);
     const [openDialog, setDialogOpen] = React.useState(false);
-
-    const params = useParams();
+    const chefProfile = { ...user.profile.chefProfile };
 
     const {
-        mealPic,
         title,
         price,
         chefName,
@@ -69,11 +68,11 @@ function MenuItem(props) {
 
     const purchaseMeal = (e) => {
         e.preventDefault();
-        const id = parseFloat(e.currentTarget.value);
+        const chefID = chefId;
+        const meal = { id, picURL, title, price, chefName, chefID };
         if (chef && chefId !== chef) {
             setDialogOpen(true);
         } else {
-            const meal = { id, mealPic, title, price, chefName, chefId };
             addToCart(meal, id);
         }
     };
@@ -95,12 +94,11 @@ function MenuItem(props) {
                 message: data.errors,
             };
         } else {
-            props.update();
+            props.update(chefProfile._id);
         }
     };
 
     const editMeal = async (formValues) => {
-        console.log(formValues);
         const response = await fetch(`/meals/${id}`, {
             method: "put",
             body: JSON.stringify(formValues),
@@ -116,8 +114,7 @@ function MenuItem(props) {
                 message: data.errors,
             };
         } else {
-            console.log(data);
-            props.update();
+            props.update(chefProfile._id);
         }
     };
 
@@ -144,7 +141,7 @@ function MenuItem(props) {
                     alignItems="stretch"
                 >
                     <Grid className={classes.editRow} item xs={12}>
-                        {params.chefId === chefId ? (
+                        {chefProfile._id === chefId ? (
                             <React.Fragment>
                                 <IconButton
                                     onClick={handleMealFormOpen}
@@ -202,7 +199,9 @@ function MenuItem(props) {
                             </Box>
                         </Grid>
                         <Grid item>
-                            <Typography variant="h5">{title}</Typography>
+                            <Typography variant="h5">
+                                <Box fontWeight="fontWeightBold">{title}</Box>
+                            </Typography>
 
                             <Typography color="primary" variant="subtitle1">
                                 {dollarFormatter.format(price / 100)}
@@ -219,27 +218,22 @@ function MenuItem(props) {
                             </Typography>
                         </Grid>
                         <Grid item>
-                            <Typography variant="subtitle2">
-                                REQUIRED STUFF
-                            </Typography>
-                            <Typography
-                                className={classes.subtitle}
-                                variant="subtitle2"
-                            >
-                                {!requirements
-                                    ? "No Meal Requirements"
-                                    : { requirements }}
-                            </Typography>
+                            <Box mb={2}>
+                                <Typography variant="subtitle2">
+                                    REQUIRED STUFF
+                                </Typography>
+                                <Typography
+                                    className={classes.subtitle}
+                                    variant="subtitle2"
+                                >
+                                    {requirements
+                                        ? `${requirements}`
+                                        : "No Meal Requirements"}
+                                </Typography>
+                            </Box>
                         </Grid>
                     </Grid>
-                    <Grid
-                        xs={12}
-                        sm={6}
-                        item
-                        container
-                        // justify="center"
-                        alignItems="center"
-                    >
+                    <Grid xs={12} sm={6} item container alignItems="center">
                         {!picURL ? (
                             <Box className={classes.mealImage}>
                                 <Typography color="primary" variant="subtitle2">

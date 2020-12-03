@@ -5,7 +5,6 @@ import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { theme } from "./themes/theme";
 import LoginSignUp from "./pages/LoginSignUp";
-import Home from "./pages/Home";
 import Page from "./components/Page";
 import { UserContext } from "../src/contexts/user/UserContextProvider";
 import UserProfile from "./pages/UserProfile";
@@ -20,16 +19,11 @@ function App() {
     const DefaultRoutes = () => (
         <Page>
             <Switch>
-                <ProtectedRoute exact path="/home" component={Home} />
                 <ProtectedRoute exact path="/meals" component={Meals} />
                 <ProtectedRoute exact path="/profile" component={UserProfile} />
                 <ProtectedRoute exact path="/editprofile" component={EditProfile} />
                 <ProtectedRoute exact path="/chefs" component={ChefSearch} />
-                <ProtectedRoute
-                    exact
-                    path="/chefs/:chefId"
-                    component={ChefProfile}
-                />
+                <ProtectedRoute exact path="/chefprofile" component={ChefProfile} />
             </Switch>
         </Page>
     );
