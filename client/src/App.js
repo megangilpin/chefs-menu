@@ -12,6 +12,7 @@ import UserProfile from "./pages/UserProfile";
 import EditProfile from "./pages/EditProfile";
 import ChefSearch from "./pages/ChefSearch";
 import ChefProfile from "./pages/ChefProfile";
+import Chat from "./pages/Chat";
 import Meals from "./pages/Meals";
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
                 <ProtectedRoute exact path="/profile" component={UserProfile} />
                 <ProtectedRoute exact path="/editprofile" component={EditProfile} />
                 <ProtectedRoute exact path="/chefs" component={ChefSearch} />
+                <ProtectedRoute path="/chats" component={Chat} />
                 <ProtectedRoute
                     exact
                     path="/chefs/:chefId"

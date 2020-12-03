@@ -51,6 +51,7 @@ function NavMenuButton(props) {
             >
                 <MenuItem onClick={() => history.push("profile")}>Profile</MenuItem>
                 <MenuItem onClick={handleClose}>My account</MenuItem>
+                <MenuItem onClick={() => history.push("chats")}>Chats</MenuItem>
                 <MenuItem onClick={() => history.push("chefs")}>
                     Find A Chefs
                 </MenuItem>
