@@ -17,7 +17,6 @@ import {
     ListItemText,
     MenuItem,
     Select,
-    // FormHelperText,
 } from "@material-ui/core";
 import allCuisines from "../lib/allCuisines";
 import { useSnackbar } from "notistack";
@@ -76,7 +75,7 @@ const ChefSignUp = (props) => {
 
     const registerChef = () => {
         if (!specialty.length > 0) {
-            showSnackBar("You don't specialize in anything? Come on..!", "error");
+            showSnackBar("At least select one!", "error");
             return;
         }
 
