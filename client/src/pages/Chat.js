@@ -72,6 +72,9 @@ function ChefSearch() {
             sender = messages.userId2._id;
             receiver = messages.userId1._id;
         }
+
+        console.log({ sender, receiver });
+
         fetch(`/messages/${chatId}`, {
             method: "put",
             headers: { "Content-Type": "application/json" },
@@ -96,7 +99,8 @@ function ChefSearch() {
                             {`Recent Chats for ${profile.email}`}
                         </Grid>
                         {chats.map(({ userId1, userId2, _id }) => {
-                            const receiver = userId1._id === profile._id ? userId2 : userId1
+                            const receiver =
+                                userId1._id === profile._id ? userId2 : userId1;
                             return (
                                 <Grid
                                     item
