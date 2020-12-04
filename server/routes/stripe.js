@@ -139,8 +139,7 @@ router.post("/secret", async (req, res) => {
     for (const meal of meals) {
         // TODO search chef/meal id to verify if the the price the client says
         let mealObj = await mealsController.findOneWithId(meal.id);
-        console.log(mealObj);
-        console.log(meal);
+
         if (meal.price !== mealObj.price) {
             res.status(400).json({
                 errors: ["Client price does not match server meal price!"],
