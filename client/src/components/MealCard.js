@@ -1,5 +1,6 @@
 // WILL MOVE ADD TO CART BUTTON ONCE CHEF PROFILE PAGE IS CREATED
 import React, { useContext } from "react";
+import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import {
     Card,
@@ -12,7 +13,6 @@ import {
     Box,
     Typography,
     Grid,
-    Link,
     IconButton,
     Dialog,
     DialogContent,
@@ -24,7 +24,6 @@ import { theme } from "../themes/theme";
 import { CartContext } from "../contexts/cart/CartContextProvider";
 import { dollarFormatter } from "../lib/utils";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
-import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles({
     root: {
@@ -58,11 +57,13 @@ const useStyles = makeStyles({
     subtitle: {
         fontWeight: "bold",
     },
+    link: {
+        color: "#FF743D",
+    },
 });
 
 function MealCard({ picURL, title, price, id, chefId }) {
     const classes = useStyles();
-    const history = useHistory();
     const { chef, addToCart } = useContext(CartContext);
     const [openDialog, setDialogOpen] = React.useState(false);
     const chefInfo = chefId.userId;
@@ -176,21 +177,8 @@ function MealCard({ picURL, title, price, id, chefId }) {
                             </Grid>
                             <Grid item xs={12}>
                                 <Link
-                                    component="button"
-                                    variant="body2"
-                                    onClick={() =>
-                                        history.push({
-                                            pathname: "/chefprofile",
-                                            state: {
-                                                ...chefInfo,
-                                                chefProfile: {
-                                                    _id: chefId._id,
-                                                    cuisineSpecialty:
-                                                        chefId.cuisineSpecialty,
-                                                },
-                                            },
-                                        })
-                                    }
+                                    className={classes.link}
+                                    to={`chefprofile/${chefId._id}`}
                                 >
                                     View Chef's Menu
                                 </Link>

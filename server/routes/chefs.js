@@ -15,10 +15,14 @@ router.get(
             return;
         }
         const chef = await chefsController.findOneWithId(id);
+
         if (!chef) {
             res.status(400).json({ errors: ["Chef not found for given id"] });
             return;
         }
+
+        chef.userId.password = undefined;
+
         res.json(chef);
     })
 );

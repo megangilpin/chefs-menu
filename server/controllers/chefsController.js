@@ -4,8 +4,8 @@ const chefSchema = require("../models/chef");
 const Chef = connection.model("Chef", chefSchema);
 
 const findOneWithId = async (id) => {
-    const { _doc } = (await Chef.findById(id)) || {};
-    return _doc;
+    const data = await Chef.findById(id).populate("userId");
+    return data;
 };
 
 const findAllChefs = async (query) => {

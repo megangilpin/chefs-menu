@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 
 import { Typography, Grid, Button } from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
@@ -56,9 +56,15 @@ const useStyles = makeStyles((theme) => ({
         padding: "10px",
     },
     box: {
-        padding: "8px",
+        padding: ".6rem",
+        fontSize: ".5rem",
+        fontWeight: "600",
         color: "#ffff",
         background: theme.background.secondary,
+    },
+    link: {
+        color: "#FF743D",
+        textDecoration: "none",
     },
 }));
 
@@ -120,7 +126,6 @@ export default function UserProfile() {
                     <Grid
                         item
                         xs={12}
-                        sm={8}
                         container
                         direction="row"
                         justify="center"
@@ -147,13 +152,13 @@ export default function UserProfile() {
                                     className={classes.chefButton}
                                     variant="outlined"
                                     color="primary"
-                                    onClick={() =>
-                                        history.push({
-                                            pathname: "/chefprofile",
-                                        })
-                                    }
                                 >
-                                    Edit Menu
+                                    <Link
+                                        className={classes.link}
+                                        to={`chefprofile/${profile.chefProfile._id}`}
+                                    >
+                                        Edit Menu
+                                    </Link>
                                 </Button>
                             </div>
                         )}
