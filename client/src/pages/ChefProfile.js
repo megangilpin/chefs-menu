@@ -8,6 +8,7 @@ import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import { Avatar, Typography, Grid, Box, Divider, Button } from "@material-ui/core";
 import MenuItem from "../components/MenuItem";
 import MealForm from "../components/MealForm";
+import SetUpStripe from "../components/SetUpStripe";
 import UpdateChef from "../components/UpdateChef";
 
 const useStyles = makeStyles((theme) => ({
@@ -106,7 +107,7 @@ function ChefProfile(props) {
                 );
             })
             .then(function (data) {
-                const meals = [...data[0]];
+                const meals = !data ? [] : [...data[0]];
                 setMeals(meals);
                 const chef = { ...data[1].userId };
                 chef.chefProfile = {
@@ -297,6 +298,9 @@ function ChefProfile(props) {
                         justify="center"
                         alignItems="center"
                     >
+                        <Grid item>
+                            <SetUpStripe />
+                        </Grid>
                         <Grid item>
                             <Typography variant="h5">
                                 <Box mt={5} fontWeight="fontWeightBold">

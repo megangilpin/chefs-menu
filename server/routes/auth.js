@@ -6,7 +6,7 @@ const {
     findChefProfile,
 } = require("../util");
 const userController = require("../controllers/usersController");
-const chefsController = require("../controllers/chefsController");
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 const router = express.Router();
 
@@ -84,10 +84,24 @@ router.post(
             [street, city, region, country] = addressArr;
         }
 
+        // STRIPE CONNECTED ACCOUNT ONBOARDING FOR CHEFS
+        let stripeId = "";
+        if (isChef) {
+            const account = await stripe.accounts.create({
+                type: "express",
+                email: email,
+                capabilities: {
+                    card_payments: { requested: true },
+                    transfers: { requested: true },
+                },
+            });
+
+            stripeId = account.id;
+        }
+
         const createdUser = await userController.create({
             firstName,
             lastName,
-            address,
             street,
             city,
             region,
@@ -95,6 +109,7 @@ router.post(
             email,
             password,
             isChef,
+            stripeId,
         });
 
         const responseObj = await createAuthResponseObj(createdUser);

@@ -17,9 +17,9 @@ import {
     ListItemText,
     MenuItem,
     Select,
-    FormHelperText,
 } from "@material-ui/core";
 import allCuisines from "../lib/allCuisines";
+import { useSnackbar } from "notistack";
 
 const useStyles = makeStyles((theme) => ({
     chefButton: {
@@ -56,7 +56,11 @@ const ChefSignUp = (props) => {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const [specialty, setSpecialty] = React.useState([]);
-    const [hasError, setError] = React.useState(false);
+    const { enqueueSnackbar } = useSnackbar();
+
+    const showSnackBar = (message, variant) => {
+        enqueueSnackbar(message, { variant: variant, autoHideDuration: "6000" });
+    };
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -66,13 +70,12 @@ const ChefSignUp = (props) => {
         setOpen(false);
     };
     const handleChange = (event) => {
-        setError(false);
         setSpecialty(event.target.value);
     };
 
     const registerChef = () => {
         if (!specialty.length > 0) {
-            setError(true);
+            showSnackBar("At least select one!", "error");
             return;
         }
 
@@ -80,6 +83,7 @@ const ChefSignUp = (props) => {
             cuisineSpecialty: [...specialty],
         };
         user.registerChef(formValues);
+        showSnackBar("You are now a chef! ;)", "success");
     };
 
     return (
@@ -144,11 +148,6 @@ const ChefSignUp = (props) => {
                                         </MenuItem>
                                     ))}
                                 </Select>
-                                {hasError && (
-                                    <FormHelperText className={classes.error}>
-                                        Must Select At Least One
-                                    </FormHelperText>
-                                )}
                             </Grid>
                         </Grid>
                     </Box>
