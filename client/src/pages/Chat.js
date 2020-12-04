@@ -62,12 +62,22 @@ function ChefSearch() {
     const sendMsg = () => {
         const message = inputEl.current.value;
         inputEl.current.value = "";
+        let receiver;
+        let sender;
+        const { userId1, userId2 } = messages;
+        if (userId1._id === profile._id) {
+            sender = messages.userId1._id;
+            receiver = messages.userId2._id;
+        } else {
+            sender = messages.userId2._id;
+            receiver = messages.userId1._id;
+        }
         fetch(`/messages/${chatId}`, {
             method: "put",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                sender: messages.userId1._id,
-                receiver: messages.userId2._id,
+                sender,
+                receiver,
                 message,
             }),
         })
@@ -85,15 +95,23 @@ function ChefSearch() {
                         <Grid item xs={12}>
                             {`Recent Chats for ${profile.email}`}
                         </Grid>
-                        {chats.map(({ userId2, _id }) => (
-                            <Grid item xs={12} key={_id} onClick={() => setchatId(_id)}>
-                                <Box mb={3}>
-                                    <Typography variant="h5">
-                                        {`${userId2.firstName}  ${userId2.lastName}`}
-                                    </Typography>
-                                </Box>
-                            </Grid>
-                        ))}
+                        {chats.map(({ userId1, userId2, _id }) => {
+                            const receiver = userId1._id === profile._id ? userId2 : userId1
+                            return (
+                                <Grid
+                                    item
+                                    xs={12}
+                                    key={_id}
+                                    onClick={() => setchatId(_id)}
+                                >
+                                    <Box mb={3}>
+                                        <Typography variant="h5">
+                                            {`${receiver.firstName}  ${receiver.lastName}`}
+                                        </Typography>
+                                    </Box>
+                                </Grid>
+                            );
+                        })}
                     </Grid>
                 </div>
             </ResponsiveSideBar>
