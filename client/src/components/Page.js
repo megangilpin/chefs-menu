@@ -19,6 +19,10 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
         marginLeft: theme.spacing(2),
     },
+    logo: {
+        width: "50vw",
+        maxWidth: "20rem",
+    },
 }));
 
 function Page(props) {
@@ -30,7 +34,11 @@ function Page(props) {
                 <AppBar position="fixed" className={classes.appBar}>
                     <Toolbar>
                         <Typography className={classes.appBarTitle}>
-                            <img src={logo} alt="Chef's Menu Logo" />
+                            <img
+                                className={classes.logo}
+                                src={logo}
+                                alt="Chef's Menu Logo"
+                            />
                         </Typography>
                         <NavMenuButton />
                         <ShoppingCart />

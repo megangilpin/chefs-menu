@@ -19,14 +19,12 @@ const useStyles = makeStyles({
         margin: "2vh auto",
         marginTop: "10vh",
         width: "80%",
-        height: "80vh",
-        overflow: "hidden",
+        paddingBottom: "5vh",
     },
     profileTopRight: {
         padding: "5vh 5vw 0 5vw",
     },
     profileTopLeft: {
-        borderRight: "1px solid lightgrey",
         padding: "5vh 5vw 0 5vw",
         textAlign: "center",
     },

@@ -25,18 +25,19 @@ import CheckoutForm from "../components/CheckoutForm";
 const useStyles = makeStyles((theme) => ({
     container: {
         marginTop: "10vh",
-        width: "100%",
     },
     orderSummary: {
         background: "white",
         padding: "1rem",
+
+        width: "102%",
     },
     checkoutForm: {
         marginTop: "1rem",
-        padding: "1rem 3rem 1rem 3rem !important",
+        padding: "5rem 3rem 1rem 2rem !important",
         background: "white",
-        height: "50vh",
-        width: "100%",
+        height: "45vh",
+        width: "105%",
     },
     empty: {
         fontSize: ".8rem",
@@ -82,17 +83,19 @@ function Checkout(props) {
                 component={Grid}
                 boxShadow={3}
                 item
-                xs={6}
+                xs={12}
+                md={6}
                 className={classes.checkoutForm}
             >
                 <CheckoutForm />
             </Box>
 
-            <Grid item xs={6}>
+            <Grid item xs={12} md={6}>
                 <Box
                     component={Grid}
                     boxShadow={3}
                     container
+                    spacing={0}
                     className={classes.orderSummary}
                 >
                     <Grid item xs={12}>
