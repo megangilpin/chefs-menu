@@ -50,6 +50,7 @@ router.put(
     errorHandelingWrapper(async (req, res) => {
         // Conversation id
         const { id } = req.params;
+        const userId = req.user.id;
         const { message, sender, receiver } = req.body;
         const errors = [];
 
@@ -59,6 +60,17 @@ router.put(
         if (errors.length > 0) {
             return res.status(400).json({ errors });
         }
+
+        console.log('iniital', { sender, receiver });
+
+        // userId should be the one of sender, fix it otherwise
+        if (userId === receiver) {
+            const tmp = sender;
+            sender = receiver;
+            receiver = tmp;
+        }
+
+        console.log('fixed', { sender, receiver });
 
         // Create message
         const savedMessage = await messagesController.create({
