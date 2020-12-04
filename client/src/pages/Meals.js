@@ -10,6 +10,13 @@ import { abortableFetch } from "../utils";
 
 const useStyles = makeStyles({
     availableMeals: { paddingBottom: "15px", display: "inline", fontSize: "30px" },
+    drawerContainer: {
+        paddingLeft: "20px",
+        paddingRight: "20px",
+        paddingTop: "100px",
+        overflow: "auto",
+        height: "100vh",
+    },
 });
 
 function Meals() {
@@ -23,7 +30,6 @@ function Meals() {
     } = useCuisineSelector();
 
     const [meals, setMeals] = useState([]);
-
     useEffect(() => {
         let url = "/search?searchType=meals";
         if (!cuisines.has(ALL)) {
@@ -42,32 +48,38 @@ function Meals() {
     return (
         <>
             <ResponsiveSideBar>
-                <Grid container spacing={2} alignContent="flex-start">
-                    <Grid item xs={12}>
-                        <Typography>Cuisine:</Typography>
-                        {[...cuisines].map((cuisine) => (
-                            <Button
-                                key={cuisine}
-                                color="primary"
-                                variant="contained"
-                                onClick={() => removeCuisine(cuisine)}
-                            >
-                                <Typography variant="button">{cuisine}</Typography>
-                            </Button>
-                        ))}
+                <div className={classes.drawerContainer}>
+                    <Grid container spacing={2} alignContent="flex-start">
+                        <Grid item xs={12}>
+                            <Typography>Cuisine:</Typography>
+                            {[...cuisines].map((cuisine) => (
+                                <Button
+                                    key={cuisine}
+                                    color="primary"
+                                    variant="contained"
+                                    onClick={() => removeCuisine(cuisine)}
+                                >
+                                    <Typography variant="button">
+                                        {cuisine}
+                                    </Typography>
+                                </Button>
+                            ))}
+                        </Grid>
+                        <Grid item xs={12}>
+                            {[...availableCuisines].map((cuisine) => (
+                                <Button
+                                    key={cuisine}
+                                    variant="contained"
+                                    onClick={() => addCuisine(cuisine)}
+                                >
+                                    <Typography variant="button">
+                                        {cuisine}
+                                    </Typography>
+                                </Button>
+                            ))}
+                        </Grid>
                     </Grid>
-                    <Grid item xs={12}>
-                        {[...availableCuisines].map((cuisine) => (
-                            <Button
-                                key={cuisine}
-                                variant="contained"
-                                onClick={() => addCuisine(cuisine)}
-                            >
-                                <Typography variant="button">{cuisine}</Typography>
-                            </Button>
-                        ))}
-                    </Grid>
-                </Grid>
+                </div>
             </ResponsiveSideBar>
             <Main>
                 <Grid container spacing={4} alignContent="flex-start">

@@ -2,9 +2,10 @@ import * as React from "react";
 import { DropzoneDialog } from "material-ui-dropzone";
 import { UserContext } from "../contexts/user/UserContextProvider";
 import { makeStyles } from "@material-ui/core/styles";
-import { IconButton, LinearProgress, Snackbar } from "@material-ui/core";
+import { IconButton, LinearProgress } from "@material-ui/core";
 import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
-import MuiAlert from "@material-ui/lab/Alert";
+
+import { useSnackbar } from "notistack";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -16,9 +17,12 @@ function ProfilePicLoader(props) {
     const classes = useStyles();
     const user = React.useContext(UserContext);
     const [dropzoneOpen, setDropzoneOpen] = React.useState(false);
-    const [snackBarOpen, setSnackBarOpen] = React.useState(false);
-    const [severity, setSeverity] = React.useState("");
-    const [message, setMessage] = React.useState("");
+    const { enqueueSnackbar } = useSnackbar();
+
+    const showSnackBar = (message, variant) => {
+        enqueueSnackbar(message, { variant: variant, autoHideDuration: "6000" });
+    };
+
     const [loading, setLoading] = React.useState(false);
 
     const handleUpload = (file) => {
@@ -29,29 +33,16 @@ function ProfilePicLoader(props) {
             .then((res) => {
                 setLoading(false);
                 if (res.result) {
-                    setSeverity("success");
-                    setMessage("Profile Picture updated");
-                    setSnackBarOpen(true);
+                    showSnackBar("Profile Picture updated", "success");
                     setDropzoneOpen(false);
                 } else {
-                    setSeverity("error");
-                    setMessage(res.message);
-                    setSnackBarOpen(true);
+                    showSnackBar(res.message, "error");
                 }
             })
             .catch((error) => {
                 setLoading(false);
-                setSeverity("error");
-                setMessage("Error while making request");
-                setSnackBarOpen(true);
+                showSnackBar("Error while making request!", "error");
             });
-    };
-
-    const snackBarClose = (event, reason) => {
-        if (reason === "clickaway") {
-            return;
-        }
-        setSnackBarOpen(false);
     };
 
     return (
@@ -84,15 +75,6 @@ function ProfilePicLoader(props) {
                 showPreviews={true}
                 showFileNamesInPreview={true}
             />
-            <Snackbar
-                open={snackBarOpen}
-                autoHideDuration={6000}
-                onClose={snackBarClose}
-            >
-                <MuiAlert onClose={snackBarClose} severity={severity}>
-                    {message}
-                </MuiAlert>
-            </Snackbar>
         </div>
     );
 }

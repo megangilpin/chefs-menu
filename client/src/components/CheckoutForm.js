@@ -4,15 +4,22 @@ import { Button, Typography, Grid, Divider } from "@material-ui/core";
 import CardSection from "./CardSection/CardSection";
 import { UserContext } from "../contexts/user/UserContextProvider";
 import { CartContext } from "../contexts/cart/CartContextProvider";
+import { useSnackbar } from "notistack";
+import { useHistory } from "react-router-dom";
+
 export default function CheckoutForm() {
     const stripe = useStripe();
     const elements = useElements();
+    const history = useHistory();
     const user = React.useContext(UserContext);
     const { cart } = React.useContext(CartContext);
+    const { enqueueSnackbar } = useSnackbar();
+
+    const showSnackBar = (message, variant) => {
+        enqueueSnackbar(message, { variant: variant, autoHideDuration: "6000" });
+    };
 
     const handleSubmit = async (event) => {
-        // We don't want to let default form submission happen here,
-        // which would refresh the page.
         event.preventDefault();
 
         if (!stripe || !elements) {
@@ -20,27 +27,35 @@ export default function CheckoutForm() {
             return;
         }
 
+        // Create a payment intent with the current cart in context (it will be validated on the server)
         const secret_result = await user.getStripeSecret({ meals: cart });
-        if (secret_result) {
-            console.log(secret_result);
+        if (!secret_result.clientSecret) {
+            showSnackBar(
+                "An error occured while creating the payment intent",
+                "error"
+            );
+            return;
         }
-
-        const result = await stripe.confirmCardPayment("{CLIENT_SECRET}", {
+        // Confirm the payment
+        const result = await stripe.confirmCardPayment(secret_result.clientSecret, {
             payment_method: {
                 card: elements.getElement(CardElement),
                 billing_details: {
-                    name: "Jenny Rosen",
+                    name: user.profile.firstName + " " + user.profile.lastName,
                 },
             },
         });
 
         if (result.error) {
             // Show error to your customer (e.g., insufficient funds)
-            console.log(result.error.message);
+            showSnackBar(result.error.message, "error");
         } else {
             // The payment has been processed!
             if (result.paymentIntent.status === "succeeded") {
-                // Show a success message to your customer
+                showSnackBar("Payment successfully processed!", "success");
+                history.push("/meals");
+
+                // TODO:
                 // There's a risk of the customer closing the window before callback
                 // execution. Set up a webhook or plugin to listen for the
                 // payment_intent.succeeded event that handles any business critical

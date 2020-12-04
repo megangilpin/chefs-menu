@@ -6,9 +6,7 @@ import { TextField } from "formik-material-ui";
 import { makeStyles } from "@material-ui/core/styles";
 import * as Yup from "yup";
 import { UserContext } from "../contexts/user/UserContextProvider";
-
-import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert from "@material-ui/lab/Alert";
+import { useSnackbar } from "notistack";
 
 const useStyles = makeStyles({
     formItem: {
@@ -29,14 +27,10 @@ export default function LoginForm(props) {
         password: Yup.string().min(6).required("Required!"),
     });
 
-    const [open, setOpen] = React.useState(false);
-    const [message, setMessage] = React.useState("");
+    const { enqueueSnackbar } = useSnackbar();
 
-    const snackBarClose = (event, reason) => {
-        if (reason === "clickaway") {
-            return;
-        }
-        setOpen(false);
+    const showSnackBar = (message, variant) => {
+        enqueueSnackbar(message, { variant: variant, autoHideDuration: "6000" });
     };
 
     return (
@@ -52,15 +46,14 @@ export default function LoginForm(props) {
                     user.login(values)
                         .then((res) => {
                             if (res.result) {
-                                history.push("/home");
+                                showSnackBar("Successfully logged in!", "success");
+                                history.push("/meals");
                             } else {
-                                setMessage(res.message);
-                                setOpen(true);
+                                showSnackBar(res.message, "error");
                             }
                         })
                         .catch((error) => {
-                            setMessage("Error while making request");
-                            setOpen(true);
+                            showSnackBar("Error while making request!", "error");
                         });
                 }}
             >
@@ -113,11 +106,6 @@ export default function LoginForm(props) {
                     </Form>
                 )}
             </Formik>
-            <Snackbar open={open} autoHideDuration={6000} onClose={snackBarClose}>
-                <MuiAlert onClose={snackBarClose} severity="error">
-                    {message}
-                </MuiAlert>
-            </Snackbar>
         </>
     );
 }

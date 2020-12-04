@@ -44,6 +44,8 @@ function SetUpStripe(props) {
                     <Typography variant="h5">
                         Looks like your Stripe is all set up!
                     </Typography>
+                </Grid>
+                <Grid item xs={8}>
                     <Button
                         onClick={() => {
                             user.getStripeLoginLink().then((data) => {
@@ -63,12 +65,12 @@ function SetUpStripe(props) {
         <Grid container justify="center" spacing={2}>
             <Grid item xs={8}>
                 <Typography variant="h5">
-                    Set up payouts to list meals on Chef's Meal
+                    Set up payouts to list meals on Chef's Menu
                 </Typography>
             </Grid>
             <Grid item xs={8}>
                 <Typography variant="body1">
-                    Chef's Meal partners with Stripe to transfer earnings to your
+                    Chef's Menu partners with Stripe to transfer earnings to your
                     bank account.
                 </Typography>
             </Grid>

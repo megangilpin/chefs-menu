@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useHistory, Redirect } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { Formik, Form, Field } from "formik";
 import {
     Typography,
@@ -14,8 +14,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import * as Yup from "yup";
 import { UserContext } from "../contexts/user/UserContextProvider";
 
-import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert from "@material-ui/lab/Alert";
+import { useSnackbar } from "notistack";
 
 const useStyles = makeStyles({
     formItem: {
@@ -30,8 +29,6 @@ export default function SignUp() {
     const classes = useStyles();
     const user = React.useContext(UserContext);
     const history = useHistory();
-    const [open, setOpen] = React.useState(false);
-    const [message, setMessage] = React.useState("");
     const [address, setAddress] = React.useState("");
     const [predictions, setPredictions] = React.useState(undefined);
 
@@ -41,11 +38,10 @@ export default function SignUp() {
         password: Yup.string().min(6).required("Required!"),
     });
 
-    const snackBarClose = (event, reason) => {
-        if (reason === "clickaway") {
-            return;
-        }
-        setOpen(false);
+    const { enqueueSnackbar } = useSnackbar();
+
+    const showSnackBar = (message, variant) => {
+        enqueueSnackbar(message, { variant: variant, autoHideDuration: "6000" });
     };
 
     const handleChange = (e) => {
@@ -79,17 +75,20 @@ export default function SignUp() {
                                 if (values.chef) {
                                     user.getStripeOnboardingLink().then((data) => {
                                         window.location.replace(data.redirectURL);
+                                        showSnackBar(
+                                            "Success! Redirecting to stripe.",
+                                            "success"
+                                        );
                                     });
                                 }
-                                history.push("/home");
+                                history.push("/meals");
+                                showSnackBar("Successfully registered!", "success");
                             } else {
-                                setMessage(res.message);
-                                setOpen(true);
+                                showSnackBar(res.message, "error");
                             }
                         })
                         .catch((error) => {
-                            setMessage("Error while making request");
-                            setOpen(true);
+                            showSnackBar("Error while making request!", "error");
                         });
                 }}
             >
@@ -187,11 +186,6 @@ export default function SignUp() {
                     </Form>
                 )}
             </Formik>
-            <Snackbar open={open} autoHideDuration={6000} onClose={snackBarClose}>
-                <MuiAlert onClose={snackBarClose} severity="error">
-                    {message}
-                </MuiAlert>
-            </Snackbar>
         </>
     );
 }

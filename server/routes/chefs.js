@@ -63,7 +63,7 @@ router.put(
         const chef = await chefsController.findOneWithUserId(id);
         if (!chef) {
             res.status(400).json({
-                errors: ["Chef profile not found for loggedin user"],
+                errors: ["Chef profile not found for logged in user"],
             });
             return;
         }
@@ -71,8 +71,8 @@ router.put(
             cuisineSpecialty,
             userId: id,
         });
-        res.json(newChef);
-        return;
+
+        res.json(newChef.cuisineSpecialty);
     })
 );
 
@@ -84,6 +84,7 @@ router.post(
         const { id } = req.user;
         let { cuisineSpecialty } = req.body;
         const chef = await chefsController.findOneWithUserId(id);
+
         if (chef) {
             res.status(400).json({
                 errors: ["Chef already exist for loggedin user"],
@@ -94,6 +95,7 @@ router.post(
             cuisineSpecialty,
             userId: id,
         });
+        delete newChef.userId;
         await usersController.update(id, { isChef: true });
         res.json(newChef);
     })
@@ -104,7 +106,6 @@ function validationMiddleware(req, res, next) {
     // input validation
     const errors = [];
     if (cuisineSpecialty) {
-        cuisineSpecialty = JSON.parse(cuisineSpecialty);
         if (!isArrayOfStrings(cuisineSpecialty)) errors.push("Invalid cuisineSpecialty type");
     }
 

@@ -11,10 +11,15 @@ const getAutoCompletePredictions = async (input) => {
     return data.predictions.map(({ description }) => description);
 };
 
-const getStaticMapImage = async (center) => {
-    const url =
+const getStaticMapImage = async (center, circlePath) => {
+    let url =
         "https://maps.googleapis.com/maps/api/staticmap" +
-        `?center=${center}&scale=2&zoom=13&size=600x300&maptype=roadmap&key=${KEY}`;
+        `?center=${center}&scale=2&zoom=11&size=600x300&maptype=roadmap`;
+
+    if (circlePath) {
+        url += `&path=${circlePath}`;
+    }
+    url += `&key=${KEY}`;
 
     return await axios({ method: "get", url, responseType: "stream" });
 };

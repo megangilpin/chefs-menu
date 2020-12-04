@@ -11,6 +11,7 @@
         "formik": "^2.2.3",
         "formik-material-ui": "^3.0.0",
         "material-ui-dropzone": "^3.5.0",
+        "notistack": "^1.0.2",
         "react": "^16.13.1",
         "react-dom": "^16.13.1",
         "react-dropzone": "^11.2.4",

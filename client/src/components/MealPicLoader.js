@@ -1,9 +1,9 @@
 import * as React from "react";
 import { DropzoneDialog } from "material-ui-dropzone";
 import { makeStyles } from "@material-ui/core/styles";
-import { IconButton, LinearProgress, Snackbar } from "@material-ui/core";
+import { IconButton, LinearProgress } from "@material-ui/core";
 import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
-import MuiAlert from "@material-ui/lab/Alert";
+import { useSnackbar } from "notistack";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -14,9 +14,12 @@ const useStyles = makeStyles((theme) => ({
 function MealPicLoader(props) {
     const classes = useStyles();
     const [dropzoneOpen, setDropzoneOpen] = React.useState(false);
-    const [snackBarOpen, setSnackBarOpen] = React.useState(false);
-    const [severity, setSeverity] = React.useState("");
-    const [message, setMessage] = React.useState("");
+    const { enqueueSnackbar } = useSnackbar();
+
+    const showSnackBar = (message, variant) => {
+        enqueueSnackbar(message, { variant: variant, autoHideDuration: "6000" });
+    };
+
     const [loading, setLoading] = React.useState(false);
 
     const saveMealPic = async (formData) => {
@@ -50,28 +53,15 @@ function MealPicLoader(props) {
                 setDropzoneOpen(false);
                 if (res.result) {
                     props.upload(res.url);
-                    setSeverity("success");
-                    setMessage("Profile Picture updated");
-                    setSnackBarOpen(true);
+                    showSnackBar("Meal picture uploaded!", "success");
                 } else {
-                    setSeverity("error");
-                    setMessage(res.message);
-                    setSnackBarOpen(true);
+                    showSnackBar(res.message, "error");
                 }
             })
             .catch((error) => {
                 setLoading(false);
-                setSeverity("error");
-                setMessage("Error while making request");
-                setSnackBarOpen(true);
+                showSnackBar("Error while making request!", "error");
             });
-    };
-
-    const snackBarClose = (event, reason) => {
-        if (reason === "clickaway") {
-            return;
-        }
-        setSnackBarOpen(false);
     };
 
     return (
@@ -104,15 +94,6 @@ function MealPicLoader(props) {
                 showPreviews={true}
                 showFileNamesInPreview={true}
             />
-            <Snackbar
-                open={snackBarOpen}
-                autoHideDuration={6000}
-                onClose={snackBarClose}
-            >
-                <MuiAlert onClose={snackBarClose} severity={severity}>
-                    {message}
-                </MuiAlert>
-            </Snackbar>
         </div>
     );
 }

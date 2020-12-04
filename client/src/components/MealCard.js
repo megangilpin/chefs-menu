@@ -60,20 +60,12 @@ const useStyles = makeStyles({
     },
 });
 
-function MealCard({
-    picURL,
-    title,
-    price,
-    chefName,
-    chefPic,
-    location,
-    id,
-    chefId,
-}) {
+function MealCard({ picURL, title, price, id, chefId }) {
     const classes = useStyles();
     const history = useHistory();
     const { chef, addToCart } = useContext(CartContext);
     const [openDialog, setDialogOpen] = React.useState(false);
+    const chefInfo = chefId.userId;
 
     const handleClose = () => {
         setDialogOpen(false);
@@ -81,11 +73,13 @@ function MealCard({
 
     const purchaseMeal = (e) => {
         e.preventDefault();
-        const id = parseFloat(e.currentTarget.value);
-        if (chef && chefId !== chef) {
+
+        if (chef && chefId._id !== chef) {
             setDialogOpen(true);
         } else {
-            const meal = { id, picURL, title, price, chefName, chefId };
+            const chefName = `${chefInfo.firstName} ${chefInfo.lastName}`;
+            const chefID = chefId._id;
+            const meal = { id, picURL, title, price, chefName, chefID };
             addToCart(meal);
         }
     };
@@ -104,7 +98,6 @@ function MealCard({
                 ) : (
                     <React.Fragment>
                         <CardContent className={classes.replacement}>
-                            {/* <Box className={classes.replacement}> */}
                             <Typography
                                 color="primary"
                                 align="center"
@@ -112,7 +105,6 @@ function MealCard({
                             >
                                 The chef is still cooking up an image
                             </Typography>
-                            {/* </Box> */}
                         </CardContent>
                         <Divider />
                     </React.Fragment>
@@ -155,39 +147,52 @@ function MealCard({
                 <CardActions>
                     <Box ml={1} mr={1}>
                         <Grid container spacing={1}>
-                            <Grid item xs={12}>
-                                <Avatar
-                                    className={classes.small}
-                                    alt={chefName}
-                                    src={chefPic}
-                                />
-                                <Grid item xs={12} container alignItems="center">
+                            <Grid item container spacing={2}>
+                                <Grid item>
+                                    <Avatar
+                                        className={classes.small}
+                                        alt={!chefInfo.profilePicURL ? "" : "Chef"}
+                                        src={chefInfo.profilePicURL}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm container alignItems="center">
                                     <Grid item container direction="column">
                                         <Grid item>
                                             <Typography
                                                 className={classes.subtitle}
                                                 variant="subtitle1"
                                             >
-                                                {chefName}
+                                                {`${chefInfo.firstName} ${chefInfo.lastName}`}
                                             </Typography>
                                             <Typography
                                                 className={classes.subtitle2}
                                                 gutterBottom
                                             >
-                                                {location}
+                                                {`${chefInfo.primaryAddress.city}, ${chefInfo.primaryAddress.country}`}
                                             </Typography>
                                         </Grid>
                                     </Grid>
                                 </Grid>
                             </Grid>
                             <Grid item xs={12}>
-                                {/* will need to connect with ChefProfile once cards have chef info */}
                                 <Link
                                     component="button"
                                     variant="body2"
-                                    onClick={() => history.push(`chefs/${chefId}`)}
+                                    onClick={() =>
+                                        history.push({
+                                            pathname: "/chefprofile",
+                                            state: {
+                                                ...chefInfo,
+                                                chefProfile: {
+                                                    _id: chefId._id,
+                                                    cuisineSpecialty:
+                                                        chefId.cuisineSpecialty,
+                                                },
+                                            },
+                                        })
+                                    }
                                 >
-                                    Learn More
+                                    View Chef's Menu
                                 </Link>
                             </Grid>
                         </Grid>

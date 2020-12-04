@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import { useLocation } from "react-router-dom";
 import { UserContext } from "../contexts/user/UserContextProvider";
-import { useParams } from "react-router-dom";
 import ResponsiveSideBar from "../components/ResponsiveSideBar";
 import Main from "../components/Main";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
@@ -9,6 +9,7 @@ import { Avatar, Typography, Grid, Box, Divider, Button } from "@material-ui/cor
 import MenuItem from "../components/MenuItem";
 import MealForm from "../components/MealForm";
 import SetUpStripe from "../components/SetUpStripe";
+import UpdateChef from "../components/UpdateChef";
 
 const useStyles = makeStyles((theme) => ({
     sideBar: {
@@ -61,16 +62,22 @@ const useStyles = makeStyles((theme) => ({
         borderBottom: "1px solid #DCDCDC",
         background: "#ffffff",
     },
+    box: {
+        color: "#ffff",
+        background: theme.background.secondary,
+    },
 }));
 
 function ChefProfile(props) {
+    const location = useLocation();
     const user = React.useContext(UserContext);
     const classes = useStyles();
-    const { chefId } = useParams();
-
-    const chef = { ...user.profile.chefProfile };
     const [meals, setMeals] = React.useState([]);
     const [mealFormOpen, setMealFormOpen] = React.useState(false);
+    const chefInfo = location.state ? location.state : user.profile;
+    const currentChef = { ...user.profile.chefProfile };
+    const headerImage = { ...meals[0] };
+
     const initialMeal = {
         title: "",
         price: "",
@@ -79,7 +86,6 @@ function ChefProfile(props) {
         ingredients: "",
         requirements: "",
     };
-    const headerImage = { ...meals[0] };
 
     const handleMealFormOpen = () => {
         setMealFormOpen(true);
@@ -89,7 +95,7 @@ function ChefProfile(props) {
         setMealFormOpen(false);
     };
 
-    const getMeals = async () => {
+    const getMeals = async (chefId) => {
         const response = await fetch(`/meals/chef/${chefId}`, {
             method: "get",
             headers: {
@@ -109,7 +115,7 @@ function ChefProfile(props) {
     };
 
     const createMeal = async (formValues) => {
-        formValues.chefId = user.profile.chefProfile._id;
+        formValues.chefId = chefInfo.chefProfile._id;
 
         const response = await fetch("/meals", {
             method: "post",
@@ -134,11 +140,14 @@ function ChefProfile(props) {
     };
 
     React.useEffect(() => {
-        const meals = async () => await getMeals();
+        const id = location.state
+            ? location.state.chefProfile._id
+            : user.profile.chefProfile._id;
+        const meals = async () => await getMeals(id);
         meals().catch((error) => {
             console.log(error);
         });
-    }, []);
+    }, [location]);
 
     return (
         <React.Fragment>
@@ -158,20 +167,20 @@ function ChefProfile(props) {
                                 <img
                                     className={classes.headerImage}
                                     src={headerImage.picURL}
+                                    alt="meal"
                                 ></img>
                             )}
                             <Box
                                 boxShadow={2}
                                 component={Avatar}
-                                src={user.profile.profilePicURL}
-                                alt={
-                                    user.profile.profilePicURL ? "profile image" : ""
-                                }
+                                src={chefInfo.profilePicURL}
+                                alt={chefInfo.profilePicURL ? "profile image" : ""}
                                 className={classes.userImage}
                             />
                         </Grid>
                         <Grid
                             container
+                            spacing={2}
                             direction="column"
                             justify="center"
                             alignItems="center"
@@ -185,35 +194,68 @@ function ChefProfile(props) {
                                 alignItems="center"
                             >
                                 <Typography variant="h6">
-                                    {`${user.profile.firstName}  ${user.profile.lastName}`}
+                                    {`${chefInfo.firstName}  ${chefInfo.lastName}`}
                                 </Typography>
                                 <Typography
                                     className={classes.subtitle}
                                     variant="caption"
-                                >{`${user.profile.primaryAddress.city}, ${user.profile.primaryAddress.country}`}</Typography>
+                                >
+                                    {chefInfo.primaryAddress &&
+                                        `${chefInfo.primaryAddress.city}, ${chefInfo.primaryAddress.country}`}
+                                </Typography>
+                            </Grid>
+                            <Grid
+                                item
+                                container
+                                spacing={2}
+                                direction="row"
+                                justify="center"
+                                alignItems="center"
+                            >
+                                {chefInfo.chefProfile.cuisineSpecialty.length > 0
+                                    ? chefInfo.chefProfile.cuisineSpecialty.map(
+                                          (specialty) => (
+                                              <Grid item key={specialty}>
+                                                  <Box
+                                                      className={classes.box}
+                                                      p={1}
+                                                      fontWeight={"fontWeightBold"}
+                                                  >
+                                                      <Typography>
+                                                          {specialty}
+                                                      </Typography>
+                                                  </Box>
+                                              </Grid>
+                                          )
+                                      )
+                                    : null}
                             </Grid>
                             <Grid item>
-                                <Box mt={3} mb={3}>
+                                <Box mt={1} mb={1}>
                                     <Divider className={classes.line} />
                                 </Box>
                             </Grid>
                             <Grid item>
-                                <Box mb={2}>
+                                <Box mb={3}>
                                     <Typography variant="body1">
-                                        {user.profile.bio}
+                                        {chefInfo.bio}
                                     </Typography>
                                 </Box>
                             </Grid>
                         </Grid>
                     </div>
                     <div>
-                        <Button
-                            color="primary"
-                            variant="contained"
-                            className={classes.footer}
-                        >
-                            Send Request
-                        </Button>
+                        {chefInfo.chefProfile._id !== currentChef._id ? (
+                            <Button
+                                color="primary"
+                                variant="contained"
+                                className={classes.footer}
+                            >
+                                Send Request
+                            </Button>
+                        ) : (
+                            <UpdateChef />
+                        )}
                     </div>
                 </div>
             </ResponsiveSideBar>
@@ -225,7 +267,6 @@ function ChefProfile(props) {
                         direction="column"
                         justify="center"
                         alignItems="center"
-                        className={classes.color1}
                     >
                         <Grid item>
                             <SetUpStripe />
@@ -233,13 +274,16 @@ function ChefProfile(props) {
                         <Grid item>
                             <Typography variant="h5">
                                 <Box mt={5} fontWeight="fontWeightBold">
-                                    {`${user.profile.firstName}'s`} Menu:
+                                    {chefInfo.chefProfile._id !== currentChef._id
+                                        ? `${chefInfo.firstName}'s`
+                                        : `Your`}{" "}
+                                    Menu:
                                 </Box>
                             </Typography>
                         </Grid>
-                        <Grid item className={classes.color2}>
-                            {chefId !== chef._id ? null : (
-                                <Box mb={2}>
+                        <Grid item>
+                            {chefInfo.chefProfile._id !== currentChef._id ? null : (
+                                <Box mb={2} mr={0}>
                                     {/* Dialog Box with Form for adding / updating meal */}
                                     <MealForm
                                         update={getMeals}

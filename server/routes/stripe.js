@@ -131,23 +131,29 @@ const calculateApplicationFeeAmount = (amount) => 0.1 * amount;
 
 router.post("/secret", async (req, res) => {
     const meals = req.body.meals;
-    const chefId = meals[0].chefId;
+    const chefId = meals[0].chefID;
     const chef = await chefsController.findOneWithId(chefId);
 
     let price = 0.0;
 
-    meals.forEach((meal) => {
+    for (const meal of meals) {
         // TODO search chef/meal id to verify if the the price the client says
-        // is the same as the server
+        let mealObj = await mealsController.findOneWithId(meal.id);
+        console.log(mealObj);
         console.log(meal);
+        if (meal.price !== mealObj.price) {
+            res.status(400).json({
+                errors: ["Client price does not match server meal price!"],
+            });
+        }
         price += meal.price * meal.quantity;
-    });
+    }
 
     await stripe.paymentIntents
         .create({
-            amount: price,
+            amount: Math.round(price),
             currency: "CAD",
-            application_fee_amount: 0,
+            application_fee_amount: calculateApplicationFeeAmount(price),
             transfer_data: {
                 destination: chef.stripeId,
             },

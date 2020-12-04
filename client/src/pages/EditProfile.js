@@ -5,8 +5,7 @@ import { Typography, Grid, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Avatar from "@material-ui/core/Avatar";
 import Box from "@material-ui/core/Box";
-import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert from "@material-ui/lab/Alert";
+import { useSnackbar } from "notistack";
 import Chip from "@material-ui/core/Chip";
 
 import { UserContext } from "../contexts/user/UserContextProvider";
@@ -79,14 +78,10 @@ export default function EditProfile() {
         );
     };
 
-    const [open, setOpen] = React.useState(false);
-    const [message, setMessage] = React.useState("");
+    const { enqueueSnackbar } = useSnackbar();
 
-    const snackBarClose = (event, reason) => {
-        if (reason === "clickaway") {
-            return;
-        }
-        setOpen(false);
+    const showSnackBar = (message, variant) => {
+        enqueueSnackbar(message, { variant: variant, autoHideDuration: "6000" });
     };
 
     return (
@@ -126,14 +121,13 @@ export default function EditProfile() {
                         .then((res) => {
                             if (res.result) {
                                 history.push("/profile");
+                                showSnackBar("Successfully updated!", "success");
                             } else {
-                                setMessage(res.message);
-                                setOpen(true);
+                                showSnackBar(res.message, "error");
                             }
                         })
                         .catch((error) => {
-                            setMessage("Error while making request");
-                            setOpen(true);
+                            showSnackBar("Error while making request", "error");
                         });
                 }}
             >
@@ -320,6 +314,7 @@ export default function EditProfile() {
                                         label="Allergen"
                                     />
                                 </Grid>
+
                                 <Grid item xs={4}>
                                     <Button
                                         className={classes.cuisineButton}
@@ -371,11 +366,6 @@ export default function EditProfile() {
                     </Form>
                 )}
             </Formik>
-            <Snackbar open={open} autoHideDuration={6000} onClose={snackBarClose}>
-                <MuiAlert onClose={snackBarClose} severity="error">
-                    {message}
-                </MuiAlert>
-            </Snackbar>
         </>
     );
 }

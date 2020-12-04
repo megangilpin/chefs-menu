@@ -4,7 +4,7 @@ const router = require("express").Router();
 const chefsController = require("../controllers/chefsController");
 const mealsController = require("../controllers/mealsController");
 const userController = require("../controllers/usersController");
-const { errorHandelingWrapper, coordinatesDistanceCalc } = require("../util");
+const { errorHandelingWrapper, coordinatesDistanceCalc, drawCirclePath } = require("../util");
 
 router.get(
     "/",
@@ -13,10 +13,14 @@ router.get(
         let { radiusKm } = req.query;
 
         if (!["chefs", "meals"].includes(searchType)) {
-            res.status(400).json({ errors: ["searchType should be one of chefs or meals!"] });
+            res.status(400).json({
+                errors: ["searchType should be one of chefs or meals!"],
+            });
             return;
         }
-        const cuisineQuery = cuisine && { $in: cuisine.split(",").map((c) => RegExp(c, "i")) };
+        const cuisineQuery = cuisine && {
+            $in: cuisine.split(",").map((c) => RegExp(c, "i")),
+        };
         radiusKm = radiusKm && Number(radiusKm);
 
         if (searchType === "chefs") {
