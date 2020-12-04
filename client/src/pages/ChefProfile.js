@@ -1,6 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { UserContext } from "../contexts/user/UserContextProvider";
 import ResponsiveSideBar from "../components/ResponsiveSideBar";
 import Main from "../components/Main";
@@ -68,16 +68,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function ChefProfile(props) {
-    const location = useLocation();
     const user = React.useContext(UserContext);
     const classes = useStyles();
     const { id } = useParams();
     const [meals, setMeals] = React.useState([]);
-    const [chef, setChefInfo] = React.useState({});
     const [mealFormOpen, setMealFormOpen] = React.useState(false);
     const currentChef = { ...user.profile.chefProfile };
+    const [chefInfo, setChefInfo] = React.useState(
+        id === currentChef._id ? user.profile : {}
+    );
     const headerImage = { ...meals[0] };
-    const chefInfo = id === currentChef._id ? user.profile : chef;
 
     const initialMeal = {
         title: "",
@@ -242,23 +242,22 @@ function ChefProfile(props) {
                                 justify="center"
                                 alignItems="center"
                             >
-                                {/* {chefInfo.chefProfile.cuisineSpecialty.length > 0
-                                    ? chefInfo.chefProfile.cuisineSpecialty.map(
-                                          (cuisineType) => (
-                                              <Grid item key={cuisineType}>
-                                                  <Box
-                                                      className={classes.box}
-                                                      p={1}
-                                                      fontWeight={"fontWeightBold"}
-                                                  >
-                                                      <Typography>
-                                                          {cuisineType}
-                                                      </Typography>
-                                                  </Box>
-                                              </Grid>
-                                          )
-                                      )
-                                    : null} */}
+                                {chefInfo.chefProfile &&
+                                    chefInfo.chefProfile.cuisineSpecialty.map(
+                                        (cuisineType) => (
+                                            <Grid item key={cuisineType}>
+                                                <Box
+                                                    className={classes.box}
+                                                    p={1}
+                                                    fontWeight={"fontWeightBold"}
+                                                >
+                                                    <Typography>
+                                                        {cuisineType}
+                                                    </Typography>
+                                                </Box>
+                                            </Grid>
+                                        )
+                                    )}
                             </Grid>
                             <Grid item>
                                 <Box mt={1} mb={1}>
