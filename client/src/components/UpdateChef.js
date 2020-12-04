@@ -60,9 +60,7 @@ const UpdateChef = (props) => {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const [hasError, setError] = React.useState(false);
-    const [specialty, setSpecialty] = React.useState([
-        ...user.profile.chefProfile.cuisineSpecialty,
-    ]);
+    const [specialty, setSpecialty] = React.useState([]);
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -89,6 +87,12 @@ const UpdateChef = (props) => {
 
         handleClose();
     };
+
+    React.useEffect(() => {
+        if (user.profile.chefProfile.cuisineSpecialty) {
+            setSpecialty([...user.profile.chefProfile.cuisineSpecialty]);
+        }
+    }, []);
 
     return (
         <React.Fragment>

@@ -2,7 +2,6 @@ import * as React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
     Avatar,
-    Badge,
     Button,
     Box,
     Divider,
@@ -13,50 +12,54 @@ import {
     ListItemAvatar,
     ListItemSecondaryAction,
     ListItemText,
-    Popover,
     Typography,
 } from "@material-ui/core";
 
 import DeleteIcon from "@material-ui/icons/Delete";
-import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
+
 import { CartContext } from "../contexts/cart/CartContextProvider";
 import { dollarFormatter, calcServiceFee, calcTotalWithFee } from "../lib/utils";
-import { useHistory } from "react-router-dom";
+
+import CheckoutForm from "../components/CheckoutForm";
+
 const useStyles = makeStyles((theme) => ({
-    root: {
-        marginRight: theme.spacing(0.5),
-    },
     container: {
-        padding: theme.spacing(2),
+        marginTop: "10vh",
+    },
+    orderSummary: {
+        background: "white",
+        padding: "1rem",
+
+        width: "102%",
+    },
+    checkoutForm: {
+        marginTop: "1rem",
+        padding: "5rem 3rem 1rem 2rem !important",
+        background: "white",
+        height: "45vh",
+        width: "105%",
     },
     empty: {
         fontSize: ".8rem",
-        paddingTop: theme.spacing(1),
-        paddingBottom: theme.spacing(1),
     },
     quantityBttnPlus: {
         minWidth: "43px",
         padding: 0,
         margin: 0,
-        marginRight: theme.spacing(1),
     },
     quantityBttnMinus: {
         minWidth: "43px",
         padding: 0,
         margin: 0,
-        marginLeft: theme.spacing(1),
     },
 }));
 
-function ShoppingCart(props) {
+function Checkout(props) {
     const classes = useStyles();
-    const history = useHistory();
 
     const {
-        chefName,
         cart,
         totalPrice,
-        totalItems,
         updateCartItem,
         deleteCartItem,
     } = React.useContext(CartContext);
@@ -64,72 +67,42 @@ function ShoppingCart(props) {
     const updateQuantity = (e) => {
         e.preventDefault();
         const { name } = e.currentTarget;
-        const id = e.currentTarget.value;
+        const id = parseFloat(e.currentTarget.value);
         updateCartItem(id, name);
     };
 
     const deleteMeal = (e) => {
         e.preventDefault();
-        const id = e.currentTarget.value;
+        const id = parseFloat(e.currentTarget.value);
         deleteCartItem(id);
     };
 
-    const [anchorEl, setAnchorEl] = React.useState(null);
-
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
-    const cartOpen = Boolean(anchorEl);
-    const id = cartOpen ? "simple-popover" : undefined;
-
     return (
-        <div>
-            <IconButton
-                aria-describedby={id}
-                onClick={handleClick}
-                className={classes.root}
-                aria-label="shopping cart"
+        <Grid container className={classes.container} spacing={4}>
+            <Box
+                component={Grid}
+                boxShadow={3}
+                item
+                xs={12}
+                md={6}
+                className={classes.checkoutForm}
             >
-                <Badge badgeContent={totalItems} color="primary">
-                    <ShoppingCartIcon fontSize="inherit" />
-                </Badge>
-            </IconButton>
-            <Popover
-                id={id}
-                open={cartOpen}
-                anchorEl={anchorEl}
-                onClose={handleClose}
-                anchorOrigin={{
-                    vertical: "bottom",
-                    horizontal: "left",
-                }}
-                transformOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                }}
-            >
-                <Grid item xs={12} className={classes.container}>
-                    <Box mt={1}>
-                        <Typography color="primary" variant="h5">
-                            Your Cart
-                        </Typography>
-                    </Box>
-                    <Divider />
-                    {chefName ? (
-                        <Box p={2}>
-                            <Typography variant="subtitle2">
-                                Selected Chef:
-                            </Typography>
-                            <Typography variant="caption">{chefName}</Typography>
-                        </Box>
-                    ) : null}
-                    <Divider />
-                    <div>
+                <CheckoutForm />
+            </Box>
+
+            <Grid item xs={12} md={6}>
+                <Box
+                    component={Grid}
+                    boxShadow={3}
+                    container
+                    spacing={0}
+                    className={classes.orderSummary}
+                >
+                    <Grid item xs={12}>
+                        <Typography variant="h6">Your Order</Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                        {" "}
                         <List>
                             {cart.length > 0 ? (
                                 cart.map((meal, index) => {
@@ -139,7 +112,10 @@ function ShoppingCart(props) {
                                             alignItems="flex-start"
                                         >
                                             <ListItemAvatar>
-                                                <Avatar src={meal.picURL} />
+                                                <Avatar
+                                                    src={meal.picURL}
+                                                    variant="square"
+                                                />
                                             </ListItemAvatar>
                                             <ListItemText
                                                 primary={`${
@@ -202,33 +178,32 @@ function ShoppingCart(props) {
                                 </Typography>
                             )}
                         </List>
-                    </div>
-                    <Divider />
-                    <Typography variant="subtitle2">
-                        SubTotal: {dollarFormatter.format(totalPrice / 100)}
-                    </Typography>
-                    <Typography variant="subtitle2">
-                        10% Service Fee:{" "}
-                        {dollarFormatter.format(calcServiceFee(totalPrice))}
-                    </Typography>
-                    <Divider />
-                    <Box pt={2}>
-                        <Typography variant="h6">
-                            Total:{" "}
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <Typography variant="subtitle2">
+                            Sub-total: {dollarFormatter.format(totalPrice / 100)}
+                        </Typography>
+
+                        <Typography variant="subtitle2">
+                            10% Service Fee:{" "}
+                            {dollarFormatter.format(calcServiceFee(totalPrice))}
+                        </Typography>
+                        <Divider />
+                    </Grid>
+
+                    <Grid item xs={6}>
+                        <Typography variant="h6">Total: </Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Typography color="primary" variant="h6">
                             {dollarFormatter.format(calcTotalWithFee(totalPrice))}
                         </Typography>
-                    </Box>
-                    <Button
-                        onClick={() => history.push("/checkout")}
-                        color="primary"
-                        variant="contained"
-                    >
-                        <Typography variant="button">Checkout</Typography>
-                    </Button>
-                </Grid>
-            </Popover>
-        </div>
+                    </Grid>
+                </Box>
+            </Grid>
+        </Grid>
     );
 }
 
-export default ShoppingCart;
+export default Checkout;

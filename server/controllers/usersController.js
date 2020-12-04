@@ -10,25 +10,11 @@ const User = connection.model("User", userSchema);
 const SALT_ROUNDS = Number(process.env.SALT_ROUNDS);
 
 // src: https://stackoverflow.com/questions/201323/how-to-validate-an-email-address-using-a-regular-expression
-const isValidEmailFormat = (email) =>
-    typeof email === "string" &&
-    /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(email);
+const isValidEmailFormat = (email) => typeof email === "string" && /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(email);
 
-const hashPassword = async (password) =>
-    await bcrypt.hash(password, SALT_ROUNDS);
+const hashPassword = async (password) => await bcrypt.hash(password, SALT_ROUNDS);
 
-const create = async ({
-    firstName,
-    lastName,
-    address,
-    street,
-    city,
-    region,
-    country,
-    email,
-    password,
-    isChef,
-}) => {
+const create = async ({ firstName, lastName, address, street, city, region, country, email, password, isChef, stripeId }) => {
     const hashedPassword = await hashPassword(password);
     let lat, lng, formattedAddress;
     if (address) {
@@ -58,7 +44,7 @@ const create = async ({
         allergies: [],
     });
     if (isChef) {
-        const chefData = await chefsController.create({ userId: _doc._id });
+        const chefData = await chefsController.create({ userId: _doc._id, stripeId: stripeId });
         delete chefData.userId;
         _doc.chefProfile = chefData;
     }
@@ -94,16 +80,8 @@ const update = async (id, requestBody) => {
         if (region) user.primaryAddress.region = region;
         if (postalCode) user.primaryAddress.postalCode = postalCode;
         if (country) user.primaryAddress.country = country;
-        const {
-            lat,
-            lng,
-            formattedAddress,
-        } = await mapsController.getLocationCoordinates(
-            [street, city, region, country]
-                .filter(
-                    (ele) => ele && typeof ele === "string" && ele.length > 0
-                )
-                .join(", ")
+        const { lat, lng, formattedAddress } = await mapsController.getLocationCoordinates(
+            [street, city, region, country].filter((ele) => ele && typeof ele === "string" && ele.length > 0).join(", ")
         );
         user.primaryAddress = {
             ...user.primaryAddress,
@@ -133,8 +111,7 @@ const findOneWithId = async (id) => {
     return _doc;
 };
 
-const checkPassword = async ({ user, password }) =>
-    await bcrypt.compare(password, user.password);
+const checkPassword = async ({ user, password }) => await bcrypt.compare(password, user.password);
 
 const deleteAll = async () => await User.deleteMany({});
 

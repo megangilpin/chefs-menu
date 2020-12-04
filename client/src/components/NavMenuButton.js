@@ -1,10 +1,19 @@
 import * as React from "react";
+import { makeStyles } from "@material-ui/core/styles";
 import { Menu, MenuItem, IconButton } from "@material-ui/core";
-import { useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { UserContext } from "../contexts/user/UserContextProvider";
+
+const useStyles = makeStyles((theme) => ({
+    link: {
+        textDecoration: "none",
+        color: "#000000DE",
+    },
+}));
 
 function NavMenuButton(props) {
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const classes = useStyles();
 
     const user = React.useContext(UserContext);
     const handleClick = (event) => {
@@ -14,8 +23,6 @@ function NavMenuButton(props) {
     const handleClose = () => {
         setAnchorEl(null);
     };
-
-    const history = useHistory();
 
     return (
         <div>
@@ -49,15 +56,18 @@ function NavMenuButton(props) {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
-                <MenuItem onClick={() => history.push("profile")}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
-                <MenuItem onClick={() => history.push("chats")}>Chats</MenuItem>
-                <MenuItem onClick={() => history.push("chefs")}>
-                    Find A Chef
-                </MenuItem>
-                <MenuItem onClick={() => history.push("meals")}>
-                    Find A Meal
-                </MenuItem>
+                <Link to="/profile" className={classes.link}>
+                    <MenuItem>Profile</MenuItem>
+                </Link>
+                <Link to="/chats" className={classes.link}>
+                    <MenuItem>Chats</MenuItem>
+                </Link>
+                <Link to="/chefs" className={classes.link}>
+                    <MenuItem>Find A Chef</MenuItem>
+                </Link>
+                <Link to="/meals" className={classes.link}>
+                    <MenuItem>Find A Meal</MenuItem>
+                </Link>
                 <MenuItem onClick={() => user.logoutUser()}>Logout</MenuItem>
             </Menu>
         </div>

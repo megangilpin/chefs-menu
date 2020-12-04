@@ -238,6 +238,64 @@ const UserContextProvider = ({ children }) => {
         }
     };
 
+    // For the record, I do realize there is a lot of repetitive stripe functions, I will make this code better at a later date
+    const getStripeOnboardingLink = async () => {
+        const response = await fetch("/stripe/onboardinglink");
+        const data = response.json();
+
+        if (!data) {
+            return {
+                result: false,
+            };
+        } else {
+            return data;
+        }
+    };
+
+    const getStripeAccount = async () => {
+        const response = await fetch("/stripe/account");
+        const data = response.json();
+
+        if (!data) {
+            return {
+                result: false,
+            };
+        } else {
+            return data;
+        }
+    };
+    const getStripeLoginLink = async () => {
+        const response = await fetch("/stripe/dashboardlink");
+        const data = response.json();
+
+        if (!data) {
+            return {
+                result: false,
+            };
+        } else {
+            return data;
+        }
+    };
+
+    const getStripeSecret = async (body) => {
+        const response = await fetch("/stripe/secret", {
+            method: "post",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(body),
+        });
+        const data = await response.json();
+
+        if (!data.clientSecret) {
+            return {
+                result: false,
+            };
+        } else {
+            return data;
+        }
+    };
+
     React.useEffect(() => {
         const checkCookie = async () => await checkLogin();
         checkCookie().catch((error) => {
@@ -256,6 +314,10 @@ const UserContextProvider = ({ children }) => {
                 updateUser,
                 updateChefProfile,
                 uploadProfileImage,
+                getStripeOnboardingLink,
+                getStripeAccount,
+                getStripeLoginLink,
+                getStripeSecret,
             }}
         >
             {children}
