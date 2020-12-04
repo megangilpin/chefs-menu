@@ -19,13 +19,15 @@ const useStyles = makeStyles({
     },
     input: {
         width: "100%",
+        height: "30px",
+        fontSize: "20px",
     },
 });
 
 function ChefSearch() {
     const classes = useStyles();
     const { profile } = useContext(UserContext);
-    const { chatId } = useParams();
+    const [chatId, setchatId] = useState(useParams().chatId);
     const [chats, setChats] = useState([]);
     const [messages, setMessages] = useState({
         userId1: {},
@@ -48,6 +50,7 @@ function ChefSearch() {
     }, []);
 
     useEffect(() => {
+        if (!chatId) return;
         let url = `/messages/${chatId}`;
         const { ready, abort } = abortableFetch(url);
         ready
@@ -56,7 +59,7 @@ function ChefSearch() {
             // ignore any errors
             .catch(() => {});
         return abort;
-    }, [chats]);
+    }, [chatId, chats]);
 
     const sendMsg = () => {
         fetch(`/messages/${chatId}`, {
@@ -72,7 +75,6 @@ function ChefSearch() {
             .then(setMessages)
             // ignore any errors
             .catch(() => {});
-        console.log("sending Msg: ", inputEl.current.value);
     };
 
     return (
@@ -83,8 +85,8 @@ function ChefSearch() {
                         <Grid item xs={12}>
                             {`Recent Chats for ${profile.email}`}
                         </Grid>
-                        {chats.map(({ userId2 }) => (
-                            <Grid item xs={12} key={userId2}>
+                        {chats.map(({ userId2, _id }) => (
+                            <Grid item xs={12} key={_id} onClick={() => setchatId(_id)}>
                                 <Box mb={3}>
                                     <Typography variant="h5">
                                         {`${userId2.firstName}  ${userId2.lastName}`}
