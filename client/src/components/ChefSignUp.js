@@ -149,6 +149,11 @@ const ChefSignUp = (props) => {
                                         </MenuItem>
                                     ))}
                                 </Select>
+                                {hasError && (
+                                    <FormHelperText className={classes.error}>
+                                        Must Select At Least One
+                                    </FormHelperText>
+                                )}
                             </Grid>
                         </Grid>
                     </Box>

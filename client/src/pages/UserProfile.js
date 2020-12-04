@@ -12,7 +12,6 @@ import UserProfileMap from "../components/UserProfileMap";
 import { UserContext } from "../contexts/user/UserContextProvider";
 import ChefSignUp from "../components/ChefSignUp";
 import Main from "../components/Main";
-// import UpdateChef from "../components/UpdateChef";
 
 const useStyles = makeStyles((theme) => ({
     profile: {

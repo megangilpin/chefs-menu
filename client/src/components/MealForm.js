@@ -45,7 +45,7 @@ function MealForm(props) {
         price: Yup.string()
             .required("Required!")
             .test("is-decimal", "must be to the nearest cent", (value) =>
-                (value + "").match(/^\d+(?:\.\d{0,2})$/)
+                (value + "").match(/^\d+(?:\.\d{2})$/)
             ),
         servingSize: Yup.string().required("Required!"),
         cuisineType: Yup.string().required("Required!"),
