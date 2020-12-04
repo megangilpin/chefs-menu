@@ -9,6 +9,7 @@ const chefSchema = new Schema({
     //     time: { type: Number },
     // },
     userId: { type: Schema.Types.ObjectId, ref: "User" },
+    stripeId: String,
 });
 
 module.exports = chefSchema;

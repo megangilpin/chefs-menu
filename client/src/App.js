@@ -7,11 +7,13 @@ import { theme } from "./themes/theme";
 import LoginSignUp from "./pages/LoginSignUp";
 import Page from "./components/Page";
 import { UserContext } from "../src/contexts/user/UserContextProvider";
+import { SnackbarProvider } from "notistack";
 import UserProfile from "./pages/UserProfile";
 import EditProfile from "./pages/EditProfile";
 import ChefSearch from "./pages/ChefSearch";
 import ChefProfile from "./pages/ChefProfile";
 import Meals from "./pages/Meals";
+import Checkout from "./pages/Checkout";
 
 function App() {
     const user = React.useContext(UserContext);
@@ -23,6 +25,7 @@ function App() {
                 <ProtectedRoute exact path="/profile" component={UserProfile} />
                 <ProtectedRoute exact path="/editprofile" component={EditProfile} />
                 <ProtectedRoute exact path="/chefs" component={ChefSearch} />
+                <ProtectedRoute exact path="/checkout" component={Checkout} />
                 <ProtectedRoute exact path="/chefprofile" component={ChefProfile} />
             </Switch>
         </Page>
@@ -30,21 +33,23 @@ function App() {
 
     return (
         <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <BrowserRouter>
-                <Route path="/">
-                    {user.isAuthenticated ? (
-                        <Redirect to="/meals" />
-                    ) : (
-                        <Redirect to="/signup" />
-                    )}
-                </Route>
-                <Switch>
-                    <Route path="/signup" component={LoginSignUp} />
-                    <Route path="/login" component={LoginSignUp} />
-                    <Route component={DefaultRoutes} />
-                </Switch>
-            </BrowserRouter>
+            <SnackbarProvider>
+                <CssBaseline />
+                <BrowserRouter>
+                    <Route path="/">
+                        {user.isAuthenticated ? (
+                            <Redirect to="/meals" />
+                        ) : (
+                            <Redirect to="/signup" />
+                        )}
+                    </Route>
+                    <Switch>
+                        <Route path="/signup" component={LoginSignUp} />
+                        <Route path="/login" component={LoginSignUp} />
+                        <Route component={DefaultRoutes} />
+                    </Switch>
+                </BrowserRouter>
+            </SnackbarProvider>
         </ThemeProvider>
     );
 }
