@@ -59,6 +59,9 @@ function NavMenuButton(props) {
                 <Link to="/profile" className={classes.link}>
                     <MenuItem>Profile</MenuItem>
                 </Link>
+                <Link to="/chats" className={classes.link}>
+                    <MenuItem>Chats</MenuItem>
+                </Link>
                 <Link to="/chefs" className={classes.link}>
                     <MenuItem>Find A Chef</MenuItem>
                 </Link>

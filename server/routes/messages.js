@@ -9,7 +9,7 @@ const router = express.Router();
 router.post(
     "/",
     errorHandelingWrapper(async (req, res) => {
-        const userId1 = req.user;
+        const userId1 = req.user.id;
         const { userId2 } = req.body;
 
         // Checks that user2 exists
@@ -31,10 +31,14 @@ router.post(
         }
 
         // Otherwise create convo
-        const newConversation = await conversationsController.create({
+        await conversationsController.create({
             userId1,
             userId2,
         });
+        const newConversation = await conversationsController.findOneWithUserId(
+            userId1,
+            userId2
+        );
 
         return res.json(newConversation);
     })
@@ -66,10 +70,12 @@ router.put(
         const messageId = savedMessage._id;
 
         // Add message to conversation by conversation id
-        const updatedConvo = await conversationsController.findAndUpdate(
+        await conversationsController.findAndUpdate(
             id,
             messageId
         );
+
+        const updatedConvo = await conversationsController.findOneWithId(id);
 
         return res.json(updatedConvo);
     })
@@ -98,7 +104,7 @@ router.get(
 router.get(
     "/",
     errorHandelingWrapper(async (req, res) => {
-        const id = req.user;
+        const { id } = req.user;
 
         const conversations = await conversationsController.findAllWithUserId({
             id,

@@ -66,7 +66,8 @@ function MealCard({ picURL, title, price, id, chefId }) {
     const classes = useStyles();
     const { chef, addToCart } = useContext(CartContext);
     const [openDialog, setDialogOpen] = React.useState(false);
-    const chefInfo = chefId.userId;
+    chefId = chefId || {}
+    const chefInfo = chefId.userId || { primaryAddress : {} };
 
     const handleClose = () => {
         setDialogOpen(false);

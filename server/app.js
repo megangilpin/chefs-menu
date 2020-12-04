@@ -36,7 +36,7 @@ app.use("/meals", loginRequired, mealsRouter);
 app.use("/search", loginRequired, searchRouter);
 app.use("/maps", mapsRouter);
 app.use("/stripe", loginRequired, stripeRouter);
-app.use("/messages", messagesRouter);
+app.use("/messages", loginRequired, messagesRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
