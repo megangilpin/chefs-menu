@@ -53,6 +53,11 @@ export default function CheckoutForm() {
             // The payment has been processed!
             if (result.paymentIntent.status === "succeeded") {
                 showSnackBar("Payment successfully processed!", "success");
+
+                // In the future push to direct messages to the chef of this purchased meal
+                // perhaps with an auto message saying what meal was purchased
+                // scheduling can be done through the chat for now
+
                 history.push("/meals");
 
                 // TODO:
