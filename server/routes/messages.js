@@ -9,7 +9,7 @@ const router = express.Router();
 router.post(
     "/",
     errorHandelingWrapper(async (req, res) => {
-        const userId1 = req.user;
+        const userId1 = req.user.id;
         const { userId2 } = req.body;
 
         // Checks that user2 exists
@@ -31,10 +31,14 @@ router.post(
         }
 
         // Otherwise create convo
-        const newConversation = await conversationsController.create({
+        await conversationsController.create({
             userId1,
             userId2,
         });
+        const newConversation = await conversationsController.findOneWithUserId(
+            userId1,
+            userId2
+        );
 
         return res.json(newConversation);
     })

@@ -24,7 +24,7 @@ function App() {
                 <ProtectedRoute exact path="/profile" component={UserProfile} />
                 <ProtectedRoute exact path="/editprofile" component={EditProfile} />
                 <ProtectedRoute exact path="/chefs" component={ChefSearch} />
-                <ProtectedRoute path="/chats" component={Chat} />
+                <ProtectedRoute path="/chats/:chatId" component={Chat} />
                 <ProtectedRoute
                     exact
                     path="/chefs/:chefId"

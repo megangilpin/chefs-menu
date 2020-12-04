@@ -1,6 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { useLocation } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 import { UserContext } from "../contexts/user/UserContextProvider";
 import ResponsiveSideBar from "../components/ResponsiveSideBar";
 import Main from "../components/Main";
@@ -69,6 +69,7 @@ const useStyles = makeStyles((theme) => ({
 
 function ChefProfile(props) {
     const location = useLocation();
+    const history = useHistory();
     const user = React.useContext(UserContext);
     const classes = useStyles();
     const [meals, setMeals] = React.useState([]);
@@ -112,6 +113,20 @@ function ChefProfile(props) {
             setMeals(data);
         }
     };
+
+    const sendRequest = async () => {
+        const response = await fetch("/messages", {
+            method: "post",
+            body: JSON.stringify({
+                userId2: chefInfo._id
+            }),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        const data = await response.json();
+        history.push({pathname: `/chats/${data[0]._id}`})
+    }
 
     const createMeal = async (formValues) => {
         formValues.chefId = chefInfo.chefProfile._id;
@@ -249,6 +264,7 @@ function ChefProfile(props) {
                                 color="primary"
                                 variant="contained"
                                 className={classes.footer}
+                                onClick={sendRequest}
                             >
                                 Send Request
                             </Button>
