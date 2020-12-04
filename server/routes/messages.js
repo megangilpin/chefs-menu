@@ -70,10 +70,12 @@ router.put(
         const messageId = savedMessage._id;
 
         // Add message to conversation by conversation id
-        const updatedConvo = await conversationsController.findAndUpdate(
+        await conversationsController.findAndUpdate(
             id,
             messageId
         );
+
+        const updatedConvo = await conversationsController.findOneWithId(id);
 
         return res.json(updatedConvo);
     })

@@ -19,7 +19,7 @@ const useStyles = makeStyles({
     },
     input: {
         width: "100%",
-        height: "30px",
+        height: "35px",
         fontSize: "20px",
     },
 });
@@ -35,8 +35,6 @@ function ChefSearch() {
         messages: [],
     });
     const inputEl = useRef(null);
-
-    console.log({ chats, messages });
 
     useEffect(() => {
         let url = "/messages";
@@ -62,13 +60,15 @@ function ChefSearch() {
     }, [chatId, chats]);
 
     const sendMsg = () => {
+        const message = inputEl.current.value;
+        inputEl.current.value = "";
         fetch(`/messages/${chatId}`, {
             method: "put",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 sender: messages.userId1._id,
                 receiver: messages.userId2._id,
-                message: inputEl.current.value,
+                message,
             }),
         })
             .then((res) => res.json())
@@ -118,6 +118,7 @@ function ChefSearch() {
                         <Grid item xs={12}>
                             <input
                                 className={classes.input}
+                                placeholder="Write a message..."
                                 ref={inputEl}
                                 type="text"
                             />
