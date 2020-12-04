@@ -1,8 +1,6 @@
 import * as React from "react";
-// import { useHistory } from "react-router-dom";
 
 import { Typography, Grid, Button } from "@material-ui/core";
-// import { makeStyles } from "@material-ui/core/styles";
 
 import { UserContext } from "../contexts/user/UserContextProvider";
 
@@ -20,7 +18,6 @@ function SetUpStripe(props) {
                 if (mounted) {
                     setIsLoaded(true);
                     setAccount(data);
-                    console.log(data);
                 }
             },
             (error) => {

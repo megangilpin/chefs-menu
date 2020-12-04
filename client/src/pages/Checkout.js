@@ -19,7 +19,6 @@ import DeleteIcon from "@material-ui/icons/Delete";
 
 import { CartContext } from "../contexts/cart/CartContextProvider";
 import { dollarFormatter, calcServiceFee, calcTotalWithFee } from "../lib/utils";
-// import { useHistory } from "react-router-dom";
 
 import CheckoutForm from "../components/CheckoutForm";
 
@@ -56,10 +55,8 @@ const useStyles = makeStyles((theme) => ({
 
 function Checkout(props) {
     const classes = useStyles();
-    // const history = useHistory();
 
     const {
-        // chefName,
         cart,
         totalPrice,
         updateCartItem,

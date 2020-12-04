@@ -112,7 +112,6 @@ router.post(
         const responseObj = await createAuthResponseObj(createdUser);
         res.cookie("token", responseObj.token, { httpOnly: true });
         res.status(201).json(responseObj);
-        // res.redirect("../chefs/stripe");
     })
 );
 
