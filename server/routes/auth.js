@@ -82,7 +82,7 @@ router.post(
         }
 
         // STRIPE CONNECTED ACCOUNT ONBOARDING FOR CHEFS
-        var stripeId = "";
+        let stripeId = "";
         if (isChef) {
             const account = await stripe.accounts.create({
                 type: "express",
