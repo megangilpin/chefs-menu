@@ -298,9 +298,11 @@ function ChefProfile(props) {
                         justify="center"
                         alignItems="center"
                     >
-                        <Grid item>
-                            <SetUpStripe />
-                        </Grid>
+                        {id === currentChef._id ? (
+                            <Grid item>
+                                <SetUpStripe />
+                            </Grid>
+                        ) : null}
                         <Grid item>
                             <Typography variant="h5">
                                 <Box mt={5} fontWeight="fontWeightBold">

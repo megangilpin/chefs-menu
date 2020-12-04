@@ -58,7 +58,9 @@ const useStyles = makeStyles((theme) => ({
         padding: "10px",
     },
     box: {
-        padding: "8px",
+        padding: ".6rem",
+        fontSize: ".5rem",
+        fontWeight: "600",
         color: "#ffff",
         background: theme.background.secondary,
     },
