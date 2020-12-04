@@ -102,7 +102,7 @@ router.get(
 router.get(
     "/",
     errorHandelingWrapper(async (req, res) => {
-        const id = req.user;
+        const { id } = req.user;
 
         const conversations = await conversationsController.findAllWithUserId({
             id,
