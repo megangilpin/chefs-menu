@@ -36,6 +36,8 @@ function ChefSearch() {
     });
     const inputEl = useRef(null);
 
+    console.log({ chats, messages });
+
     useEffect(() => {
         let url = "/messages";
         const { ready, abort } = abortableFetch(url);
@@ -66,11 +68,11 @@ function ChefSearch() {
         let sender;
         const { userId1, userId2 } = messages;
         if (userId1._id === profile._id) {
-            sender = messages.userId1._id;
-            receiver = messages.userId2._id;
+            sender = userId1._id;
+            receiver = userId2._id;
         } else {
-            sender = messages.userId2._id;
-            receiver = messages.userId1._id;
+            sender = userId2._id;
+            receiver = userId1._id;
         }
 
         console.log({ sender, receiver });
