@@ -2,8 +2,8 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
-import { Avatar, Typography, Grid, Box, Button, Link } from "@material-ui/core";
-import { useHistory } from "react-router-dom";
+import { Avatar, Typography, Grid, Box, Button } from "@material-ui/core";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -26,13 +26,13 @@ const useStyles = makeStyles((theme) => ({
     },
     link: {
         fontWeight: "bold",
-        fontSize: "1rem",
+        fontSize: ".8rem",
+        color: "#FF743D",
     },
 }));
 
 function ChefCard(props) {
     const classes = useStyles();
-    const history = useHistory();
 
     const { cuisineSpecialty, userId, distanceKm } = props;
     const {
@@ -103,22 +103,8 @@ function ChefCard(props) {
                         </Grid>
                         <Grid item xs={12}>
                             <Link
-                                component="button"
-                                variant="body2"
                                 className={classes.link}
-                                onClick={() =>
-                                    history.push({
-                                        pathname: "/chefprofile",
-                                        state: {
-                                            ...props.userId,
-                                            chefProfile: {
-                                                _id: props._id,
-                                                cuisineSpecialty:
-                                                    props.cuisineSpecialty,
-                                            },
-                                        },
-                                    })
-                                }
+                                to={`chefprofile/${props._id}`}
                             >
                                 View Chef's Menu
                             </Link>
