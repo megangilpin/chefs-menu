@@ -19,14 +19,14 @@ const useStyles = makeStyles((theme) => ({
         height: "85vh",
     },
     profileTopRight: {
-        padding: "2rem 0 0 1rem",
-        height: "50%",
+        padding: "2rem 0 0 2rem",
+        height: "60%",
     },
     profileTopLeft: {
         borderRight: "1px solid lightgrey",
         padding: "2rem 0 0 0",
         textAlign: "center",
-        height: "50%",
+        height: "60%",
     },
 
     userImage: {
@@ -49,6 +49,8 @@ const useStyles = makeStyles((theme) => ({
     editButton: {
         color: "white",
         background: "#FF743D",
+        maxHeight: "2rem",
+        maxWidth: "2rem",
     },
     chefButton: {
         padding: "10px",
@@ -92,6 +94,7 @@ export default function UserProfile() {
                 <Grid
                     item
                     xs={6}
+                    sm={4}
                     container
                     spacing={2}
                     alignContent="flex-start"
@@ -117,6 +120,7 @@ export default function UserProfile() {
                     <Grid
                         item
                         xs={12}
+                        sm={8}
                         container
                         direction="row"
                         justify="center"
@@ -174,7 +178,7 @@ export default function UserProfile() {
                     </Grid>
                     <Grid item xs={12}>
                         <Typography variant="h6" component="h4">
-                            ABOUT ME:
+                            About Me:
                         </Typography>
                         <Typography variant="body1" component="h5">
                             {userData.about}
@@ -183,7 +187,7 @@ export default function UserProfile() {
 
                     <Grid item xs={12}>
                         <Typography variant="h6" component="h4">
-                            FAVOURITE CUISINE:
+                            Favourite Cuisine:
                         </Typography>
                         {userData.cuisine.map((cuisine) => (
                             <Button
