@@ -60,6 +60,8 @@ router.put(
             return res.status(400).json({ errors });
         }
 
+        console.log({ sender, receiver });
+
         // Create message
         const savedMessage = await messagesController.create({
             receiver,
