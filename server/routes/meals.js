@@ -39,7 +39,7 @@ router.get(
         const meals = await mealController.findAllWithChefId({
             chefId: chefId,
         });
-        res.json(meals);
+        res.status(200).json(meals);
     })
 );
 

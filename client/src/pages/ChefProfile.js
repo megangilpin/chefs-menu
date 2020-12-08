@@ -139,7 +139,7 @@ function ChefProfile(props) {
                 message: data.errors,
             };
         } else {
-            setMeals(data);
+            setMeals([...data]);
         }
     };
 
@@ -147,15 +147,15 @@ function ChefProfile(props) {
         const response = await fetch("/messages", {
             method: "post",
             body: JSON.stringify({
-                userId2: chefInfo._id
+                userId2: chefInfo._id,
             }),
             headers: {
                 "Content-Type": "application/json",
             },
         });
         const data = await response.json();
-        history.push({pathname: `/chats/${data[0]._id}`})
-    }
+        history.push({ pathname: `/chats/${data[0]._id}` });
+    };
 
     const createMeal = async (formValues) => {
         formValues.chefId = chefInfo.chefProfile._id;
@@ -169,12 +169,15 @@ function ChefProfile(props) {
         });
 
         const data = await response.json();
+
         if (data.errors) {
             return {
                 result: false,
                 message: data.errors,
             };
         } else {
+            getMeals(id);
+            handleMealFormClose();
             return {
                 result: true,
                 message: "Meal successfully added to menu",

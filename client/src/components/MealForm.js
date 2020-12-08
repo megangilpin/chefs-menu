@@ -80,10 +80,7 @@ function MealForm(props) {
                         values.price = parseFloat(values.price) * 100;
                         values.cuisineType = [values.cuisineType];
                         props.onSubmit(values);
-
-                        props.update(user.profile.chefProfile._id);
                         setMealPicUrl("");
-                        props.close();
                     }}
                 >
                     {({ submitForm, isSubmitting }) => (
