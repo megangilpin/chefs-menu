@@ -15,7 +15,6 @@ const mapsRouter = require("./routes/maps");
 const stripeRouter = require("./routes/stripe");
 const messagesRouter = require("./routes/messages");
 
-
 const { json, urlencoded } = express;
 
 const app = express();
@@ -42,6 +41,10 @@ app.use("/messages", loginRequired, messagesRouter);
 app.use(function (req, res, next) {
     next(createError(404));
 });
+
+if (process.env.NODE_ENV === "production") {
+    app.use(express.static(path.join(__dirname, "../client", "build")));
+}
 
 // error handler
 app.use(function (err, req, res, next) {
