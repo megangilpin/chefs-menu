@@ -23,7 +23,6 @@ app.use(logger("dev"));
 app.use(json());
 app.use(urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(join(__dirname, "public")));
 
 // ROUTES
 app.get("/health", (req, res) => res.json({ success: true }));
@@ -40,6 +39,10 @@ app.use("/messages", loginRequired, messagesRouter);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     next(createError(404));
+});
+
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "../client", "build", "index.html"));
 });
 
 if (process.env.NODE_ENV === "production") {
