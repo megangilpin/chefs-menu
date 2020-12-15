@@ -51,14 +51,17 @@ app.get("*", (req, res) => {
 });
 
 // error handler
-app.use(function (err, req, res, next) {
-    // set locals, only providing error in development
-    res.locals.message = err.message;
-    res.locals.error = req.app.get("env") === "development" ? err : {};
+// app.use(function (err, req, res, next) {
+//     // set locals, only providing error in development
+//     res.locals.message = err.message;
+//     res.locals.error = req.app.get("env") === "development" ? err : {};
 
-    // render the error page
-    res.status(err.status || 500);
-    res.json({ error: err });
+//     // render the error page
+//     res.status(err.status || 500);
+//     res.json({ error: err });
+// });
+app.listen(PORT, () => {
+    console.log(`🌎 ==> API server now on port ${PORT}!`);
 });
 
 module.exports = app;

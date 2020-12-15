@@ -6,7 +6,7 @@
         "node": "12.x"
     },
     "scripts": {
-        "start": "node index.js",
+        "start": "node app.js",
         "dev": "nodemon ./bin/www",
         "debug": "nodemon  --inspect ./bin/www",
         "seed": "node scripts/seedDB.js",

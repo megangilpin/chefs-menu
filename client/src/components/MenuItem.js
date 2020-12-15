@@ -63,6 +63,7 @@ function MenuItem(props) {
         ingredients,
         requirements,
         picURL,
+        servingSize,
     } = props.meal;
     const id = props.meal._id;
 
@@ -115,6 +116,7 @@ function MenuItem(props) {
             };
         } else {
             props.update(chefProfile._id);
+            handleMealFormClose();
         }
     };
 
@@ -195,7 +197,7 @@ function MenuItem(props) {
                                 p={1}
                                 fontWeight={"fontWeightBold"}
                             >
-                                <Typography>Meal for 1</Typography>
+                                <Typography>{servingSize}</Typography>
                             </Box>
                         </Grid>
                         <Grid item>
