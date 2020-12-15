@@ -4,6 +4,7 @@ const express = require("express");
 const { join } = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+const PORT = process.env.PORT || 3001;
 
 const { loginRequired } = require("./middleware");
 const authRouter = require("./routes/auth");
@@ -53,5 +54,3 @@ app.get("*", (req, res) => {
 app.listen(PORT, () => {
     console.log(`🌎 ==> API server now on port ${PORT}!`);
 });
-
-module.exports = app;
