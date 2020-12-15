@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 // connect to mongodb
-const connection = mongoose.createConnection(process.env.ATLAS_URI, {
+const connection = mongoose.createConnection(process.env.ATLAS_URI2, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
