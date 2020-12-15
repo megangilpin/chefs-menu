@@ -2,6 +2,9 @@
     "name": "server",
     "version": "0.0.0",
     "private": true,
+    "engines": {
+        "node": "12.x"
+    },
     "scripts": {
         "dev": "nodemon ./bin/www",
         "debug": "nodemon  --inspect ./bin/www",
