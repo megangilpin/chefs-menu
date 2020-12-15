@@ -1,7 +1,6 @@
 require("dotenv").config();
 const createError = require("http-errors");
 const express = require("express");
-const { join } = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const PORT = process.env.PORT || 3001;
@@ -15,6 +14,7 @@ const searchRouter = require("./routes/search");
 const mapsRouter = require("./routes/maps");
 const stripeRouter = require("./routes/stripe");
 const messagesRouter = require("./routes/messages");
+const path = require("path");
 
 const { json, urlencoded } = express;
 
