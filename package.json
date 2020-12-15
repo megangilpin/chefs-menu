@@ -9,9 +9,10 @@
         "dev": "nodemon ./bin/www",
         "debug": "nodemon  --inspect ./bin/www",
         "seed": "node scripts/seedDB.js",
-        "install": "cd ../client && npm install",
-        "build": "cd ../client && npm run build",
-        "heroku-postbuild": "npm run install && npm run build",
+        "client": "cd client && npm run start",
+        "install": "cd client && npm install",
+        "build": "cd client && npm run build",
+        "heroku-postbuild": "cd client && npm run build",
         "test": "NODE_ENV=test ATLAS_URI=mongodb://localhost:27017/corn-pops-test ./node_modules/.bin/mocha --exit --timeout 30000"
     },
     "dependencies": {
