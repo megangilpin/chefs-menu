@@ -53,7 +53,7 @@ nodemon ./bin/www
 
 ### Sign Up
 
-!["Sign Up"](https://github.com/hatchways/team-corn-pops/blob/sagar/signup-and-login/README_IMAGES/sign-up.png?raw=true)
+!["Sign Up"](https://media.giphy.com/media/qAmsDsJVLgIBOxG20r/giphy.gif?raw=true)
 
 ### User Profile
 
