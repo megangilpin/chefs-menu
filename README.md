@@ -53,7 +53,7 @@ nodemon ./bin/www
 
 ### Sign Up
 
-!["Sign Up"](https://imgur.com/a/dRmRYDxraw=true)
+!["Sign Up"](https://imgur.com/a/lE0iyre?raw=true)
 
 ### User Profile
 
