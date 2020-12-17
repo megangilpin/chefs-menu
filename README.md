@@ -53,7 +53,7 @@ nodemon ./bin/www
 
 ### Sign Up
 
-!["Sign Up"](https://imgur.com/a/lE0iyre?raw=true)
+!["Sign Up"](https://thumbs.gfycat.com/VagueFatalHart-size_restricted.gif?raw=true)
 
 ### User Profile
 
