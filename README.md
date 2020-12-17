@@ -53,7 +53,7 @@ nodemon ./bin/www
 
 ### Sign Up
 
-!["Sign Up"](https://media.giphy.com/media/qAmsDsJVLgIBOxG20r/giphy.gif?raw=true)
+!["Sign Up"](https://imgur.com/a/dRmRYDxraw=true)
 
 ### User Profile
 
