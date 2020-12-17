@@ -12,17 +12,27 @@ when they want to try out a new cuisine.
 
 !["App Demo"](https://thumbs.gfycat.com/PinkScratchyArabianoryx-size_restricted.gif?raw=true)
 
-## Scope of Project
+## Tech Stack
 
--   Create a marketplace for chefs to showcase their homecooked meals and their
-    availabilities.
--   Then users can come on and filter to find chefs in their area that would be
-    available to cook in their kitchen on a specific date.
+-   React.js
+-   Material UI
+-   MongoDB
+-   Google Maps API
+-   Stripe
+-   AWS - for image storage
 
 ## Features
 
--   Login/sign up flow with e-mail address
--   Profile pages (for chefs and for users)
+-   Login / Sign up flow with auto predict address
+
+!["Sign Up"](https://thumbs.gfycat.com/PalatableImportantImperialeagle-size_restricted.gif?raw=true)
+
+-   Profile page
+    -   Drag and Drop photo upload to AWS
+    -   Google map of geolocation and distance matrix circle
+
+!["Profile Page"](https://thumbs.gfycat.com/WillingWetEmperorpenguin-size_restricted.gif?raw=true)
+
 -   Browse page with filters for: location, cuisine, availability
 -   Payments
 -   Direct messaging between users
@@ -47,13 +57,11 @@ nodemon ./bin/www
 
 ## Screenshots
 
-### Sign In
+ttps://github.com/hatchways/team-corn-pops/blob/sagar/signup-and-login/README_IMAGES/sign-in.png?raw=true)
 
-!["Sign In"](https://github.com/hatchways/team-corn-pops/blob/sagar/signup-and-login/README_IMAGES/sign-in.png?raw=true)
+### Sign In / Sign Up
 
-### Sign Up
-
-!["Sign Up"](https://thumbs.gfycat.com/VagueFatalHart-size_restricted.gif?raw=true)
+!["Sign Up"](https://thumbs.gfycat.com/PalatableImportantImperialeagle-size_restricted.gif?raw=true)
 
 ### User Profile
 
