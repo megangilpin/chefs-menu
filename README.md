@@ -25,7 +25,7 @@ when they want to try out a new cuisine.
 
 -   Login / Sign up flow with auto predict address
 
-!["Sign Up"](https://thumbs.gfycat.com/ImperfectEnchantedAfghanhound-size_restricted.gif?raw=true)
+!["Sign Up"](https://thumbs.gfycat.com/PassionateWatchfulGoldenretriever-size_restricted.gif?raw=true)
 
 -   Profile page
     -   Drag and Drop photo upload to AWS
