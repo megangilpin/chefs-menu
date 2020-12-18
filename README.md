@@ -33,9 +33,22 @@ when they want to try out a new cuisine.
 
 !["Profile Page"](https://thumbs.gfycat.com/WillingWetEmperorpenguin-size_restricted.gif?raw=true)
 
--   Browse page with filters for: location, cuisine, availability
--   Payments
--   Direct messaging between users
+-   Browse Meals with filters: location,
+
+    -   Cuisine Type Filter
+
+        !["Cuisine Search"](https://thumbs.gfycat.com/SafeInformalFlyinglemur-size_restricted.gif?raw=true)
+
+    -   Chef's Location Filter
+
+        !["Chef Search"](https://thumbs.gfycat.com/ClumsyComfortableAyeaye-size_restricted.gif?raw=true)
+
+-   Cart and Payment
+
+    -   Integrated Stripe Checkout
+    -   Cart context utilizing local storage
+
+        !["Checkout Process"](https://thumbs.gfycat.com/AmazingDazzlingBarb-size_restricted.gif?raw=true)
 
 ## Running the project locally
 
@@ -52,37 +65,5 @@ npm run start
 ```sh
 cd server
 npm install
-nodemon ./bin/www
+npm run dev
 ```
-
-## Screenshots
-
-ttps://github.com/hatchways/team-corn-pops/blob/sagar/signup-and-login/README_IMAGES/sign-in.png?raw=true)
-
-### Sign In / Sign Up
-
-!["Sign Up"](https://thumbs.gfycat.com/PalatableImportantImperialeagle-size_restricted.gif?raw=true)
-
-### User Profile
-
-!["User Profile"](https://github.com/hatchways/team-corn-pops/blob/sagar/signup-and-login/README_IMAGES/regular-user-profile.png?raw=true)
-
-### Chef Profile
-
-!["Chef Profile"](https://github.com/hatchways/team-corn-pops/blob/sagar/signup-and-login/README_IMAGES/chef-profile.png?raw=true)
-
-### Messaging
-
-!["Messaging"](https://github.com/hatchways/team-corn-pops/blob/sagar/signup-and-login/README_IMAGES/messages.png?raw=true)
-
-### Checkout
-
-!["Checkout"](https://github.com/hatchways/team-corn-pops/blob/sagar/signup-and-login/README_IMAGES/checkout.png?raw=true)
-
-### Browse Chefs
-
-!["Browse Chefs"](https://github.com/hatchways/team-corn-pops/blob/sagar/signup-and-login/README_IMAGES/browse-chefs.png?raw=true)
-
-### Browse Meals
-
-!["Browse Meals"](https://github.com/hatchways/team-corn-pops/blob/sagar/signup-and-login/README_IMAGES/browse-meals.png?raw=true)
