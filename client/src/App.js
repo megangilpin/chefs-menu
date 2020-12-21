@@ -1,7 +1,13 @@
 import * as React from "react";
 import { ThemeProvider } from "@material-ui/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
+import {
+    BrowserRouter,
+    Route,
+    Redirect,
+    Switch,
+    HashRouter,
+} from "react-router-dom";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { theme } from "./themes/theme";
 import LoginSignUp from "./pages/LoginSignUp";
@@ -47,7 +53,7 @@ function App() {
         <ThemeProvider theme={theme}>
             <SnackbarProvider>
                 <CssBaseline />
-                <BrowserRouter>
+                <HashRouter>
                     <Route path="/">
                         {user.isAuthenticated ? (
                             <Redirect to="/meals" />
@@ -60,7 +66,7 @@ function App() {
                         <Route path="/login" component={LoginSignUp} />
                         <Route component={DefaultRoutes} />
                     </Switch>
-                </BrowserRouter>
+                </HashRouter>
             </SnackbarProvider>
         </ThemeProvider>
     );
