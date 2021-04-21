@@ -20,6 +20,9 @@ const useStyles = makeStyles({
     formItem: {
         margin: "2vh 0 2vh 0",
     },
+    demoButton: {
+        margin: "2vh 0 2vh 2rem",
+    },
     formContainer: {
         margin: "10vh 0 0 0",
     },
@@ -56,6 +59,25 @@ export default function SignUp() {
                 .then(({ predictions }) => setPredictions(predictions))
                 .catch(console.error);
     };
+
+    const handleDemoSubmit = () => {
+        const values = {
+            email: "megan@gmail.com",
+            password: "123456"
+        }
+        user.login(values)
+        .then((res) => {
+            if (res.result) {
+                showSnackBar("Successfully logged in!", "success");
+                history.push("/meals");
+            } else {
+                showSnackBar(res.message, "error");
+            }
+        })
+        .catch((error) => {
+            showSnackBar("Error while making request!", "error");
+        });
+    }
 
     return (
         <>
@@ -181,6 +203,8 @@ export default function SignUp() {
                                 >
                                     Sign Up
                                 </Button>
+                                <Button onClick={handleDemoSubmit}className={classes.demoButton} color="primary" variant="contained"> Demo App</Button>
+
                             </Grid>
                         </Grid>
                     </Form>

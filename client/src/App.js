@@ -7,6 +7,7 @@ import {
     Redirect,
     Switch,
     HashRouter,
+    useLocation,
 } from "react-router-dom";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { theme } from "./themes/theme";
@@ -54,13 +55,24 @@ function App() {
             <SnackbarProvider>
                 <CssBaseline />
                 <HashRouter>
-                    <Route path="/">
+                    {/* <Route path="/">
                         {user.isAuthenticated ? (
                             <Redirect to="/meals" />
                         ) : (
                             <Redirect to="/signup" />
                         )}
-                    </Route>
+                    </Route> */}
+                    {user.isAuthenticated ? (
+                        <Route exact path="/">
+                            {" "}
+                            <Redirect to="/meals" />{" "}
+                        </Route>
+                    ) : (
+                        <Route path="/">
+                            {" "}
+                            <Redirect to="/signup" />{" "}
+                        </Route>
+                    )}
                     <Switch>
                         <Route path="/signup" component={LoginSignUp} />
                         <Route path="/login" component={LoginSignUp} />

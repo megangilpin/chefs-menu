@@ -2,7 +2,7 @@ import React from "react";
 
 import { Link, useLocation } from "react-router-dom";
 
-import { Grid, Typography, Button } from "@material-ui/core";
+import { Grid, Typography, Button, Box } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 import rightBanner from "../images/login-signup-image.png";
@@ -50,6 +50,7 @@ export default function LoginSignUp(props) {
                         src={logo}
                         alt="Chef's Menu Logo"
                     />
+
                 </Grid>
                 <Grid item container xs={12}>
                     {location.pathname === "/login" ? <LoginForm /> : <SignUpForm />}

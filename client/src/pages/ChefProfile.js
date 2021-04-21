@@ -70,6 +70,7 @@ const useStyles = makeStyles((theme) => ({
 
 function ChefProfile(props) {
     const location = useLocation();
+    console.log(location);
     const history = useHistory();
     const user = React.useContext(UserContext);
     const classes = useStyles();
